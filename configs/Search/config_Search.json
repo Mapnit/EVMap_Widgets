@@ -1,0 +1,38 @@
+{
+  "allPlaceholder": "",
+  "showInfoWindowOnSelect": true,
+  "sources": [
+    {
+      "layerId": "Parcels_5073_1",
+      "url": "https://hdc-arcgis01t.enervest.net/arcgis/rest/services/Culture/Parcels/MapServer/1",
+      "name": "Parcel Lots",
+      "placeholder": "",
+      "searchFields": [
+        "COUNTY",
+        "STATE",
+        "FIPS_CODE",
+        "BLOCK_NBR",
+        "LOT_NBR"
+      ],
+      "displayField": "STATE",
+      "exactMatch": false,
+      "searchInCurrentMapExtent": false,
+      "zoomScale": 50000,
+      "maxSuggestions": 6,
+      "maxResults": 6,
+      "type": "query"
+    },
+    {
+      "url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+      "name": "Esri World Geocoder",
+      "singleLineFieldName": "SingleLine",
+      "placeholder": "Esri World Geocoder",
+      "countryCode": "",
+      "zoomScale": 50000,
+      "maxSuggestions": 6,
+      "maxResults": 6,
+      "searchInCurrentMapExtent": false,
+      "type": "locator"
+    }
+  ]
+}

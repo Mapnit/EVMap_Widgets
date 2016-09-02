@@ -1,0 +1,51 @@
+{
+  "title": "Find Leases",
+  "prompt": "How do you want to search for leases?",
+  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/EV_Lease/MapServer/6", 
+  "options": [{
+	  "name": "singleLease",
+	  "label": "Single Lease Number",
+	  "field": "LEASE_NO",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided",
+	  "default": true
+	}, {
+	  "name": "multipleLeases",
+	  "label": "Multiple Lease Numbers",
+	  "field": "LEASE_NO",
+	  "dataType": "text",
+	  "input": "multiple",
+	  "prompt": "Enter a comma-separated list of lease numbers"
+	}, {
+	  "name": "lessee",
+	  "label": "Lessee",
+	  "field": "LESSEE",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessee name below, as you type matching lessee names will be provided"
+	}, {
+	  "name": "lessor",
+	  "label": "Lessor",
+	  "field": "LESSOR",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessor name below, as you type matching lessor names will be provided"
+	}, {
+	  "name": "status",
+	  "label": "Status",
+	  "field": "STATUS",
+	  "dataType": "text",
+	  "input": "select",
+	  "prompt": "Select at least one status from the following list:"
+	}, {
+	  "name": "expirationDate",
+	  "label": "Expiration Date",
+	  "field": "EXP_DATE",
+	  "dataType": "date",
+	  "input": "range",
+	  "rangeLabels": ["From", "To"],
+	  "prompt": "Use the fields below to specify the date range you wish to search"
+	}],
+	"limitToMapExtent": false
+}

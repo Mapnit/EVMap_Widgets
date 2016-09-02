@@ -1,0 +1,133 @@
+{
+  "showLegend": true,
+  "contextMenu": {
+    "ZoomTo": true,
+    "Transparency": true,
+    "EnableOrDisablePopup": true,
+    "MoveupOrMovedown": true,
+    "OpenAttributeTable": true,
+    "DescriptionOrShowItemDetailsOrDownload": true
+  },
+  "layerOptions": {
+    "IHS_Wells_4876": {
+      "display": true
+    },
+    "IHS_Wells_4876_0": {
+      "display": true
+    },
+    "IHS_Wells_4876_1": {
+      "display": true
+    },
+    "IHS_Wells_4876_2": {
+      "display": true
+    },
+    "IHS_Wells_4876_3": {
+      "display": true
+    },
+    "IHS_Wells_4876_4": {
+      "display": true
+    },
+    "EV_Wells_6360": {
+      "display": true
+    },
+    "EV_Wells_6360_0": {
+      "display": true
+    },
+    "EV_Wells_6360_1": {
+      "display": true
+    },
+    "EV_Wells_6360_2": {
+      "display": true
+    },
+    "EV_Wells_6360_3": {
+      "display": true
+    },
+    "EV_Wells_6360_4": {
+      "display": true
+    },
+    "EV_Wells_6360_5": {
+      "display": true
+    },
+    "EV_Wells_6360_6": {
+      "display": true
+    },
+    "Drillinginfo_Wells_9258": {
+      "display": true
+    },
+    "Drillinginfo_Wells_9258_0": {
+      "display": true
+    },
+    "Drillinginfo_Wells_9258_1": {
+      "display": true
+    },
+    "Drillinginfo_Wells_9258_2": {
+      "display": true
+    },
+    "RigData_Activity_9868": {
+      "display": true
+    },
+    "RigData_Activity_9868_0": {
+      "display": true
+    },
+    "RigData_Activity_9868_1": {
+      "display": true
+    },
+    "RigData_Activity_9868_2": {
+      "display": true
+    },
+    "RigData_Activity_9868_3": {
+      "display": true
+    },
+    "RigData_Activity_9868_4": {
+      "display": true
+    },
+    "RigData_Activity_9868_5": {
+      "display": true
+    },
+    "LandGrid_3132": {
+      "display": true
+    },
+    "LandGrid_3132_0": {
+      "display": true
+    },
+    "LandGrid_3132_1": {
+      "display": true
+    },
+    "LandGrid_3132_2": {
+      "display": true
+    },
+    "LandGrid_3132_3": {
+      "display": true
+    },
+    "LandGrid_3132_4": {
+      "display": true
+    },
+    "LandGrid_3132_5": {
+      "display": true
+    },
+    "LandGrid_3132_6": {
+      "display": true
+    },
+    "LandGrid_3132_7": {
+      "display": true
+    },
+    "LandGrid_3132_8": {
+      "display": true
+    },
+    "LandGrid_3132_9": {
+      "display": true
+    },
+    "Parcels_5073": {
+      "display": true
+    },
+    "Parcels_5073_0": {
+      "display": true
+    },
+    "Parcels_5073_1": {
+      "display": true
+    },
+    "Parcels_5073_2": {
+      "display": true
+    }
+  }
+}

@@ -1,0 +1,69 @@
+<div>
+  <label class="search-title" data-dojo-attach-point="searchTitle">Find Leases</label>
+  <div data-dojo-attach-point="ParameterSection">
+    <div class="option-section" data-dojo-attach-point="optionSection">
+      <label class="option-list-prompt" data-dojo-attach-point="optionListPrompt">
+			  How do you want to search for leases?
+			</label>
+      <div class="option-list" data-dojo-attach-point="optionList">
+				<div>
+				  <input type="radio" name="searchOption" value="singleLease"
+						data-dojo-attach-point="singleLease" data-dojo-attach-event="onchange:_onSearchOptionChecked"/>
+					<label data-dojo-attach-point="singleLeaseLabel">Single Lease Number</label>
+				</div>
+				<div>
+				  <input type="radio" name="searchOption" value="multipleLeases" 
+						data-dojo-attach-point="multipleLeases" data-dojo-attach-event="onchange:_onSearchOptionChecked"/>
+					<label data-dojo-attach-point="multipleLeasesLabel">Multiple Lease Numbers</label>
+				</div>
+				<div>
+				  <input type="radio" name="searchOption" value="lessee"  
+						data-dojo-attach-point="lessee" data-dojo-attach-event="onchange:_onSearchOptionChecked"/>
+					<label data-dojo-attach-point="lesseeLabel">Lessee</label>
+				</div>
+				<div>
+				  <input type="radio" name="searchOption" value="lessor" 
+						data-dojo-attach-point="lessor" data-dojo-attach-event="onchange:_onSearchOptionChecked"/>
+					<label data-dojo-attach-point="lessorLabel">Lessor</label>
+				</div>
+				<div>
+				  <input type="radio" name="searchOption" value="status"  
+						data-dojo-attach-point="status" data-dojo-attach-event="onchange:_onSearchOptionChecked"/>
+					<label data-dojo-attach-point="statusLabel">Status</label>
+				</div>
+				<div>
+				  <input type="radio" name="searchOption" value="expirationDate"  
+						data-dojo-attach-point="expirationDate" data-dojo-attach-event="onchange:_onSearchOptionChecked"/>
+					<label data-dojo-attach-point="expirationDateLabel">Expiration Date</label>
+				</div>
+      </div>
+			<div>
+        <input type="checkbox" data-dojo-attach-point="limitToMapExtent" data-dojo-attach-event="onchange:_onLimitToMapExtentChecked"/>
+	      <label data-dojo-attach-point="limitToMapExtentLabel">${nls.limitToMapExtent}</label>
+			</div>
+      <div class="nav-section">
+        <button class="nav-btn-cancel" data-dojo-attach-event="onclick:_onBtnCancelClicked">${nls.cancelSteps}</button>
+        <button class="nav-btn-next" data-dojo-attach-event="onclick:_onBtnGoToNextClicked">${nls.nextStep}</button>
+      </div>
+    </div>
+    <div class="filter-section" data-dojo-attach-point="filterSection">
+      <label class="filter-prompt" data-dojo-attach-point="filterPrompt">
+			  Enter the lease number below, as you type matching lease numbers will be provided.
+		  </label>
+      <div class="filter-input" data-dojo-attach-point="filterInput">
+			  <table>
+				  <tr>
+					  <td><label data-dojo-attach-point="filterLabel">Lease Number:</label></td>
+						<td><input type="text" style="width: 175px" data-dojo-attach-point="filterValue" data-dojo-attach-event="onkeyup:_onFilterValueChanged"/></td>
+					</tr>
+				</table>
+      </div>
+      <div class="nav-section">
+        <button class="nav-btn-cancel" data-dojo-attach-event="onclick:_onBtnCancelClicked">${nls.cancelSteps}</button>
+        <button class="nav-btn-prev" data-dojo-attach-event="onclick:_onBtnGoToPrevClicked">${nls.prevStep}</button>
+        <button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
+      </div>
+    </div>  
+  </div>
+	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+</div>

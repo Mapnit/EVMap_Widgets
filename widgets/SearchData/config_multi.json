@@ -1,0 +1,128 @@
+{
+  "lease": {
+	"title": "Find Leases",
+    "prompt": "How do you want to search for leases?",
+    "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/EV_Lease/MapServer/6"
+    "options": [{
+	  "name": "singleNumber",
+	  "label": "Single Lease Number",
+	  "field": "lease_number",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided",
+	  "default": true
+	}, {
+	  "name": "multipleNumber",
+	  "label": "Multiple Lease Numbers",
+	  "field": "lease_number",
+	  "dataType": "text",
+	  "input": "multiple",
+	  "prompt": "Enter a comma-separated list of lease numbers"
+	}, {
+	  "name": "lessee",
+	  "label": "Lessee",
+	  "field": "lessee",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessee name below, as you type matching lessee names will be provided_"
+	}, {
+	  "name": "lessor",
+	  "label": "Lessor",
+	  "field": "lessor",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessor name below, as you type matching lessor names will be provided_"
+	}, {
+	  "name": "lessee",
+	  "label": "Lessee",
+	  "field": "lessee",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided"
+	}, {
+	  "name": "status",
+	  "label": "Status",
+	  "field": "lease_status",
+	  "dataType": "text",
+	  "input": "select",
+	  "prompt": "Select at least one status from the following list:"
+	}, {
+	  "name": "expirationDate",
+	  "label": "Expiration Date",
+	  "field": "exp_date",
+	  "dataType": "date",
+	  "input": "range",
+	  "rangeLabels": ["From", "To"],
+	  "prompt": "Use the fields below to specify the date range you wish to search"
+	}],
+	"limitToMapExtent": true
+  }
+  "aerisWell": {
+    "title": "How do you want to search for aries wells?",
+    "layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/3"
+    "options": [{
+	  "name": "propNum",
+	  "label": "Prop Num",
+	  "field": "prop_num",
+	  "dataType": "text",
+	  "input": "single",
+	  "default": true
+	}, {
+	  "name": "propertyNumber",
+	  "label": "Property Number",
+	  "field": "property_number",
+	  "dataType": "text",
+	  "input": "single"
+	}, {
+	  "name": "lease",
+	  "label": "Lease",
+	  "field": "lease_number",
+	  "dataType": "text",
+	  "input": "single"
+	}, {
+	  "name": "wellName",
+	  "label": "Well Name",
+	  "field": "well_name",
+	  "dataType": "text",
+	  "input": "single"
+	}, {
+	  "name": "wellApi",
+	  "label": "API",
+	  "field": "well_api",
+	  "dataType": "text",
+	  "input": "single"
+	}],
+	"limitToMapExtent": true
+  }
+  "oilPipeline": {
+    "title": "How do you want to search for aries wells?",
+    "layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/3"
+    "options": [{
+	  "name": "operator",
+	  "label": "Operator",
+	  "field": "operator",
+	  "dataType": "text",
+	  "input": "single",
+	  "default": true
+	}, {
+	  "name": "owner",
+	  "label": "Owner",
+	  "field": "owner",
+	  "dataType": "text",
+	  "input": "single",
+	}, {
+	  "name": "systemName",
+	  "label": "System Name",
+	  "field": "sys_name",
+	  "dataType": "text",
+	  "input": "single",
+	}, {
+	  "name": "status",
+	  "label": "Status",
+	  "field": "status",
+	  "dataType": "text",
+	  "input": "select"
+	}],
+	"limitToMapExtent": true
+  }
+}

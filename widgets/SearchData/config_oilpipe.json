@@ -1,0 +1,36 @@
+{
+	"title": "Find Oil Pipelines",
+	"prompt": "How do you want to search for Oil Pipelines?",
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Midstream/Pipelines/MapServer/1", 
+	"options": [{
+	  "name": "operator",
+	  "label": "Operator",
+	  "field": "OPERATOR",
+	  "dataType": "text",
+	  "input": "single",
+		"prompt": "Enter an operator name below, as you type matching operator names will be provided",
+	  "default": true
+	}, {
+	  "name": "owner",
+	  "label": "Owner",
+	  "field": "OWNER",
+	  "dataType": "text",
+	  "input": "single",
+		"prompt": "Enter an owner name below, as you type matching owner names will be provided"
+	}, {
+	  "name": "systemName",
+	  "label": "System Name",
+	  "field": "SYS_NAME",
+	  "dataType": "text",
+	  "input": "single",
+		"prompt": "Enter a system name below, as you type matching system names will be provided"
+	}, {
+	  "name": "status",
+	  "label": "Status",
+	  "field": "OPER_STAT",
+	  "dataType": "text",
+	  "input": "select",
+		"prompt": "Select at least one status from the following list:"
+	}],
+	"limitToMapExtent": true
+}

@@ -1,0 +1,43 @@
+{
+	"title": "Find Aries Wells",
+	"prompt": "How do you want to search for aries wells?",
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/3",
+	"options": [{
+		"name": "propNum",
+		"label": "Prop Num",
+		"field": "PROPNUM",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a propNum below, as you type matching propNum will be provided",
+		"default": true
+	}, {
+		"name": "propertyNumber",
+		"label": "Property Number",
+		"field": "PROPERTY_NUM",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a property number below, as you type matching property numbers will be provided"
+	}, {
+		"name": "lease",
+		"label": "Lease",
+		"field": "LEASE",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a lease number below, as you type matching lease numbers will be provided"
+	}, {
+		"name": "wellName",
+		"label": "Well Name",
+		"field": "LEASE_WELLNAME",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a well name below, as you type matching well names will be provided"
+	}, {
+		"name": "wellApi",
+		"label": "API",
+		"field": "API",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a well API below, as you type matching well APIs will be provided"
+	}],
+	"limitToMapExtent": true
+}
