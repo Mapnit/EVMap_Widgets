@@ -1,0 +1,18 @@
+<div>
+	<label class="search-title" data-dojo-attach-point="searchTitle">Search Survey</label>
+	<label class="search-prompt" data-dojo-attach-point="searchPrompt"></label>
+	<form>
+		<div>
+		  <label class="param-label">${nls.countyLabel}</label>
+		  <input type="text" class="param-input" data-dojo-attach-point="countyInput"/>
+		</div>
+		<div>
+		  <label class="param-label">${nls.abstractLabel}</label>
+		  <input type="text" class="param-input" data-dojo-attach-point="abstractInput"/>
+		</div>
+	</form>
+	<div class="nav-section">
+		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
+	</div>
+	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+</div>

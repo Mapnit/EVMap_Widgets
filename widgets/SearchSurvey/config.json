@@ -1,0 +1,13 @@
+{
+  "title": "Search Survey - Texas",
+  "prompt": "Please select the County and/or Abstract",   
+  "county": {
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/1", 
+	"countyField": "COUNTY"
+  },
+  "abstract": {
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+	"countyField": "COUNTY",
+	"abstractField": "SURVNA"
+  }
+}

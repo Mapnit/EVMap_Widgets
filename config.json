@@ -320,7 +320,16 @@
         "index": 7,
         "id": "widgets_SearchData_Widget_42",
         "icon": "widgets/SearchData/images/icon.png?wab_dv=2.1"
-      }
+      },
+      {
+        "name": "SearchSurvey",
+        "label": "SearchSurvey",
+        "version": "2.1",
+        "uri": "widgets/SearchSurvey/Widget",
+        "index": 8,
+        "id": "widgets_SearchSurvey_Widget_43",
+        "icon": "widgets/SearchSurvey/images/icon.png?wab_dv=2.1"
+	  }
     ],
     "groups": []
   },
