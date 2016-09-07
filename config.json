@@ -329,6 +329,15 @@
         "index": 8,
         "id": "widgets_SearchSurvey_Widget_43",
         "icon": "widgets/SearchSurvey/images/icon.png?wab_dv=2.1"
+      },
+      {
+        "name": "SearchTwnship",
+        "label": "Search Township",
+        "version": "2.1",
+        "uri": "widgets/SearchTwnship/Widget",
+        "index": 9,
+        "id": "widgets_SearchTwnship_Widget_44",
+        "icon": "widgets/SearchTwnship/images/icon.png?wab_dv=2.1"
 	  }
     ],
     "groups": []

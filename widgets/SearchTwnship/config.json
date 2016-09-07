@@ -1,0 +1,21 @@
+{  
+  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/3", 
+  "state": {	
+	"field": "STATE"
+  },
+  "section": {
+	"field": "SEC"
+  },
+  "township": {
+	"field": "TWP"
+  },
+  "range": {
+	"field": "RNG"
+  },
+  "hrzDir": {
+	"field": "RDIR"
+  },
+  "vtlDir": {
+	"field": "TDIR"
+  }
+}

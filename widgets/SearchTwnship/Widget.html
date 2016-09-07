@@ -1,0 +1,48 @@
+<div>
+	<label class="search-title" data-dojo-attach-point="searchTitle">${nls.searchTitle}</label>
+	<label class="search-prompt" data-dojo-attach-point="searchPrompt">${nls.searchPrompt}</label>
+	<form>
+		<div>
+		  <label class="param-label">${nls.stateLabel}</label>
+		  <input type="text" class="param-input" data-dojo-attach-point="stateInput"/>
+		</div>
+		<div>
+		  <label class="param-label">${nls.sectionLabel}</label>
+		  <input type="text" class="param-input" data-dojo-attach-point="sectionInput"/>
+		</div>
+		<div>
+		  <label class="param-label">${nls.townshipLabel}</label>
+		  <input type="text" class="param-input" data-dojo-attach-point="townshipInput"/>
+		</div>
+		<div>
+		  <label class="param-label">${nls.rangeLabel}</label>
+		  <input type="text" class="param-input" data-dojo-attach-point="rangeInput"/>
+		</div>		
+		<table>
+			<tr>
+				<td>
+					<div>
+					  <input type="radio" name="vtlDirList" value="N" data-dojo-attach-event="change:_onVtlDirChanged">
+					  ${nls.northDirLabel}
+					  <input type="radio" name="vtlDirList" value="S" data-dojo-attach-event="change:_onVtlDirChanged">
+					  ${nls.southDirLabel}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div>
+					  <input type="radio" name="hrzDirList" value="E" data-dojo-attach-event="change:_onHrzDirChanged">
+					  ${nls.eastDirLabel}
+					  <input type="radio" name="hrzDirList" value="W" data-dojo-attach-event="change:_onHrzDirChanged">
+					  ${nls.westDirLabel}
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div class="nav-section">
+		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
+	</div>
+	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+</div>
