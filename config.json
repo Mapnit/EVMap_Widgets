@@ -314,7 +314,7 @@
       },
       {
         "name": "SearchData",
-        "label": "SearchData",
+        "label": "Search Data",
         "version": "2.1",
         "uri": "widgets/SearchData/Widget",
         "index": 7,
@@ -323,7 +323,7 @@
       },
       {
         "name": "SearchSurvey",
-        "label": "SearchSurvey",
+        "label": "Search Texas Survey",
         "version": "2.1",
         "uri": "widgets/SearchSurvey/Widget",
         "index": 8,
