@@ -165,8 +165,8 @@ define([
 				var query = new Query();
 				query.where = "1=1"; 
 				query.returnGeometry = false;
-				query.outFields = [this.config.county.countyField];
-				query.orderByFields = [this.config.county.countyField];
+				query.outFields = [this.config.county.field];
+				query.orderByFields = [this.config.county.field];
 				query.returnDistinctValues = true; 
 				
 				var queryTask = new QueryTask(this.config.county.layer); 
@@ -177,7 +177,7 @@ define([
 							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
 								valueStore.put({
 										"id" : i,
-										"name" : feature.attributes[this.config.county.countyField]
+										"name" : feature.attributes[this.config.county.field]
 									});
 								}));
 							this._countyValues.store = valueStore;
@@ -197,10 +197,10 @@ define([
 				var countyName = this._countyValues.get('value');
 				
 				var query = new Query();
-				query.where = this.config.abstract.countyField + " like '" + countyName + "%'";
+				query.where = this.config.abstract.relatedFields["county"] + " like '" + countyName + "%'";
 				query.returnGeometry = false;
-				query.outFields = [this.config.abstract.abstractField];
-				query.orderByFields = [this.config.abstract.abstractField];
+				query.outFields = [this.config.abstract.field];
+				query.orderByFields = [this.config.abstract.field];
 				query.returnDistinctValues = true; 
 
 				var queryTask = new QueryTask(this.config.abstract.layer); 
@@ -211,7 +211,7 @@ define([
 							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
 								valueStore.put({
 										"id" : i,
-										"name" : feature.attributes[this.config.abstract.abstractField]
+										"name" : feature.attributes[this.config.abstract.field]
 									});
 								}));
 							this._abstractValues.store = valueStore;
@@ -226,8 +226,8 @@ define([
 			_onBtnEndClicked : function () {
 				var abstractConfig = this.config.abstract;
 				var whereClause = 
-					abstractConfig.countyField + " like '" + this._countyValues.get('value') + "%'" 
-					+ " and " + abstractConfig.abstractField + " = '" + this._abstractValues.get('value') + "'" ;
+					abstractConfig.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'" 
+					+ " and " + abstractConfig.field + " = '" + this._abstractValues.get('value') + "'" ;
 					
 				this._executeSearch(whereClause);				
 			},
@@ -263,7 +263,7 @@ define([
 				query.returnGeometry = true;
 				query.outFields = ["*"];
 
-				var queryTask = new QueryTask(this.config.abstract.layer);
+				var queryTask = new QueryTask(this.config.layer);
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
 							this._showMessage(resultSet.features.length + " feature(s) found");
