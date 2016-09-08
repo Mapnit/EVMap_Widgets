@@ -1,0 +1,91 @@
+{
+  "title": "Search Survey - Texas",
+  "prompt": "Please select the County and/or Abstract", 
+  "layer": [{	
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/Parcels/MapServer/1", 
+	  "options": [{
+		  "name": "stateInput",
+		  "fields": ["STATE"],
+		  "dataType": "text"
+		}, {
+		  "name": "countyInput",
+		  "fields": ["COUNTY"],
+		  "dataType": "text"
+		}, {
+		  "name": "zipcodeInput",
+		  "fields": ["ZIP"],
+		  "dataType": "text"
+		}, {
+		  "name": "cityInput",
+		  "fields": ["CITY"],
+		  "dataType": "text"
+		}, {
+		  "name": "addressInput",
+		  "fields": ["ADDR"],
+		  "dataType": "text"
+		}, {
+		  "name": "blockInput",
+		  "fields": ["BLOCK_NBR"],
+		  "dataType": "text"
+		}, {
+		  "name": "lotInput",
+		  "fields": ["LOT_NBR"],
+		  "dataType": "text"
+		}, {
+		  "name": "suvdivInput",
+		  "fields": ["SUB_NAME"],
+		  "dataType": "text"
+		}, {
+		  "name": "apnInput",
+		  "fields": ["APN"],
+		  "dataType": "text"
+		}, {
+		  "name": "lastNameInput",
+		  "fields": ["OWN1_LAST"],
+		  "dataType": "text"
+		}]
+	}, {
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/Parcels/MapServer/2", 
+	  "options": [{
+		  "name": "stateInput",
+		  "fields": ["STATE"],
+		  "dataType": "text"
+		}, {
+		  "name": "countyInput",
+		  "fields": ["COUNTY"],
+		  "dataType": "text"
+		}, {
+		  "name": "zipcodeInput",
+		  "fields": ["ZIP"],
+		  "dataType": "text"
+		}, {
+		  "name": "cityInput",
+		  "fields": ["CITY"],
+		  "dataType": "text"
+		}, {
+		  "name": "addressInput",
+		  "fields": ["ADDR"],
+		  "dataType": "text"
+		}, {
+		  "name": "blockInput",
+		  "fields": ["BLOCK_NBR"],
+		  "dataType": "text"
+		}, {
+		  "name": "lotInput",
+		  "fields": ["LOT_NBR"],
+		  "dataType": "text"
+		}, {
+		  "name": "suvdivInput",
+		  "fields": ["SUB_NAME"],
+		  "dataType": "text"
+		}, {
+		  "name": "apnInput",
+		  "fields": ["APN", "APN2"],
+		  "dataType": "text"
+		}, {
+		  "name": "lastNameInput",
+		  "fields": ["OWNER"],
+		  "dataType": "text"
+		}]	
+	}]
+}
