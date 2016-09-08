@@ -338,6 +338,15 @@
         "index": 9,
         "id": "widgets_SearchTwnship_Widget_44",
         "icon": "widgets/SearchTwnship/images/icon.png?wab_dv=2.1"
+      },
+      {
+        "name": "SearchParcel",
+        "label": "Search Parcels",
+        "version": "2.1",
+        "uri": "widgets/SearchParcel/Widget",
+        "index": 10,
+        "id": "widgets_SearchParcel_Widget_45",
+        "icon": "widgets/SearchParcel/images/icon.png?wab_dv=2.1"
 	  }
     ],
     "groups": []
