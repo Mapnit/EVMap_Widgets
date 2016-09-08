@@ -305,7 +305,7 @@
       },
       {
         "name": "Select",
-        "label": "Select",
+        "label": "Find data on Map",
         "version": "2.1",
         "uri": "widgets/Select/Widget",
         "config": "configs/Select/config_Select.json",
