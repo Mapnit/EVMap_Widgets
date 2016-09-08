@@ -223,7 +223,7 @@ define([
 				case "range":
 					searchVals = [];
 					array.forEach(this._filterValues, function (fltrVal, i) {
-						searchVals[i%2] = fltrVal.displayedValue;
+						searchVals[i%2] = fltrVal.get('displayedValue');
 					});
 					var rangeLimits = [];
 					if (searchVals[0]) {
