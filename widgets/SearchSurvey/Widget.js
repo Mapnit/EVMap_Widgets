@@ -115,8 +115,6 @@ define([
 			},
 
 			_initSearchForm : function () {
-				this.searchTitle.innerText = this.config.title;
-				this.searchPrompt.innerText = this.config.prompt;
 				
 				this._countyValues = new ComboBox({
 						hasDownArrow: false,

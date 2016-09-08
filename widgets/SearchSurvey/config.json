@@ -1,6 +1,4 @@
 {
-  "title": "Search Survey - Texas",
-  "prompt": "Please select the County and/or Abstract", 
   "layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
   "county": {
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/1", 
