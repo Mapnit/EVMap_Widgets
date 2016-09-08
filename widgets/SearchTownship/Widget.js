@@ -45,8 +45,8 @@ define([
 		Memory, LoadingIndicator, Popup, ComboBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
-			name : 'SearchTwnship',
-			baseClass : 'jimu-widget-searchTwnship',
+			name : 'SearchTownship',
+			baseClass : 'jimu-widget-searchTownship',
 			_gs : null,
 			_defaultGsUrl : '//tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer', 
 			_graphicLayer : null,

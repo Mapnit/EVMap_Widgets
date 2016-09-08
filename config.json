@@ -331,13 +331,13 @@
         "icon": "widgets/SearchSurvey/images/icon.png?wab_dv=2.1"
       },
       {
-        "name": "SearchTwnship",
+        "name": "SearchTownship",
         "label": "Search Township",
         "version": "2.1",
-        "uri": "widgets/SearchTwnship/Widget",
+        "uri": "widgets/SearchTownship/Widget",
         "index": 9,
-        "id": "widgets_SearchTwnship_Widget_44",
-        "icon": "widgets/SearchTwnship/images/icon.png?wab_dv=2.1"
+        "id": "widgets_SearchTownship_Widget_44",
+        "icon": "widgets/SearchTownship/images/icon.png?wab_dv=2.1"
       },
       {
         "name": "SearchParcel",
