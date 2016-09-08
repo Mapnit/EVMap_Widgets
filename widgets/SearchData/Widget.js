@@ -432,7 +432,7 @@ define([
 					query.outFields = [this._selectedOption.field];
 
 					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
-							valueArray = [];
+							var valueArray = [];
 							if (resultSet && resultSet.features && resultSet.features.length > 0) {
 								array.forEach(resultSet.features, lang.hitch(this, function (feature, i) {
 										valueArray.push(feature.attributes[this._selectedOption.field]);
