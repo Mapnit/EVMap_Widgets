@@ -6,9 +6,16 @@
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/1", 
 	"field": "COUNTY"
   },
-  "abstract": {
+  "section": {
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 	"field": "SURVNA",
+	"relatedFields": {
+		"county": "COUNTY"
+	}
+  },
+  "abstract": {
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+	"field": "ABSNO",
 	"relatedFields": {
 		"county": "COUNTY"
 	}

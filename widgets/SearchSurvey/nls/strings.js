@@ -4,6 +4,8 @@ define({
 	stateLabel: "State", 
 	countyLabel: "County",
 	abstractLabel: "Abstract",
+	sectionLabel: "Section",
+	searchOptionLabel: "Choose one",
     endSteps: "Search"
   })
 });

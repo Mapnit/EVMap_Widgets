@@ -6,10 +6,21 @@
 		  <label class="param-label">${nls.countyLabel}</label>
 		  <input type="text" class="param-input" data-dojo-attach-point="countyInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.abstractLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="abstractInput"/>
-		</div>
+		<fieldset>
+			<legend>${nls.searchOptionLabel}</legend>
+			<div>
+			  <input type="radio" name="searchOption" value="abstract" 
+				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
+			  <label class="param-label">${nls.abstractLabel}</label>
+			  <input type="text" class="param-input" data-dojo-attach-point="abstractInput"/>
+			</div>
+			<div>
+			  <input type="radio" name="searchOption" value="section" 
+				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
+			  <label class="param-label">${nls.sectionLabel}</label>
+			  <input type="text" class="param-input" data-dojo-attach-point="sectionInput"/>
+			</div>
+		</fieldset>
 	</form>
 	<div class="nav-section">
 		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>

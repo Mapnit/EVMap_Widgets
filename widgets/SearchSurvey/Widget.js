@@ -86,6 +86,8 @@ define([
 			},
 			_countyValues : null,
 			_abstractValues : null,
+			_sectionValues : null, 
+			_searchTarget : null, 
 
 			postMixInProperties : function () {
 				this.inherited(arguments);
@@ -121,7 +123,7 @@ define([
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
-						onChange: lang.hitch(this, this._fetchAbstractNamesByCounty)
+						onChange: lang.hitch(this, this._onCountyNameChanged)
 					}, this.countyInput);
 				this._countyValues.startup();
 
@@ -129,9 +131,19 @@ define([
 						hasDownArrow: false,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
-						searchAttr: "name"
+						searchAttr: "name",
+						disabled: true
 					}, this.abstractInput);
 				this._abstractValues.startup(); 
+				
+				this._sectionValues = new ComboBox({
+						hasDownArrow: false,
+						style: "width: 175px; height:25px",
+						store: new Memory({data: []}),
+						searchAttr: "name",
+						disabled: true
+					}, this.sectionInput);
+				this._sectionValues.startup(); 				
 			},
 
 			onActive : function () {
@@ -145,6 +157,8 @@ define([
 			onClose : function () {
 				this._countyValues.set('value', '');
 				this._abstractValues.set('value', '');
+				this._sectionValues.set('value', '');
+				
 				this._hideMessage(); 
 				
 				this._graphicLayer.clear();
@@ -157,6 +171,30 @@ define([
 				this.inherited(arguments);
 
 				this._fetchCountyNames(); 
+			},
+			
+			_onSearchOptionChanged: function(evt) {
+				var rdoInput = evt.currentTarget; 
+				this._searchTarget = rdoInput.value; 
+				if (rdoInput.value === "abstract") {
+					this._abstractValues.set('disabled', !rdoInput.checked);
+					this._sectionValues.set('disabled', rdoInput.checked);
+				} else if (rdoInput.value === "section") {
+					this._abstractValues.set('disabled', rdoInput.checked);
+					this._sectionValues.set('disabled', !rdoInput.checked);
+				}
+				if (this._abstractValues.get('disabled')) {
+					this._abstractValues.set('value', '');
+				}
+				if (this._sectionValues.get('disabled')) {
+					this._sectionValues.set('value', '');
+				}
+			},
+			
+			_onCountyNameChanged: function() {
+				
+				this._fetchSectionNamesByCounty();
+				this._fetchAbstractNumbersByCounty();
 			},
 			
 			_fetchCountyNames : function() {
@@ -189,9 +227,45 @@ define([
 					}));
 			},
 
-			_fetchAbstractNamesByCounty : function() {
+			_fetchSectionNamesByCounty : function() {
+				this._sectionValues.store = new Memory({data: []});
+				this._sectionValues.set('value', '');
+				
+				this._hideMessage(); 
+				
+				var countyName = this._countyValues.get('value');
+				
+				var query = new Query();
+				query.where = this.config.section.relatedFields["county"] + " like '" + countyName + "%'";
+				query.returnGeometry = false;
+				query.outFields = [this.config.section.field];
+				query.orderByFields = [this.config.section.field];
+				query.returnDistinctValues = true; 
+
+				var queryTask = new QueryTask(this.config.section.layer); 
+				queryTask.execute(query, lang.hitch(this, function (resultSet) {
+						if (resultSet && resultSet.features && resultSet.features.length > 0) {
+							var valueStore = new Memory({data: []});
+							
+							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
+								valueStore.put({
+										"id" : i,
+										"name" : feature.attributes[this.config.section.field]
+									});
+								}));
+							this._sectionValues.store = valueStore;
+						} else {
+							this._showMessage("no section found", "warning");
+						} 
+					}), lang.hitch(this, function (err) {
+						this._showMessage(err.message, "error");
+					}));
+			},
+			
+			_fetchAbstractNumbersByCounty : function() {
 				this._abstractValues.store = new Memory({data: []});
 				this._abstractValues.set('value', '');
+				
 				this._hideMessage(); 
 				
 				var countyName = this._countyValues.get('value');
@@ -221,15 +295,28 @@ define([
 					}), lang.hitch(this, function (err) {
 						this._showMessage(err.message, "error");
 					}));
-			},
+			},			
 			
 			_onBtnEndClicked : function () {
-				var abstractConfig = this.config.abstract;
-				var whereClause = 
-					abstractConfig.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'" 
-					+ " and " + abstractConfig.field + " = '" + this._abstractValues.get('value') + "'" ;
+				var whereClause = null; 
+				switch(this._searchTarget) {
+				case "abstract":
+					whereClause = 
+						this.config.abstract.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'" 
+						+ " and " + this.config.abstract.field + " = '" + this._abstractValues.get('value') + "'" ;
+					break;
+				case "section":
+					whereClause = 
+						this.config.section.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'" 
+						+ " and " + this.config.section.field + " = '" + this._sectionValues.get('value') + "'" ;
+					break;
+				default: 
+					this._showMessage("invalid search", "error"); 
 					
-				this._executeSearch(whereClause);				
+				}
+				if (whereClause) {
+					this._executeSearch(whereClause);
+				}				
 			},
 
 			_showMessage : function (textMsg, lvl) {
