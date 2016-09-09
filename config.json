@@ -347,6 +347,15 @@
         "index": 10,
         "id": "widgets_SearchParcel_Widget_45",
         "icon": "widgets/SearchParcel/images/icon.png?wab_dv=2.1"
+      },
+      {
+        "name": "DataFilter",
+        "label": "Filter Data",
+        "version": "2.1",
+        "uri": "widgets/DataFilter/Widget",
+        "index": 11,
+        "id": "widgets_DataFilter_Widget_46",
+        "icon": "widgets/DataFilter/images/icon.png?wab_dv=2.1"
 	  }
     ],
     "groups": []
