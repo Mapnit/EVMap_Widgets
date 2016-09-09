@@ -1,0 +1,37 @@
+.ev-widget-dataFilter{
+	width: 100%;
+	height: 100%;
+	min-width: 250px;
+	min-height: 192px;
+}
+
+.ev-widget-dataFilter .search-prompt{
+}
+
+.ev-widget-dataFilter .limit-to-map-extent{
+	padding: 5px;
+}
+
+.ev-widget-dataFilter .target-section{
+}
+
+.ev-widget-dataFilter .target-label{
+}
+
+.ev-widget-dataFilter .filter-section{
+}
+
+.ev-widget-dataFilter .nav-section{
+}
+
+.ev-widget-dataFilter .nav-btn-end{
+}
+
+.ev-widget-dataFilter .message-info{
+}
+
+.ev-widget-dataFilter .message-warning{
+}
+
+.ev-widget-dataFilter .message-error{
+}
