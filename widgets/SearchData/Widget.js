@@ -118,9 +118,6 @@ define([
 			_initSearch : function () {
 				this._queryTask = new QueryTask(this.config.layer);
 
-				this._graphicLayer = new GraphicsLayer();
-				this.map.addLayer(this._graphicLayer);
-
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 
 				this._filterValues = []; 
@@ -161,6 +158,11 @@ define([
 			onDeActive : function () {
 				this.map.setInfoWindowOnClick(true);
 			},
+			
+			onOpen : function() {
+				this._graphicLayer = new GraphicsLayer();
+				this.map.addLayer(this._graphicLayer);				
+			},
 
 			onClose : function () {
 				this._graphicLayer.clear();
@@ -179,6 +181,8 @@ define([
 			_onBtnCancelClicked : function () {
 				this._currentViewIndex = 0;
 				this.viewStack.switchView(this._currentViewIndex);
+				
+				this._hideMessage();
 			},
 
 			_onBtnGoToPrevClicked : function () {
@@ -376,6 +380,7 @@ define([
 				if (fltrValue) {
 					var textInput = fltrValue.trim();
 					if (textInput.length > 3) {
+						this._hideMessage(); 
 						this._fetchPartialMatches(textInput).then(lang.hitch(this, function (valueArray) {
 								var valueStore = new Memory({data: []});
 								this._filterValues[0].store = valueStore;
@@ -495,14 +500,17 @@ define([
 				case "esriGeometryPolygon":
 					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
 					break;
+				default: 
+					this._showMessage("not support such geometry", "error"); 
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
-						this._graphicLayer.add(new Graphic(
-								feature.geometry,
-								highlightSymbol,
-								feature.attributes,
-								this._infoTemplate));
+						var graphic = new Graphic(
+							feature.geometry,
+							highlightSymbol,
+							feature.attributes,
+							this._infoTemplate);
+						this._graphicLayer.add(graphic);
 
 						if (resultSet.geometryType === "esriGeometryPoint") {
 							if (resultExtent) {
