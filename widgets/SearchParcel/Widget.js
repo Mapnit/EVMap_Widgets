@@ -106,9 +106,6 @@ define([
 
 			_initSearch : function () {
 
-				this._graphicLayer = new GraphicsLayer();
-				this.map.addLayer(this._graphicLayer);
-
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 			},
 
@@ -137,6 +134,11 @@ define([
 
 			onDeActive : function () {
 				this.map.setInfoWindowOnClick(true);
+			},
+			
+			onOpen : function () {
+				this._graphicLayer = new GraphicsLayer();
+				this.map.addLayer(this._graphicLayer);	
 			},
 
 			onClose : function () {
