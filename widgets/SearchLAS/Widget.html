@@ -1,0 +1,55 @@
+<div>
+  <div data-dojo-attach-point="parameterSection">
+    <div class="draw-section" data-dojo-attach-point="drawSection">
+      <label class="draw-prompt" data-dojo-attach-point="drawPrompt">${nls.drawPrompt}</label>
+      <div class="draw-input">
+		<button title="${nls.selectByPolygonButton}"> 
+			<span class="geometry-type-polygon" data-dojo-attach-event="onclick:_onSelectByPolygonClicked"></span> 
+		</button>
+	  </div>
+      <div class="nav-section">
+        <button class="nav-btn-next" data-dojo-attach-event="onclick:_onBtnGoToNextClicked">${nls.nextStep}</button>
+      </div>
+    </div>
+    <div class="filter-section" data-dojo-attach-point="filterSection">
+      <label class="filter-prompt" data-dojo-attach-point="filterPrompt">${nls.filterPrompt}</label>
+      <div class="filter-input">
+		<input type="checkbox" data-dojo-attach-point="searchLogAliasField" data-dojo-attach-event="onchange:_onSearchLogAliasFieldsChanged"/>
+		<label data-dojo-attach-point="searchLogAliasFieldLabel">${nls.searchLogAliasFieldLabel}</label>
+		<fieldset>
+			<legend>${nls.logAliasFields}</legend>
+			<div class="log-alias-fields" data-dojo-attach-point="logAliasFieldList">
+			</div>
+		</fieldset>
+		<label>${nls.curveName}</label><input type="text" data-dojo-attach-point="curveName"/>
+		<fieldset>
+			<legend>${nls.wellTDRange}</legend>
+			<table>
+				<tr>
+					<td><label>${nls.wellTDMinValue}</label></td>
+					<td><input type="text" data-dojo-attach-point="wellTDMinValue"/></td>
+				</tr>
+				<tr>
+					<td><label>${nls.wellTDMaxValue}</label></td>
+					<td><input type="text" data-dojo-attach-point="wellTDMaxValue"/></td>
+				</tr>
+			</table>
+		</fieldset>
+		<input type="checkbox" data-dojo-attach-point="includePreviousLogs" data-dojo-attach-event="onchange:_onIncludePreviousLogsChanged"/>
+		<label data-dojo-attach-point="includePreviousLogsLabel">${nls.includePreviousLogsLabel}</label>
+		<fieldset>
+			<legend>${nls.queryType}</legend>
+			<input type="radio" name="queryTypeOpr" value="OR" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
+			<label data-dojo-attach-point="queryTypeOrLabel">${nls.queryTypeOR}</label>
+			<input type="radio" name="queryTypeOpr" value="AND" data-dojo-attach-point="queryTypeAnd" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
+			<label data-dojo-attach-point="queryTypeAndLabel">${nls.queryTypeAND}</label>
+		</fieldset>		
+      </div>
+      <div class="nav-section">
+        <button class="nav-btn-prev" data-dojo-attach-event="onclick:_onBtnGoToPrevClicked">${nls.prevStep}</button>
+        <button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
+      </div>
+    </div>  
+  </div>
+  <label class="message-info" data-dojo-attach-point="searchMessage"></label>
+</div>

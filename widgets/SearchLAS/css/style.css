@@ -1,0 +1,69 @@
+.jimu-widget-searchLAS{
+	width: 100%;
+	height: 100%;
+	min-width: 250px;
+	min-height: 192px;
+}
+
+.jimu-widget-searchLAS .draw-section{
+}
+
+.jimu-widget-searchLAS .draw-prompt{
+}
+
+.jimu-widget-searchLAS .geometry-type-polygon{
+    background-image: url(../images/draw-polygon-24.png);
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.jimu-widget-searchLAS .polygon-capture-check{
+    background-image: url(../images/draw-polygon-24.png);
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.jimu-widget-searchLAS .filter-section{
+}
+
+.jimu-widget-searchLAS .filter-prompt{
+}
+
+.jimu-widget-searchLAS .filter-input{
+}
+
+.jimu-widget-searchLAS .filter-input-prompt{
+}
+
+.jimu-widget-searchLAS .filter-input-value{
+}
+
+.jimu-widget-searchLAS .nav-section{
+}
+
+.jimu-widget-searchLAS .nav-btn-cancel{
+}
+
+.jimu-widget-searchLAS .nav-btn-prev{
+}
+
+.jimu-widget-searchLAS .nav-btn-next{
+}
+
+.jimu-widget-searchLAS .nav-btn-end{
+}
+
+.jimu-widget-searchLAS .nav-section{
+}
+
+.jimu-widget-searchLAS .message-info{
+}
+
+.jimu-widget-searchLAS .message-warning{
+}
+
+.jimu-widget-searchLAS .message-error{
+}
+

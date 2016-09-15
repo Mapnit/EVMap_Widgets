@@ -1,0 +1,20 @@
+{
+  "title": "Search EV LAS",
+  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Geology/Well_EV_LAS/MapServer/4", 
+  "logAliases": [{
+	"field": "Evdphi",
+	"label": "EVDPHI"
+  }, {
+	"field": "Evdt",
+	"label": "EVDT"
+  }, {
+	"field": "Evgr",
+	"label": "EVGR"
+  }], 
+  "curveName": {
+	"field": "Curves"
+  },
+  "wellTDValue": {
+	"field": "TVD"
+  }  
+}
