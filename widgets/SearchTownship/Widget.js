@@ -97,8 +97,13 @@ define([
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 			},
 
-			_initSearchForm : function () {				
+			_initSearchForm : function () {	
+			
+				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirNorth, this.vtlDirNorthLabel);
+				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirSouth, this.vtlDirSouthLabel);
 
+				jimuUtils.combineRadioCheckBoxWithLabel(this.hrzDirEast, this.hrzDirEastLabel);
+				jimuUtils.combineRadioCheckBoxWithLabel(this.hrzDirWest, this.hrzDirWestLabel);				
 			},
 			
 			onOpen : function () {

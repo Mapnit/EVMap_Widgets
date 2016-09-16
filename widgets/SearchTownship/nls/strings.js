@@ -7,10 +7,10 @@ define({
 	sectionLabel: "Section",
 	townshipLabel: "Township",
 	rangeLabel: "Range",
-	northDirLabel: "N",
-	southDirLabel: "S",
-	eastDirLabel: "E",
-	westDirLabel: "W",
+	northDirLabel: "North",
+	southDirLabel: "South",
+	eastDirLabel: "East",
+	westDirLabel: "West",
     endSteps: "Search"
   })
 });

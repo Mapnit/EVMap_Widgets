@@ -21,20 +21,20 @@
 			<tr>
 				<td>
 					<div>
-					  <input type="radio" name="vtlDirList" value="N" data-dojo-attach-event="change:_onVtlDirChanged">
-					  ${nls.northDirLabel}
-					  <input type="radio" name="vtlDirList" value="S" data-dojo-attach-event="change:_onVtlDirChanged">
-					  ${nls.southDirLabel}
+					  <input type="radio" name="vtlDirList" value="N" data-dojo-attach-point="vtlDirNorth" data-dojo-attach-event="change:_onVtlDirChanged">
+					  <label data-dojo-attach-point="vtlDirNorthLabel">${nls.northDirLabel}</label>
+					  <input type="radio" name="vtlDirList" value="S" data-dojo-attach-point="vtlDirSouth" data-dojo-attach-event="change:_onVtlDirChanged">
+					  <label data-dojo-attach-point="vtlDirSouthLabel">${nls.southDirLabel}</label>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<div>
-					  <input type="radio" name="hrzDirList" value="E" data-dojo-attach-event="change:_onHrzDirChanged">
-					  ${nls.eastDirLabel}
-					  <input type="radio" name="hrzDirList" value="W" data-dojo-attach-event="change:_onHrzDirChanged">
-					  ${nls.westDirLabel}
+					  <input type="radio" name="hrzDirList" value="E" data-dojo-attach-point="hrzDirEast" data-dojo-attach-event="change:_onHrzDirChanged">
+					  <label data-dojo-attach-point="hrzDirEastLabel">${nls.eastDirLabel}</label>
+					  <input type="radio" name="hrzDirList" value="W" data-dojo-attach-point="hrzDirWest" data-dojo-attach-event="change:_onHrzDirChanged">
+					  <label data-dojo-attach-point="hrzDirWestLabel">${nls.westDirLabel}</label>
 					</div>
 				</td>
 			</tr>
