@@ -356,6 +356,15 @@
         "index": 11,
         "id": "widgets_DataFilter_Widget_46",
         "icon": "widgets/DataFilter/images/icon.png?wab_dv=2.1"
+      },
+      {
+        "name": "SearchLAS",
+        "label": "Search TGS LAS",
+        "version": "2.1",
+        "uri": "widgets/SearchLAS/Widget",
+        "index": 12,
+        "id": "widgets_SearchLAS_Widget_47",
+        "icon": "widgets/SearchLAS/images/icon.png?wab_dv=2.1"
 	  }
     ],
     "groups": []
