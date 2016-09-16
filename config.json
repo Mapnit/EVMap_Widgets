@@ -313,12 +313,21 @@
         "id": "widgets_Select_Widget_41"
       },
       {
+        "name": "DataFilter",
+        "label": "Filter Data",
+        "version": "2.1",
+        "uri": "widgets/DataFilter/Widget",
+        "icon": "widgets/DataFilter/images/icon.png?wab_dv=2.1"
+	  }
+    ],
+    "groups": [{
+	  "name": "SearchGroup", 
+	  "label": "Search", 
+	  "widgets": [{
         "name": "SearchData",
-        "label": "Search Data",
+        "label": "Search Lease",
         "version": "2.1",
         "uri": "widgets/SearchData/Widget",
-        "index": 7,
-        "id": "widgets_SearchData_Widget_42",
         "icon": "widgets/SearchData/images/icon.png?wab_dv=2.1"
       },
       {
@@ -326,8 +335,6 @@
         "label": "Search Texas Survey",
         "version": "2.1",
         "uri": "widgets/SearchSurvey/Widget",
-        "index": 8,
-        "id": "widgets_SearchSurvey_Widget_43",
         "icon": "widgets/SearchSurvey/images/icon.png?wab_dv=2.1"
       },
       {
@@ -335,8 +342,6 @@
         "label": "Search Township",
         "version": "2.1",
         "uri": "widgets/SearchTownship/Widget",
-        "index": 9,
-        "id": "widgets_SearchTownship_Widget_44",
         "icon": "widgets/SearchTownship/images/icon.png?wab_dv=2.1"
       },
       {
@@ -344,8 +349,6 @@
         "label": "Search Parcels",
         "version": "2.1",
         "uri": "widgets/SearchParcel/Widget",
-        "index": 10,
-        "id": "widgets_SearchParcel_Widget_45",
         "icon": "widgets/SearchParcel/images/icon.png?wab_dv=2.1"
       },
       {
@@ -353,21 +356,9 @@
         "label": "Search TGS LAS",
         "version": "2.1",
         "uri": "widgets/SearchLAS/Widget",
-        "index": 11,
-        "id": "widgets_SearchLAS_Widget_46",
         "icon": "widgets/SearchLAS/images/icon.png?wab_dv=2.1"
-      },
-      {
-        "name": "DataFilter",
-        "label": "Filter Data",
-        "version": "2.1",
-        "uri": "widgets/DataFilter/Widget",
-        "index": 12,
-        "id": "widgets_DataFilter_Widget_47",
-        "icon": "widgets/DataFilter/images/icon.png?wab_dv=2.1"
-	  }
-    ],
-    "groups": []
+      }]
+	}]
   },
   "mobileLayout": {
     "widgetOnScreen": {
