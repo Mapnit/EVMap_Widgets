@@ -40,8 +40,5 @@
   },
   "wellTDValue": {
 	"field": "TOT_DEPTH"
-  }, 
-  "purchasedLogs": {
-	"field": "LAS"
   }  
 }
