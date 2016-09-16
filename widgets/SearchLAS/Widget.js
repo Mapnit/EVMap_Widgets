@@ -53,9 +53,7 @@ define([
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchLAS',
-			baseClass : 'jimu-widget-searchLAS',
-			_gs : null,
-			_defaultGsUrl : '//tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
+			baseClass : 'ev-widget-searchLAS',
 			_searchParams : {}, 
 			_queryTask : null,
 			_graphicLayer : null,
@@ -94,21 +92,10 @@ define([
 				}
 			},
 			_currentViewIndex : 0,
-			_filterValues : [],
 			_drawTool : null, 
 			_editTool : null, 
 			_editCxtMenu : null, 
 			_searchPolygon : null, 
-
-			postMixInProperties : function () {
-				this.inherited(arguments);
-
-				if (esriConfig.defaults.geometryService) {
-					this._gs = esriConfig.defaults.geometryService;
-				} else {
-					this._gs = new GeometryService(this._defaultGsUrl);
-				}
-			},
 
 			postCreate : function () {
 				this.inherited(arguments);
@@ -127,7 +114,7 @@ define([
 
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 
-				this._filterValues = []; 
+				this._searchParams = {"queryTypeOpr": "OR"}; 
 			},
 
 			_initSearchForm : function () {
@@ -151,7 +138,7 @@ define([
 						on(checkBtn, "change", lang.hitch(this, this._onLogAliasFieldChecked));
 					}));
 				
-				jimuUtils.combineRadioCheckBoxWithLabel(this.includePreviousLogs, this.includePreviousLogsLabel);
+				jimuUtils.combineRadioCheckBoxWithLabel(this.includePurchasedLogs, this.includePurchasedLogsLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.searchLogAliasField, this.searchLogAliasFieldLabel);
 				
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeOr, this.queryTypeOrLabel);
@@ -185,7 +172,7 @@ define([
 				if (this._drawTool) {
 					this._drawTool.deactivate(); 
 				}
-				this.map.enableMapNavigation();				
+				this.map.enableMapNavigation();	
 			},
 
 			destroy : function () {},
@@ -212,8 +199,41 @@ define([
 			},
 
 			_onBtnEndClicked : function () {
-				var whereClause;
+				var criteria = [], aliasCriteria = []; 
+				if (this._searchParams["logAliasFields"] && this._searchParams["logAliasFields"].length > 0) {
+					aliasCriteria = array.map(this._searchParams["logAliasFields"], lang.hitch(this, function(alias) {
+						return alias + "=1";
+					})); 
+					criteria.push("(" + aliasCriteria.join(" " + this._searchParams["queryTypeOpr"] + " ") + ")"); 
+				}
+				if (this.curveName.value) {
+					criteria.push(this.config.curveName.field + " like '%" + this.curveName.value + "%'"); 
+				}
+				if (this.wellTDMinValue.value) {
+					if (this._isNumeric(this.wellTDMinValue.value)) {
+						criteria.push(this.config.wellTDValue.field + " > " + this.wellTDMinValue.value); 
+					}
+				}
+				if (this.wellTDMaxValue.value) {
+					if (this._isNumeric(this.wellTDMaxValue.value)) {
+						criteria.push(this.config.wellTDValue.field + " < " + this.wellTDMaxValue.value); 
+					}
+				}
+				if (this._searchParams["includePurchasedLogs"]) {
+					criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Not Purchased')");
+				}
+				
+				if (criteria.length > 0) {
+					var whereClause = criteria.join (" and "); 
+					this._executeSearch(whereClause); 
+				} else {
+					this._showMessage("invalid search parameter", "error"); 
+				}
 			},
+			
+			_isNumeric : function(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
+			}, 
 
 			_onLogAliasFieldChecked : function (evt) {
 				var logAlias = evt.currentTarget; 
@@ -224,9 +244,9 @@ define([
 					this._searchParams["logAliasFields"].push(logAlias.value); 
 				} else {
 					this._searchParams["logAliasFields"] = array.filter(
-						this._searchParams["logAliasFields"], function(unwanted) {
-							return unwanted === logAlias.value; 
-					}); 
+						this._searchParams["logAliasFields"], lang.hitch(this, function(unwanted) {
+							return unwanted !== logAlias.value; 
+					})); 
 				}
 			},
 
@@ -300,11 +320,15 @@ define([
 			},
 
 			_onSearchLogAliasFieldsChanged : function (evt) {
-				this._searchParams["searchLogAliasField"] = evt.currentTarget.checked; 
+				if (evt.currentTarget.checked) {
+					domStyle.set(this.logAliasFieldList, "display", "block"); 
+				} else {
+					domStyle.set(this.logAliasFieldList, "display", "none"); 
+				}
 			},
 
-			_onIncludePreviousLogsChanged : function (evt) {
-				this._searchParams["includePreviousLogs"] = evt.currentTarget.checked; 
+			_onIncludePurchasedLogsChanged : function (evt) {
+				this._searchParams["includePurchasedLogs"] = evt.currentTarget.checked; 
 			},
 			
 			_onQueryTypeChanged : function (evt) {
@@ -333,48 +357,14 @@ define([
 				this.searchMessage.innerText = "";
 			},
 
-			_filterByPolygon : function () {
-				var deferred = new Deferred();
-				
-				if (this._searchPolygon === true) {
-					var query = new Query();
-					query.where = whereClause;
-					query.outSpatialReference = this.map.spatialReference;
-					query.returnGeometry = true;
-					query.outFields = ["*"];
-					query.geometry = this._searchPolygon;
-					query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
-
-					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
-							var valueArray = [];
-							if (resultSet && resultSet.features && resultSet.features.length > 0) {
-								array.forEach(resultSet.features, lang.hitch(this, function (feature, i) {
-										valueArray.push(feature.attributes[this._selectedOption.field]);
-										console.debug("partial match: " + feature.attributes[this._selectedOption.field]);
-									}));
-							} else {
-								this._showMessage("no feature found", "warning");
-							}
-							return deferred.resolve(valueArray);
-						}), lang.hitch(this, function (err) {
-							return deferred.reject(err);
-						}));
-				} else {
-					this._showMessage("Draw a search polygon first", "error"); 
-				}
-			},
-
 			_executeSearch : function (whereClause) {
 				var query = new Query();
 				query.where = whereClause;
 				query.outSpatialReference = this.map.spatialReference;
 				query.returnGeometry = true;
 				query.outFields = ["*"];
-
-				if (this._searchParams["limitToMapExtent"] === true) {
-					query.geometry = this.map.extent;
-					query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
-				}
+				query.geometry = this._searchPolygon.geometry;
+				query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
 
 				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {

@@ -40,6 +40,14 @@
 .jimu-widget-searchLAS .filter-input-value{
 }
 
+.jimu-widget-searchLAS .log-alias-field-list{
+	display: none; 
+	border-style: solid; 
+	border-width: 1px; 
+	margin: 5px 2px 2px 5px; 
+	padding: 5px 2px 2px 5px; 
+}
+
 .jimu-widget-searchLAS .nav-section{
 }
 

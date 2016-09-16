@@ -16,12 +16,11 @@
       <div class="filter-input">
 		<input type="checkbox" data-dojo-attach-point="searchLogAliasField" data-dojo-attach-event="onchange:_onSearchLogAliasFieldsChanged"/>
 		<label data-dojo-attach-point="searchLogAliasFieldLabel">${nls.searchLogAliasFieldLabel}</label>
-		<fieldset>
-			<legend>${nls.logAliasFields}</legend>
-			<div class="log-alias-fields" data-dojo-attach-point="logAliasFieldList">
-			</div>
-		</fieldset>
+		<div class="log-alias-field-list" data-dojo-attach-point="logAliasFieldList">
+		</div>
+		<div>
 		<label>${nls.curveName}</label><input type="text" data-dojo-attach-point="curveName"/>
+		<div>
 		<fieldset>
 			<legend>${nls.wellTDRange}</legend>
 			<table>
@@ -35,11 +34,11 @@
 				</tr>
 			</table>
 		</fieldset>
-		<input type="checkbox" data-dojo-attach-point="includePreviousLogs" data-dojo-attach-event="onchange:_onIncludePreviousLogsChanged"/>
-		<label data-dojo-attach-point="includePreviousLogsLabel">${nls.includePreviousLogsLabel}</label>
+		<input type="checkbox" data-dojo-attach-point="includePurchasedLogs" data-dojo-attach-event="onchange:_onIncludePurchasedLogsChanged"/>
+		<label data-dojo-attach-point="includePurchasedLogsLabel">${nls.includePurchasedLogsLabel}</label>
 		<fieldset>
 			<legend>${nls.queryType}</legend>
-			<input type="radio" name="queryTypeOpr" value="OR" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
+			<input type="radio" name="queryTypeOpr" value="OR" checked="checked" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
 			<label data-dojo-attach-point="queryTypeOrLabel">${nls.queryTypeOR}</label>
 			<input type="radio" name="queryTypeOpr" value="AND" data-dojo-attach-point="queryTypeAnd" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
 			<label data-dojo-attach-point="queryTypeAndLabel">${nls.queryTypeAND}</label>

@@ -12,7 +12,7 @@ define({
 	wellTDRange: "Well TD Range", 
 	wellTDMinValue: "Min Value",
 	wellTDMaxValue: "Max Value", 
-	includePreviousLogsLabel: "Include Previous Purchased Logs?", 
+	includePurchasedLogsLabel: "Include Previous Purchased Logs?", 
 	queryType: "Query Type",
 	queryTypeOR: "OR",
 	queryTypeAND: "AND",
