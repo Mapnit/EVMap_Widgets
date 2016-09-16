@@ -212,6 +212,8 @@ define([
 					}
 				}
 				if (this._searchParams["includePurchasedLogs"]) {
+					criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Purchased')");
+				} else {
 					criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Not Purchased')");
 				}
 				
