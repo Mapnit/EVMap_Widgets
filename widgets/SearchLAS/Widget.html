@@ -34,8 +34,10 @@
 				</tr>
 			</table>
 		</fieldset>
+		<div data-dojo-attach-point="includePurchasedLogsSection" >
 		<input type="checkbox" data-dojo-attach-point="includePurchasedLogs" data-dojo-attach-event="onchange:_onIncludePurchasedLogsChanged"/>
 		<label data-dojo-attach-point="includePurchasedLogsLabel">${nls.includePurchasedLogsLabel}</label>
+		</div>
 		<fieldset>
 			<legend>${nls.queryType}</legend>
 			<input type="radio" name="queryTypeOpr" value="OR" checked="checked" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
