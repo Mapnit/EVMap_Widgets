@@ -144,14 +144,6 @@ define([
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeOr, this.queryTypeOrLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeAnd, this.queryTypeAndLabel);
 			},
-
-			onActive : function () {
-				this.map.setInfoWindowOnClick(false);
-			},
-
-			onDeActive : function () {
-				this.map.setInfoWindowOnClick(true);
-			},
 			
 			onOpen : function() {
 				this._graphicLayer = new GraphicsLayer();
