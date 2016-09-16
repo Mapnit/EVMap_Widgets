@@ -114,7 +114,11 @@ define([
 
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 
-				this._searchParams = {"queryTypeOpr": "OR"}; 
+				this._searchParams = {
+					"logAliasFields": [], 
+					"includePurchasedLogs": false, 
+					"queryTypeOpr": "OR"
+				}; 
 			},
 
 			_initSearchForm : function () {
@@ -143,6 +147,12 @@ define([
 				
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeOr, this.queryTypeOrLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeAnd, this.queryTypeAndLabel);
+				
+				if (this.config.purchasedLogs) {
+					domStyle.set(this.includePurchasedLogsSection, "display", "block"); 
+				} else {
+					domStyle.set(this.includePurchasedLogsSection, "display", "none"); 
+				}
 			},
 			
 			onOpen : function() {
@@ -211,17 +221,19 @@ define([
 						criteria.push(this.config.wellTDValue.field + " < " + this.wellTDMaxValue.value); 
 					}
 				}
-				if (this._searchParams["includePurchasedLogs"]) {
-					criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Purchased')");
-				} else {
-					criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Not Purchased')");
+				if (this.config.purchasedLogs) {
+					if (this._searchParams["includePurchasedLogs"] === true) {
+						criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Purchased')");
+					} else if (this._searchParams["includePurchasedLogs"] === false) {
+						criteria.push("UPPER(" + this.config.purchasedLogs.field + ")=UPPER('Not Purchased')");
+					}					
 				}
 				
 				if (criteria.length > 0) {
 					var whereClause = criteria.join (" and "); 
 					this._executeSearch(whereClause); 
 				} else {
-					this._showMessage("invalid search parameter", "error"); 
+					this._showMessage("empty search parameter", "error"); 
 				}
 			},
 			
@@ -232,9 +244,6 @@ define([
 			_onLogAliasFieldChecked : function (evt) {
 				var logAlias = evt.currentTarget; 
 				if (logAlias.checked === true) {
-					if (!this._searchParams["logAliasFields"]) {
-						this._searchParams["logAliasFields"] = []; 
-					}
 					this._searchParams["logAliasFields"].push(logAlias.value); 
 				} else {
 					this._searchParams["logAliasFields"] = array.filter(
