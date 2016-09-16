@@ -6,7 +6,7 @@ define({
 	polygonCaptured: "Geometry captured", 
 	filterPrompt: "Enter your search using the form fields below.", 
 	filterInputTip: "Note: All form fields are optional. If none are selected, a search will be performed on all ('Not Purchased') records", 
-	searchLogAliasFieldLabel: "Search with Log Alias Fields?", 
+	searchLogAliasFieldsLabel: "Search with Log Alias Fields?", 
 	logAliasFields: "Log Alias", 
 	curveName: "Curve Name",
 	wellTDRange: "Well TD Range", 

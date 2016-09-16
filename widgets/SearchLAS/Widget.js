@@ -115,6 +115,7 @@ define([
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 
 				this._searchParams = {
+					"searchLogAliasFields": false, 
 					"logAliasFields": [], 
 					"includePurchasedLogs": false, 
 					"queryTypeOpr": "OR"
@@ -143,7 +144,7 @@ define([
 					}));
 				
 				jimuUtils.combineRadioCheckBoxWithLabel(this.includePurchasedLogs, this.includePurchasedLogsLabel);
-				jimuUtils.combineRadioCheckBoxWithLabel(this.searchLogAliasField, this.searchLogAliasFieldLabel);
+				jimuUtils.combineRadioCheckBoxWithLabel(this.searchLogAliasFields, this.searchLogAliasFieldsLabel);
 				
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeOr, this.queryTypeOrLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.queryTypeAnd, this.queryTypeAndLabel);
@@ -202,11 +203,13 @@ define([
 
 			_onBtnEndClicked : function () {
 				var criteria = [], aliasCriteria = []; 
-				if (this._searchParams["logAliasFields"] && this._searchParams["logAliasFields"].length > 0) {
-					aliasCriteria = array.map(this._searchParams["logAliasFields"], lang.hitch(this, function(alias) {
-						return alias + "=1";
-					})); 
-					criteria.push("(" + aliasCriteria.join(" " + this._searchParams["queryTypeOpr"] + " ") + ")"); 
+				if (this._searchParams["searchLogAliasFields"] === true) {
+					if (this._searchParams["logAliasFields"] && this._searchParams["logAliasFields"].length > 0) {
+						aliasCriteria = array.map(this._searchParams["logAliasFields"], lang.hitch(this, function(alias) {
+							return alias + "=1";
+						})); 
+						criteria.push("(" + aliasCriteria.join(" " + this._searchParams["queryTypeOpr"] + " ") + ")"); 
+					}					
 				}
 				if (this.curveName.value) {
 					criteria.push(this.config.curveName.field + " like '%" + this.curveName.value + "%'"); 
@@ -323,6 +326,7 @@ define([
 			},
 
 			_onSearchLogAliasFieldsChanged : function (evt) {
+				this._searchParams["searchLogAliasFields"] = evt.currentTarget.checked;
 				if (evt.currentTarget.checked) {
 					domStyle.set(this.logAliasFieldList, "display", "block"); 
 				} else {
