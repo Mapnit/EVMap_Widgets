@@ -47,8 +47,6 @@ define([
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchParcel',
 			baseClass : 'jimu-widget-searchParcel',
-			_gs : null,
-			_defaultGsUrl : '//tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer', 
 			_graphicLayer : null,
 			_symbols : {
 				"esriGeometryPolygon" : {
@@ -86,16 +84,6 @@ define([
 			},
 			_stateValues : null,
 			_countyValues : null,
-
-			postMixInProperties : function () {
-				this.inherited(arguments);
-
-				if (esriConfig.defaults.geometryService) {
-					this._gs = esriConfig.defaults.geometryService;
-				} else {
-					this._gs = new GeometryService(this._defaultGsUrl);
-				}
-			},
 
 			postCreate : function () {
 				this.inherited(arguments);

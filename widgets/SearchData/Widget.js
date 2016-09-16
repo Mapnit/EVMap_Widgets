@@ -50,8 +50,6 @@ define([
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchData',
 			baseClass : 'jimu-widget-searchData',
-			_gs : null,
-			_defaultGsUrl : '//tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
 			_searchParams : {},
 			_selectedOption : null,
 			_queryTask : null,
@@ -92,16 +90,6 @@ define([
 			},
 			_currentViewIndex : 0,
 			_filterValues : [],
-
-			postMixInProperties : function () {
-				this.inherited(arguments);
-
-				if (esriConfig.defaults.geometryService) {
-					this._gs = esriConfig.defaults.geometryService;
-				} else {
-					this._gs = new GeometryService(this._defaultGsUrl);
-				}
-			},
 
 			postCreate : function () {
 				this.inherited(arguments);
