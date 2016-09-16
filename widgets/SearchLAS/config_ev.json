@@ -1,0 +1,47 @@
+{
+  "title": "Search EV LAS",
+  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Geology/Well_EV_LAS/MapServer/4", 
+  "logAliases": [{
+	"field": "Evdphi",
+	"label": "EVDPHI"
+  }, {
+	"field": "Evdt",
+	"label": "EVDT"
+  }, {
+	"field": "Evdts",
+	"label": "EVDTS"
+  }, {
+	"field": "Evgr",
+	"label": "EVGR"
+  }, {
+	"field": "Evnphi",
+	"label": "EVNPHI"
+  }, {
+	"field": "Evpe",
+	"label": "EVPE"
+  }, {
+	"field": "Evresd",
+	"label": "EVRESD"
+  }, {
+	"field": "Evresm",
+	"label": "EVRESM"
+  }, {
+	"field": "Evress",
+	"label": "EVRESS"
+  }, {
+	"field": "Evrhob",
+	"label": "EVRHOB"
+  }, {
+	"field": "Evsp",
+	"label": "EVSP"
+  }], 
+  "curveName": {
+	"field": "Curves"
+  },
+  "wellTDValue": {
+	"field": "TOT_DEPTH"
+  }, 
+  "purchasedLogs": {
+	"field": "LAS"
+  }  
+}
