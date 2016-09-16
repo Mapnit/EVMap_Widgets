@@ -1,46 +1,46 @@
-.jimu-widget-searchLAS{
+.ev-widget-searchLAS{
 	width: 100%;
 	height: 100%;
 	min-width: 250px;
 	min-height: 192px;
 }
 
-.jimu-widget-searchLAS .draw-section{
+.ev-widget-searchLAS .draw-section{
 }
 
-.jimu-widget-searchLAS .draw-prompt{
+.ev-widget-searchLAS .draw-prompt{
 }
 
-.jimu-widget-searchLAS .geometry-type-polygon{
+.ev-widget-searchLAS .geometry-type-polygon{
     background-image: url(../images/draw-polygon-24.png);
     display: block;
     width: 24px;
     height: 24px;
 }
 
-.jimu-widget-searchLAS .polygon-capture-check{
+.ev-widget-searchLAS .polygon-capture-check{
     background-image: url(../images/draw-polygon-24.png);
     display: block;
     width: 24px;
     height: 24px;
 }
 
-.jimu-widget-searchLAS .filter-section{
+.ev-widget-searchLAS .filter-section{
 }
 
-.jimu-widget-searchLAS .filter-prompt{
+.ev-widget-searchLAS .filter-prompt{
 }
 
-.jimu-widget-searchLAS .filter-input{
+.ev-widget-searchLAS .filter-input{
 }
 
-.jimu-widget-searchLAS .filter-input-prompt{
+.ev-widget-searchLAS .filter-input-prompt{
 }
 
-.jimu-widget-searchLAS .filter-input-value{
+.ev-widget-searchLAS .filter-input-value{
 }
 
-.jimu-widget-searchLAS .log-alias-field-list{
+.ev-widget-searchLAS .log-alias-field-list{
 	display: none; 
 	border-style: solid; 
 	border-width: 1px; 
@@ -48,30 +48,30 @@
 	padding: 5px 2px 2px 5px; 
 }
 
-.jimu-widget-searchLAS .nav-section{
+.ev-widget-searchLAS .nav-section{
 }
 
-.jimu-widget-searchLAS .nav-btn-cancel{
+.ev-widget-searchLAS .nav-btn-cancel{
 }
 
-.jimu-widget-searchLAS .nav-btn-prev{
+.ev-widget-searchLAS .nav-btn-prev{
 }
 
-.jimu-widget-searchLAS .nav-btn-next{
+.ev-widget-searchLAS .nav-btn-next{
 }
 
-.jimu-widget-searchLAS .nav-btn-end{
+.ev-widget-searchLAS .nav-btn-end{
 }
 
-.jimu-widget-searchLAS .nav-section{
+.ev-widget-searchLAS .nav-section{
 }
 
-.jimu-widget-searchLAS .message-info{
+.ev-widget-searchLAS .message-info{
 }
 
-.jimu-widget-searchLAS .message-warning{
+.ev-widget-searchLAS .message-warning{
 }
 
-.jimu-widget-searchLAS .message-error{
+.ev-widget-searchLAS .message-error{
 }
 
