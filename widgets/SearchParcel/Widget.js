@@ -46,7 +46,7 @@ define([
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchParcel',
-			baseClass : 'jimu-widget-searchParcel',
+			baseClass : 'ev-widget-searchParcel',
 			_graphicLayer : null,
 			_symbols : {
 				"esriGeometryPolygon" : {
