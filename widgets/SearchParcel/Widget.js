@@ -127,14 +127,6 @@ define([
 					}, this.countyInput);
 				this._countyValues.startup(); 			
 			},
-
-			onActive : function () {
-				this.map.setInfoWindowOnClick(false);
-			},
-
-			onDeActive : function () {
-				this.map.setInfoWindowOnClick(true);
-			},
 			
 			onOpen : function () {
 				this._graphicLayer = new GraphicsLayer();

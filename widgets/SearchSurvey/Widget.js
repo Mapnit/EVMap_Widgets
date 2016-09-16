@@ -140,14 +140,6 @@ define([
 					}, this.sectionInput);
 				this._sectionValues.startup(); 				
 			},
-
-			onActive : function () {
-				this.map.setInfoWindowOnClick(false);
-			},
-
-			onDeActive : function () {
-				this.map.setInfoWindowOnClick(true);
-			},
 			
 			onOpen : function () {
 				this._graphicLayer = new GraphicsLayer();

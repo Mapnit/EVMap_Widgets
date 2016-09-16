@@ -112,14 +112,6 @@ define([
 			_initSearchForm : function () {				
 
 			},
-
-			onActive : function () {
-				this.map.setInfoWindowOnClick(false);
-			},
-
-			onDeActive : function () {
-				this.map.setInfoWindowOnClick(true);
-			},
 			
 			onOpen : function () {
 				this._graphicLayer = new GraphicsLayer();
