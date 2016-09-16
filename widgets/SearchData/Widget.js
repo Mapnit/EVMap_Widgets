@@ -58,7 +58,7 @@ define([
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
-					"color" : [255, 0, 0, 64],
+					"color" : [0, 255, 255, 64],
 					"outline" : {
 						"type" : "esriSLS",
 						"style" : "esriSLSSolid",
@@ -75,7 +75,7 @@ define([
 				"esriGeometryPoint" : {
 					"type" : "esriSMS",
 					"style" : "esriSMSCircle",
-					"color" : [255, 0, 0, 128],
+					"color" : [0, 255, 255, 128],
 					"size" : 8,
 					"angle" : 0,
 					"xoffset" : 0,
