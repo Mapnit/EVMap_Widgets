@@ -49,7 +49,7 @@ define([
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchData',
-			baseClass : 'jimu-widget-searchData',
+			baseClass : 'ev-widget-searchData',
 			_searchParams : {},
 			_selectedOption : null,
 			_queryTask : null,
