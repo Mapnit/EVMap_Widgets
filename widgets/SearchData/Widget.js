@@ -113,7 +113,6 @@ define([
 
 			_initSearchForm : function () {
 
-				this.searchTitle.innerText = this.config.title;
 				this.optionListPrompt.innerText = this.config.prompt;
 
 				array.forEach(this.config.options, lang.hitch(this, function (opt) {
