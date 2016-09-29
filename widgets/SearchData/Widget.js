@@ -50,6 +50,8 @@ define([
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchData',
 			baseClass : 'ev-widget-searchData',
+			partialMatchMaxNumber : 100, 
+			partialMatchMinInputLength : 3, 
 			_searchParams : {},
 			_selectedOption : null,
 			_queryTask : null,
@@ -177,7 +179,7 @@ define([
 					this._currentViewIndex = Math.min(++this._currentViewIndex, this.viewStack.views.length - 1);
 					this.viewStack.switchView(this.filterSection);
 				} else {
-					this._showMessage("Select one of search options first"); 
+					this._showMessage("no search option selected", "error"); 
 				}
 			},
 
@@ -297,12 +299,13 @@ define([
 						switch (this._selectedOption.dataType) {
 						case "text":
 						case "number":
-							this._hideMessage();
 							this._filterValues[0] = domConstruct.create("select", {
 									"name" : "searchVal",
 									"multiple" : "multiple"
 								});
 							this.filterInput.appendChild(this._filterValues[0]);
+							
+							this._showMessage("retrieving " + this._selectedOption.label + "..."); 
 							this._fetchPartialMatches("").then(
 								lang.hitch(this, function (valueArray) {
 									array.forEach(valueArray, lang.hitch(this, function (valItem) {
@@ -312,6 +315,7 @@ define([
 												});
 											this._filterValues[0].appendChild(valOption);
 										}));
+									this._hideMessage(); 
 								}), lang.hitch(this, function (err) {
 									this._showMessage(err.message, "error");
 								}));
@@ -356,7 +360,6 @@ define([
 									}, limitVal)
 									);
 								this._filterValues[i%2].startup();
-								domStyle
 								break;
 							}
 							valueRow.appendChild(limitValCell);
@@ -376,9 +379,10 @@ define([
 				var fltrValue = this._filterValues[0].get('value'); 
 				if (fltrValue) {
 					var textInput = fltrValue.trim();
-					if (textInput.length > 3) {
-						this._hideMessage(); 
-						this._fetchPartialMatches(textInput).then(lang.hitch(this, function (valueArray) {
+					if (textInput.length >= this.partialMatchMinInputLength) {
+						this._showMessage("retrieving partial matches on " + this._selectedOption.label + "...");  
+						this._fetchPartialMatches(textInput).then(
+							lang.hitch(this, function (valueArray) {
 								var valueStore = new Memory({data: []});
 								this._filterValues[0].store = valueStore;
 								if (valueArray && valueArray.length > 0) {
@@ -390,8 +394,9 @@ define([
 											});											
 										}));
 									this._filterValues[0].store = valueStore;
+									this._showMessage("click the dropdown arrow to show partial matches");
 								} else {
-									this._showMessage("no value found", "warning");
+									this._showMessage("no partial match found", "warning");
 								}
 							}), lang.hitch(this, function (err) {
 								this._showMessage(err.message, "error");
@@ -416,9 +421,13 @@ define([
 					domClass.add(this.searchMessage, "message-info");
 				}
 				this.searchMessage.innerText = textMsg;
+				
+				domStyle.set(this.searchMessage, "display", "block"); 
 			},
 
 			_hideMessage : function () {
+				domStyle.set(this.searchMessage, "display", "none"); 
+				
 				this.searchMessage.innerText = "";
 			},
 
@@ -432,6 +441,7 @@ define([
 					query.orderByFields = [this._selectedOption.field];
 					query.returnDistinctValues = true;
 					query.outFields = [this._selectedOption.field];
+					query.num = this.partialMatchMaxNumber; 
 
 					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
 							var valueArray = [];
@@ -458,6 +468,8 @@ define([
 
 			_executeSearch : function (whereClause) {
 				if (this._selectedOption) {
+					this._showMessage("searching..."); 
+					
 					var query = new Query();
 					query.where = whereClause;
 					query.outSpatialReference = this.map.spatialReference;
@@ -471,7 +483,12 @@ define([
 
 					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
 							if (resultSet && resultSet.features && resultSet.features.length > 0) {
-								this._showMessage(resultSet.features.length + " feature(s) found");
+								if (resultSet.exceededTransferLimit === true) {
+									this._showMessage("exceed search limit. only first " 
+										+ resultSet.features.length + " feature(s) displayed", "warning"); 
+								} else {
+									this._showMessage(resultSet.features.length + " feature(s) found");
+								}
 								this._drawResultsOnMap(resultSet);
 							} else {
 								this._showMessage("no feature found", "warning");
