@@ -4,10 +4,11 @@
       <label class="option-list-prompt" data-dojo-attach-point="optionListPrompt"></label>
       <div class="option-list" data-dojo-attach-point="optionList">
       </div>
-			<div>
-				<input type="checkbox" data-dojo-attach-point="limitToMapExtent" data-dojo-attach-event="onchange:_onLimitToMapExtentChecked"/>
-				<label data-dojo-attach-point="limitToMapExtentLabel">${nls.limitToMapExtent}</label>
-			</div>
+	  <div class="limit-to-map-extent-section">
+		  <input type="checkbox" data-dojo-attach-point="limitToMapExtent" data-dojo-attach-event="onchange:_onLimitToMapExtentChecked"/>
+		  <label data-dojo-attach-point="limitToMapExtentLabel">${nls.limitToMapExtent}</label>
+	  </div>
+	  <hr/>
       <div class="nav-section">
         <button class="nav-btn-cancel" data-dojo-attach-event="onclick:_onBtnCancelClicked">${nls.cancelSteps}</button>
         <button class="nav-btn-next" data-dojo-attach-event="onclick:_onBtnGoToNextClicked">${nls.nextStep}</button>
@@ -17,6 +18,7 @@
       <label class="filter-prompt" data-dojo-attach-point="filterPrompt"></label>
       <div class="filter-input" data-dojo-attach-point="filterInput">
       </div>
+	  <hr/>
       <div class="nav-section">
         <button class="nav-btn-cancel" data-dojo-attach-event="onclick:_onBtnCancelClicked">${nls.cancelSteps}</button>
         <button class="nav-btn-prev" data-dojo-attach-event="onclick:_onBtnGoToPrevClicked">${nls.prevStep}</button>
@@ -24,5 +26,7 @@
       </div>
     </div>  
   </div>
+  <div class="message-section">
 	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+  </div>
 </div>

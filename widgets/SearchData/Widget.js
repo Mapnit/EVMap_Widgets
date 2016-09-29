@@ -117,6 +117,7 @@ define([
 
 				array.forEach(this.config.options, lang.hitch(this, function (opt) {
 						var optionDiv = domConstruct.create("div");
+						domClass.add(optionDiv, "option-list-item"); 
 						var radioBtn = domConstruct.create("input", {
 								"type" : "radio",
 								"name" : "searchOption",
@@ -172,8 +173,12 @@ define([
 			},
 
 			_onBtnGoToNextClicked : function () {
-				this._currentViewIndex = Math.min(++this._currentViewIndex, this.viewStack.views.length - 1);
-				this.viewStack.switchView(this.filterSection);
+				if (this._selectedOption) {
+					this._currentViewIndex = Math.min(++this._currentViewIndex, this.viewStack.views.length - 1);
+					this.viewStack.switchView(this.filterSection);
+				} else {
+					this._showMessage("Select one of search options first"); 
+				}
 			},
 
 			_onBtnEndClicked : function () {
@@ -226,6 +231,8 @@ define([
 			},
 
 			_onSearchOptionChecked : function (evt) {
+				this._hideMessage();
+				
 				this._searchParams["searchOption"] = evt.currentTarget.value;
 
 				this._selectedOption = null;
@@ -247,6 +254,7 @@ define([
 					var filterLabel = domConstruct.create("label", {
 							"innerHTML" : this._selectedOption.label
 						});
+					domClass.add(filterLabel, "filter-input-prompt");
 					this.filterInput.appendChild(filterLabel);
 					
 					switch (this._selectedOption.input) {
@@ -277,8 +285,8 @@ define([
 						case "text":
 						case "number":
 							this._filterValues[0] = domConstruct.create("textarea", {
-									"row" : "5",
-									"style" : "width:175px"
+									"row" : "10",
+									"style" : "height:50px;width:90%;"
 								});
 							this.filterInput.appendChild(this._filterValues[0]);
 							break;
@@ -292,8 +300,7 @@ define([
 							this._hideMessage();
 							this._filterValues[0] = domConstruct.create("select", {
 									"name" : "searchVal",
-									"multiple" : "multiple",
-									"style" : "width:175px"
+									"multiple" : "multiple"
 								});
 							this.filterInput.appendChild(this._filterValues[0]);
 							this._fetchPartialMatches("").then(
@@ -313,15 +320,20 @@ define([
 						break;
 					case "range":
 						this._hideMessage();
-						var valueContainer = domConstruct.create("div"); 						
-						this.filterInput.appendChild(valueContainer);
-						
+						var valueContainer = domConstruct.create("table"); 
+						this.filterInput.appendChild(valueContainer);						
 						array.forEach(this._selectedOption.rangeLabels, lang.hitch(this, function(lbl, i) {
+							var valueRow = domConstruct.create("tr");
+							
+							var limitLabelCell = domConstruct.create("td");
 							var limitLabel = domConstruct.create("label", {
 								"innerHTML": lbl
 							});
-							valueContainer.appendChild(limitLabel);
+							domClass.add(limitLabel, "filter-input-prompt");
+							limitLabelCell.appendChild(limitLabel);
+							valueRow.appendChild(limitLabelCell);
 							
+							var limitValCell = domConstruct.create("td");
 							var limitVal;
 							switch(this._selectedOption.dataType) {
 							case "text":
@@ -330,20 +342,26 @@ define([
 										"type" : "text",
 										"style" : "width:100px"
 									});	
-								valueContainer.appendChild(limitVal);
+								limitValCell.appendChild(limitVal);
 								this._filterValues.push(limitVal);
 								break;
 							case "date":
 								limitVal = domConstruct.create("input", {
 										"type" : "text"
 									});	
-								valueContainer.appendChild(limitVal);
+								limitValCell.appendChild(limitVal);
 								this._filterValues.push(
-									new DateTextBox({}, limitVal)
+									new DateTextBox({
+										"style": "width:125px;height:30px;"
+									}, limitVal)
 									);
 								this._filterValues[i%2].startup();
+								domStyle
 								break;
 							}
+							valueRow.appendChild(limitValCell);
+							
+							valueContainer.appendChild(valueRow); 
 						}));
 						break;
 					}
