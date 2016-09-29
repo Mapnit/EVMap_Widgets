@@ -9,6 +9,11 @@
 }
 
 .ev-widget-searchLAS .draw-prompt{
+	padding-bottom: 10px; 	
+}
+
+.ev-widget-searchLAS .draw-input{
+	padding: 5px; 	
 }
 
 .ev-widget-searchLAS .geometry-type-polygon{
@@ -29,49 +34,96 @@
 }
 
 .ev-widget-searchLAS .filter-prompt{
+	padding-bottom: 10px; 	
 }
 
 .ev-widget-searchLAS .filter-input{
+	width: 100%; 
+	padding-left: 5px; 
+	padding-top: 10px; 	
 }
 
 .ev-widget-searchLAS .filter-input-prompt{
+	vertical-align: top;
+	padding-right: 5px;	
 }
 
-.ev-widget-searchLAS .filter-input-value{
+.ev-widget-searchLAS .filter-input-fieldset{
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 2px groove;	
+}
+
+.ev-widget-searchLAS .filter-input-field{
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
 }
 
 .ev-widget-searchLAS .log-alias-field-list{
+	border: 2px groove;
+	padding: 5px 0px 5px 7px; 
+	margin-left: 5px; 
+	margin-top: 5px; 
 	display: none; 
-	border-style: solid; 
-	border-width: 1px; 
-	margin: 5px 2px 2px 5px; 
-	padding: 5px 2px 2px 5px; 
 }
 
 .ev-widget-searchLAS .nav-section{
+	width: 100%; 
+	padding-bottom: 10px; 		
 }
 
 .ev-widget-searchLAS .nav-btn-cancel{
+	float: left;
+	margin-left: 5px; 
+	display: none; 	
 }
 
 .ev-widget-searchLAS .nav-btn-prev{
+	float: left;
+	margin-left: 5px; 	
 }
 
 .ev-widget-searchLAS .nav-btn-next{
+	float: right;
+	margin-right: 5px; 	
 }
 
 .ev-widget-searchLAS .nav-btn-end{
+	float: right;
+	margin-right: 5px; 	
 }
 
-.ev-widget-searchLAS .nav-section{
+.ev-widget-searchLAS .message-section{
+	width: 100%; 
+	margin-top: 20px; 
+	text-align: center; 
 }
 
 .ev-widget-searchLAS .message-info{
+	font-size: 12px; 
+	color: #444444; 
+	font-weight: bolder;
+	padding: 5px; 	
 }
 
 .ev-widget-searchLAS .message-warning{
+	font-size: 12px; 
+	background-color: yellow; 
+	color: #444444; 
+	font-weight: bolder;
+	padding: 5px; 	
 }
 
 .ev-widget-searchLAS .message-error{
+	font-size: 12px; 
+	background-color: red; 
+	color: yellow; 
+	font-weight: bolder;
+	padding: 5px; 	
 }
 

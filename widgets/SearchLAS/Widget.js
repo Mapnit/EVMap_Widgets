@@ -61,11 +61,11 @@ define([
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
-					"color" : [0, 255, 255, 64],
+					"color" : [0, 255, 255, 0],
 					"outline" : {
 						"type" : "esriSLS",
 						"style" : "esriSLSSolid",
-						"color" : [0, 255, 255, 255],
+						"color" : [255, 0, 0, 255],
 						"width" : 2
 					}
 				},
@@ -195,10 +195,14 @@ define([
 			},
 
 			_onBtnGoToNextClicked : function () {
-				this._hideMessage();
-				
-				this._currentViewIndex = Math.min(++this._currentViewIndex, this.viewStack.views.length - 1);
-				this.viewStack.switchView(this.filterSection);
+				if (this._searchPolygon) {
+					this._hideMessage();
+					
+					this._currentViewIndex = Math.min(++this._currentViewIndex, this.viewStack.views.length - 1);
+					this.viewStack.switchView(this.filterSection);
+				} else {
+					this._showMessage("no search polygon captured", "error"); 
+				}
 			},
 
 			_onBtnEndClicked : function () {
@@ -257,6 +261,7 @@ define([
 			},
 
 			_onSelectByPolygonClicked : function (evt) {
+				this._searchPolygon = null; 
 				// clear the old one
 				this._graphicLayer.clear(); 
 				this._searchParams["searchPolygon"] = null; 
@@ -268,6 +273,8 @@ define([
 				
 				this.map.disableMapNavigation();
 				this._drawTool.activate("polygon");
+				
+				this._showMessage("draw a search polygon on map"); 
 			},
 			
 			_setSearchPolygon : function(evt) {
@@ -286,6 +293,8 @@ define([
 						this._editTool.deactivate();
 					}));
 				}
+				
+				this._showMessage("search polygon is captured. Right click to make changes"); 
 			},
 
 			_createGraphicsMenu : function(graphicsLayer) {
@@ -358,13 +367,19 @@ define([
 					domClass.add(this.searchMessage, "message-info");
 				}
 				this.searchMessage.innerText = textMsg;
+				
+				domStyle.set(this.searchMessage, "display", "block"); 
 			},
 
 			_hideMessage : function () {
+				domStyle.set(this.searchMessage, "display", "none"); 
+				
 				this.searchMessage.innerText = "";
 			},
 
 			_executeSearch : function (whereClause) {
+				this._showMessage("searching..."); 
+				
 				var query = new Query();
 				query.where = whereClause;
 				query.outSpatialReference = this.map.spatialReference;
@@ -375,8 +390,13 @@ define([
 
 				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							this._showMessage(resultSet.features.length + " feature(s) found");
-							this._drawResultsOnMap(resultSet);
+							if (resultSet.exceededTransferLimit === true) {
+								this._showMessage("exceed search limit. only first " 
+									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+							} else {
+								this._showMessage(resultSet.features.length + " feature(s) found");
+							}
+							this._drawResultsOnMap(resultSet, false);
 						} else {
 							this._showMessage("no feature found", "warning");
 						}
@@ -385,8 +405,11 @@ define([
 					}));
 			},
 
-			_drawResultsOnMap : function (resultSet) {
-				this._graphicLayer.clear();
+			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._graphicLayer.clear();
+				}
+				
 				var resultExtent = null,
 				highlightSymbol;
 
@@ -401,7 +424,7 @@ define([
 					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
 					break;
 				default: 
-					this._showMessage("not support such geometry", "error"); 
+					this._showMessage("not support such a geometry", "error"); 
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
