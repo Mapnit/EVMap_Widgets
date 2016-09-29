@@ -102,7 +102,7 @@ define([
 			_initSearchForm : function () {
 				
 				this._countyValues = new ComboBox({
-						hasDownArrow: false,
+						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
@@ -111,7 +111,7 @@ define([
 				this._countyValues.startup();
 
 				this._abstractValues = new ComboBox({
-						hasDownArrow: false,
+						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
@@ -120,13 +120,16 @@ define([
 				this._abstractValues.startup(); 
 				
 				this._sectionValues = new ComboBox({
-						hasDownArrow: false,
+						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
 						disabled: true
 					}, this.sectionInput);
-				this._sectionValues.startup(); 				
+				this._sectionValues.startup(); 	
+				
+				jimuUtils.combineRadioCheckBoxWithLabel(this.abstractInputRadio, this.abstractInputLabel);	
+				jimuUtils.combineRadioCheckBoxWithLabel(this.sectionInputRadio, this.sectionInputLabel);	
 			},
 			
 			onOpen : function () {
@@ -151,6 +154,25 @@ define([
 				this.inherited(arguments);
 
 				this._fetchCountyNames(); 
+			},
+			
+			_onCountyNameChanged: function() {				
+				this._abstractValues.set('value', '');
+				this._sectionValues.set('value', '');				
+				
+				var countyName = this._countyValues.get('value');
+				if (!countyName) {
+					this._showMessage("no county is selected", "error"); 
+				} else {
+					switch(this._searchTarget) {
+					case "abstract":
+						this._fetchAbstractNumbersByCounty(countyName);
+						break; 
+					case "section":
+						this._fetchSectionNamesByCounty(countyName);
+						break;
+					} 
+				}
 			},
 			
 			_onSearchOptionChanged: function(evt) {
@@ -234,6 +256,8 @@ define([
 									});
 								}));
 							this._sectionValues.store = valueStore;
+							
+							this._hideMessage();
 						} else {
 							this._showMessage("no section found", "warning");
 						} 
@@ -269,6 +293,8 @@ define([
 									});
 								}));
 							this._abstractValues.store = valueStore;
+							
+							this._hideMessage();
 						} else {
 							this._showMessage("no abstract found", "warning");
 						} 
@@ -315,14 +341,18 @@ define([
 					domClass.add(this.searchMessage, "message-info");
 				}
 				this.searchMessage.innerText = textMsg;
+				
+				domStyle.set(this.searchMessage, "display", "block"); 
 			},
 
 			_hideMessage : function () {
+				domStyle.set(this.searchMessage, "display", "none"); 
+				
 				this.searchMessage.innerText = "";
 			},
 
 			_executeSearch : function (whereClause) {
-				this._hideMessage(); 
+				this._showMessage("searching...");
 				
 				var query = new Query();
 				query.where = whereClause;
@@ -333,7 +363,12 @@ define([
 				var queryTask = new QueryTask(this.config.layer);
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							this._showMessage(resultSet.features.length + " feature(s) found");
+							if (resultSet.exceededTransferLimit === true) {
+								this._showMessage("exceed search limit. only first " 
+									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+							} else {
+								this._showMessage(resultSet.features.length + " feature(s) found");
+							}
 							this._drawResultsOnMap(resultSet);
 						} else {
 							this._showMessage("no feature found", "warning");
@@ -343,8 +378,11 @@ define([
 					}));
 			},
 
-			_drawResultsOnMap : function (resultSet) {
-				this._graphicLayer.clear();
+			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._graphicLayer.clear();
+				}
+				
 				var resultExtent = null,
 				highlightSymbol;
 
