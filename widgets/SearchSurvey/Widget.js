@@ -46,7 +46,9 @@ define([
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchSurvey',
-			baseClass : 'ev-widget-searchSurvey',
+			baseClass : 'ev-widget-searchSurvey', 
+			partialMatchMaxNumber : 100, 
+			partialMatchMinInputLength : 3, 			
 			_graphicLayer : null,
 			_symbols : {
 				"esriGeometryPolygon" : {
@@ -115,7 +117,8 @@ define([
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
-						disabled: true
+						disabled: true, 
+						onKeyUp: lang.hitch(this, this._onFilterAbstractValueEntered)
 					}, this.abstractInput);
 				this._abstractValues.startup(); 
 				
@@ -124,7 +127,8 @@ define([
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
-						disabled: true
+						disabled: true, 
+						onKeyUp: lang.hitch(this, this._onFilterSectionValueEntered)
 					}, this.sectionInput);
 				this._sectionValues.startup(); 	
 				
@@ -177,29 +181,53 @@ define([
 			
 			_onSearchOptionChanged: function(evt) {
 				var rdoInput = evt.currentTarget; 
+				console.debug("search option changed: " + rdoInput.value + " " + rdoInput.checked);
+
 				this._searchTarget = rdoInput.value; 
-				if (rdoInput.value === "abstract") {
-					this._abstractValues.set('disabled', !rdoInput.checked);
-					this._sectionValues.set('disabled', rdoInput.checked);
-				} else if (rdoInput.value === "section") {
-					this._abstractValues.set('disabled', rdoInput.checked);
-					this._sectionValues.set('disabled', !rdoInput.checked);
-				}
+				
+				this._abstractValues.set('disabled', rdoInput.value !== "abstract");
 				if (this._abstractValues.get('disabled')) {
 					this._abstractValues.set('value', '');
 				}
+
+				this._sectionValues.set('disabled', rdoInput.value !== "section");
 				if (this._sectionValues.get('disabled')) {
 					this._sectionValues.set('value', '');
 				}
+				
+				// manually call the event handler
+				this._onCountyNameChanged();
 			},
 			
-			_onCountyNameChanged: function() {
+			_onFilterSectionValueEntered: function() {
+				var countyName = this._countyValues.get('value');
+				if (!countyName) {
+					this._showMessage("no county is selected", "error");
+					return; 
+				}
 				
-				this._fetchSectionNamesByCounty();
-				this._fetchAbstractNumbersByCounty();
-			},
+				var sectionInputValue = this._sectionValues.get('value');
+				if (sectionInputValue && sectionInputValue.length >= this.partialMatchMinInputLength) {
+					this._fetchSectionNamesByCounty(countyName, sectionInputValue);
+				}
+			}, 
+			
+			_onFilterAbstractValueEntered: function() {
+				var countyName = this._countyValues.get('value');
+				if (!countyName) {
+					this._showMessage("no county is selected", "error");
+					return; 
+				}
+
+				var abstractInputValue = this._abstractValues.get('value');
+				if (abstractInputValue && abstractInputValue.length >= this.partialMatchMinInputLength) {
+					this._fetchAbstractNumbersByCounty(countyName, abstractInputValue);
+				}				
+			}, 
 			
 			_fetchCountyNames : function() {
+				this._showMessage("retrieving counties...");
+				
 				this._countyValues.store = new Memory({data: []});
 
 				var query = new Query();
@@ -221,28 +249,34 @@ define([
 									});
 								}));
 							this._countyValues.store = valueStore;
+							
+							this._hideMessage();
 						} else {
 							this._showMessage("no county found", "warning");
 						}
 					}), lang.hitch(this, function (err) {
 						this._showMessage(err.message, "error");
 					}));
-			},
+			},				
 
-			_fetchSectionNamesByCounty : function() {
+			_fetchSectionNamesByCounty : function(countyName, filterSectionName) {
+				this._showMessage("retrieving sections for " + countyName + "...");
+
 				this._sectionValues.store = new Memory({data: []});
-				this._sectionValues.set('value', '');
+				//this._sectionValues.set('value', '');	
 				
-				this._hideMessage(); 
-				
-				var countyName = this._countyValues.get('value');
-				
+				var whereClause = this.config.section.relatedFields["county"] + " like '" + countyName + "%'"; 
+				if (filterSectionName) {
+					whereClause += (" and " + this.config.section.field + " like '%" + filterSectionName + "%'");
+				}
+			
 				var query = new Query();
-				query.where = this.config.section.relatedFields["county"] + " like '" + countyName + "%'";
+				query.where = whereClause;
 				query.returnGeometry = false;
 				query.outFields = [this.config.section.field];
 				query.orderByFields = [this.config.section.field];
 				query.returnDistinctValues = true; 
+				query.num = this.partialMatchMaxNumber;
 
 				var queryTask = new QueryTask(this.config.section.layer); 
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
@@ -266,20 +300,24 @@ define([
 					}));
 			},
 			
-			_fetchAbstractNumbersByCounty : function() {
+			_fetchAbstractNumbersByCounty : function(countyName, filterAbstractName) {
+				this._showMessage("retrieving abstracts for " + countyName + "...");
+
 				this._abstractValues.store = new Memory({data: []});
-				this._abstractValues.set('value', '');
+				//this._abstractValues.set('value', '');
 				
-				this._hideMessage(); 
-				
-				var countyName = this._countyValues.get('value');
+				var whereClause = this.config.abstract.relatedFields["county"] + " like '" + countyName + "%'";
+				if (filterAbstractName) {
+					whereClause += (" and " + this.config.abstract.field + " like '%" + filterAbstractName + "%'");
+				}
 				
 				var query = new Query();
-				query.where = this.config.abstract.relatedFields["county"] + " like '" + countyName + "%'";
+				query.where = whereClause;
 				query.returnGeometry = false;
 				query.outFields = [this.config.abstract.field];
 				query.orderByFields = [this.config.abstract.field];
 				query.returnDistinctValues = true; 
+				query.num = this.partialMatchMaxNumber;
 
 				var queryTask = new QueryTask(this.config.abstract.layer); 
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
