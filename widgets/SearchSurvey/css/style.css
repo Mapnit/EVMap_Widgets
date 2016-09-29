@@ -5,33 +5,84 @@
 	min-height: 192px;
 }
 
-.ev-widget-searchSurvey .search-title{
+.ev-widget-searchSurvey .search-prompt{
+	padding-bottom: 10px; 	
 }
 
-.ev-widget-searchSurvey .param-label{
+.ev-widget-searchSurvey .filter-input{
+	width: 100%; 
+	padding-left: 5px; 
+	padding-top: 10px; 	
 }
 
-.ev-widget-searchSurvey .param-input{
+.ev-widget-searchSurvey .filter-input-prompt{
+	vertical-align: top;
+	padding-right: 5px;	
+}
+
+.ev-widget-searchSurvey .filter-input-fieldset{
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 2px groove;	
+}
+
+.ev-widget-searchSurvey .filter-input-field{
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
+}
+
+.ev-widget-searchSurvey .filter-input-label{
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
 }
 
 .ev-widget-searchSurvey .nav-section{
+	width: 100%; 
+	padding-bottom: 10px; 	
 }
 
 .ev-widget-searchSurvey .nav-btn-cancel{
+	float: left;
+	margin-left: 5px; 
+	display: none; 		
 }
 
 .ev-widget-searchSurvey .nav-btn-end{
+	float: right;
+	margin-right: 5px; 	
 }
 
-.ev-widget-searchSurvey .nav-section{
+.ev-widget-searchSurvey .message-section{
+	width: 100%; 
+	margin-top: 20px; 
+	text-align: center; 
 }
 
 .ev-widget-searchSurvey .message-info{
+	font-size: 12px; 
+	color: #444444; 
+	font-weight: bolder;
+	padding: 5px; 		
 }
 
 .ev-widget-searchSurvey .message-warning{
+	font-size: 12px; 
+	background-color: yellow; 
+	color: #444444; 
+	font-weight: bolder;
+	padding: 5px; 		
 }
 
 .ev-widget-searchSurvey .message-error{
+	font-size: 12px; 
+	background-color: red; 
+	color: yellow; 
+	font-weight: bolder;
+	padding: 5px; 		
 }
 

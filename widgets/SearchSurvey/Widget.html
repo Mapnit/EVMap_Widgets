@@ -1,28 +1,31 @@
 <div>
 	<label class="search-prompt" data-dojo-attach-point="searchPrompt">${nls.searchPrompt}</label>
-	<form>
-		<div>
-		  <label class="param-label">${nls.countyLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="countyInput"/>
+	<div class="filter-input">
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.countyLabel}</label>
+		  <input type="text" data-dojo-attach-point="countyInput"/>
 		</div>
-		<fieldset>
+		<fieldset class="filter-input-fieldset">
 			<legend>${nls.searchOptionLabel}</legend>
-			<div>
-			  <input type="radio" name="searchOption" value="abstract" 
+			<div class="filter-input-field">
+			  <input type="radio" name="searchOption" value="abstract" data-dojo-attach-point="abstractInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
-			  <label class="param-label">${nls.abstractLabel}</label>
-			  <input type="text" class="param-input" data-dojo-attach-point="abstractInput"/>
+			  <label class="filter-input-label" data-dojo-attach-point="abstractInputLabel">${nls.abstractLabel}</label>
+			  <input type="text" data-dojo-attach-point="abstractInput"/>
 			</div>
-			<div>
-			  <input type="radio" name="searchOption" value="section" 
+			<div class="filter-input-field">
+			  <input type="radio" name="searchOption" value="section" data-dojo-attach-point="sectionInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
-			  <label class="param-label">${nls.sectionLabel}</label>
-			  <input type="text" class="param-input" data-dojo-attach-point="sectionInput"/>
+			  <label class="filter-input-label" data-dojo-attach-point="sectionInputLabel">${nls.sectionLabel}</label>
+			  <input type="text" data-dojo-attach-point="sectionInput"/>
 			</div>
 		</fieldset>
-	</form>
+	</div>
+	<hr/>
 	<div class="nav-section">
 		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
 	</div>
-	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+	<div class="message-section">
+		<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+	</div>
 </div>
