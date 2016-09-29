@@ -1,5 +1,4 @@
 {
-	"title": "Find Aries Wells",
 	"prompt": "How do you want to search for aries wells?",
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/3",
 	"options": [{
@@ -8,8 +7,7 @@
 		"field": "PROPNUM",
 		"dataType": "text",
 		"input": "single",
-		"prompt": "Enter a propNum below, as you type matching propNum will be provided",
-		"default": true
+		"prompt": "Enter a propNum below, as you type matching propNum will be provided"
 	}, {
 		"name": "propertyNumber",
 		"label": "Property Number",
