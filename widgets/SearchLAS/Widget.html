@@ -7,6 +7,7 @@
 			<span class="geometry-type-polygon" data-dojo-attach-event="onclick:_onSelectByPolygonClicked"></span> 
 		</button>
 	  </div>
+	  <hr/>
       <div class="nav-section">
         <button class="nav-btn-next" data-dojo-attach-event="onclick:_onBtnGoToNextClicked">${nls.nextStep}</button>
       </div>
@@ -14,43 +15,50 @@
     <div class="filter-section" data-dojo-attach-point="filterSection">
       <label class="filter-prompt" data-dojo-attach-point="filterPrompt">${nls.filterPrompt}</label>
       <div class="filter-input">
-		<input type="checkbox" data-dojo-attach-point="searchLogAliasFields" data-dojo-attach-event="onchange:_onSearchLogAliasFieldsChanged"/>
-		<label data-dojo-attach-point="searchLogAliasFieldsLabel">${nls.searchLogAliasFieldsLabel}</label>
+		<div class="filter-input-field">
+			<input type="checkbox" data-dojo-attach-point="searchLogAliasFields" data-dojo-attach-event="onchange:_onSearchLogAliasFieldsChanged"/>
+			<label data-dojo-attach-point="searchLogAliasFieldsLabel">${nls.searchLogAliasFieldsLabel}</label>
+		</div>
 		<div class="log-alias-field-list" data-dojo-attach-point="logAliasFieldList">
 		</div>
-		<div>
-		<label>${nls.curveName}</label><input type="text" data-dojo-attach-point="curveName"/>
-		<div>
-		<fieldset>
-			<legend>${nls.wellTDRange}</legend>
-			<table>
-				<tr>
-					<td><label>${nls.wellTDMinValue}</label></td>
-					<td><input type="text" data-dojo-attach-point="wellTDMinValue"/></td>
-				</tr>
-				<tr>
-					<td><label>${nls.wellTDMaxValue}</label></td>
-					<td><input type="text" data-dojo-attach-point="wellTDMaxValue"/></td>
-				</tr>
-			</table>
-		</fieldset>
-		<div data-dojo-attach-point="includePurchasedLogsSection" >
-		<input type="checkbox" data-dojo-attach-point="includePurchasedLogs" data-dojo-attach-event="onchange:_onIncludePurchasedLogsChanged"/>
-		<label data-dojo-attach-point="includePurchasedLogsLabel">${nls.includePurchasedLogsLabel}</label>
+		<div class="filter-input-field">
+			<label>${nls.curveName}</label><input type="text" data-dojo-attach-point="curveName"/>
 		</div>
-		<fieldset>
-			<legend>${nls.queryType}</legend>
-			<input type="radio" name="queryTypeOpr" value="OR" checked="checked" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
-			<label data-dojo-attach-point="queryTypeOrLabel">${nls.queryTypeOR}</label>
-			<input type="radio" name="queryTypeOpr" value="AND" data-dojo-attach-point="queryTypeAnd" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
-			<label data-dojo-attach-point="queryTypeAndLabel">${nls.queryTypeAND}</label>
-		</fieldset>		
-      </div>
+		<div>
+			<fieldset class="filter-input-fieldset">
+				<legend>${nls.wellTDRange}</legend>
+				<table>
+					<tr>
+						<td><label>${nls.wellTDMinValue}</label></td>
+						<td><input type="text" data-dojo-attach-point="wellTDMinValue"/></td>
+					</tr>
+					<tr>
+						<td><label>${nls.wellTDMaxValue}</label></td>
+						<td><input type="text" data-dojo-attach-point="wellTDMaxValue"/></td>
+					</tr>
+				</table>
+			</fieldset>
+			<div class="filter-input-field" data-dojo-attach-point="includePurchasedLogsSection" >
+				<input type="checkbox" data-dojo-attach-point="includePurchasedLogs" data-dojo-attach-event="onchange:_onIncludePurchasedLogsChanged"/>
+				<label data-dojo-attach-point="includePurchasedLogsLabel">${nls.includePurchasedLogsLabel}</label>
+			</div>
+			<fieldset class="filter-input-fieldset">
+				<legend>${nls.queryType}</legend>
+				<input type="radio" name="queryTypeOpr" value="OR" checked="checked" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
+				<label data-dojo-attach-point="queryTypeOrLabel">${nls.queryTypeOR}</label>
+				<input type="radio" name="queryTypeOpr" value="AND" data-dojo-attach-point="queryTypeAnd" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
+				<label data-dojo-attach-point="queryTypeAndLabel">${nls.queryTypeAND}</label>
+			</fieldset>		
+  	    </div>
+	  </div>
+	  <hr/>
       <div class="nav-section">
         <button class="nav-btn-prev" data-dojo-attach-event="onclick:_onBtnGoToPrevClicked">${nls.prevStep}</button>
         <button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
       </div>
     </div>  
   </div>
-  <label class="message-info" data-dojo-attach-point="searchMessage"></label>
+  <div class="message-section">
+	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+  </div>
 </div>
