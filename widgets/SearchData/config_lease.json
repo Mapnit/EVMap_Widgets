@@ -1,5 +1,4 @@
 {
-  "title": "Find Leases",
   "prompt": "How do you want to search for leases?",
   "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/EV_Lease/MapServer/6", 
   "options": [{
@@ -8,8 +7,7 @@
 	  "field": "LEASE_NO",
 	  "dataType": "text",
 	  "input": "single",
-	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided",
-	  "default": true
+	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided"
 	}, {
 	  "name": "multipleLeases",
 	  "label": "Multiple Lease Numbers",

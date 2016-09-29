@@ -1,0 +1,27 @@
+{
+	"prompt": "How do you want to search for open wells?",
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/5",
+	"options": [{
+		"name": "wellApi",
+		"label": "API",
+		"field": "api_no",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a well API below, as you type matching well APIs will be provided"
+	}, {
+		"name": "wellName",
+		"label": "Well Name",
+		"field": "well_common_name",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a well name below, as you type matching well names will be provided"
+	}, {
+		"name": "bolNumber",
+		"label": "Bolo Number",
+		"field": "field_number",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a bolo number below, as you type matching bolo numbers will be provided"
+	}],
+	"limitToMapExtent": true
+}

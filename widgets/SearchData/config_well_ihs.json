@@ -1,0 +1,49 @@
+{
+	"prompt": "How do you want to search for IHS wells?",
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/IHS_Wells/MapServer/0",
+	"options": [{
+		"name": "wellUWI",
+		"label": "API(UWI)",
+		"field": "UWI",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a well API below, as you type matching well APIs will be provided"
+	}, {
+		"name": "multipleUWIs",
+		"label": "Multiple APIs (UWIs)",
+		"field": "UWI",
+		"dataType": "text",
+		"input": "multiple",
+		"prompt": "Enter a comma-separated list of well UWIs"	
+	}, {
+		"name": "lease",
+		"label": "Lease Name",
+		"field": "LSE_NAME",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter a lease name below, as you type matching lease names will be provided"
+	}, {
+		"name": "operator",
+		"label": "Operator",
+		"field": "OPER_NAME",
+		"dataType": "text",
+		"input": "single",
+		"prompt": "Enter an operator name below, as you type matching operator names will be provided"
+	}, {
+		"name": "status",
+		"label": "Status",
+		"field": "ACT_STATUS",
+		"dataType": "text",
+		"input": "select",
+		"prompt": "Select at least one status from the following list:"
+	}, {
+		"name": "spudDate",
+		"label": "Spud Date",
+		"field": "SPUD_DATE",
+		"dataType": "date",
+		"input": "range",
+		"rangeLabels": ["From", "To"],
+		"prompt": "Use the fields below to specify the date range you wish to search"	
+	}],
+	"limitToMapExtent": true
+}
