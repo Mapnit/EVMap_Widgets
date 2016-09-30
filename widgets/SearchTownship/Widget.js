@@ -225,14 +225,18 @@ define([
 					domClass.add(this.searchMessage, "message-info");
 				}
 				this.searchMessage.innerText = textMsg;
+				
+				domStyle.set(this.searchMessage, "display", "block"); 
 			},
 
 			_hideMessage : function () {
+				domStyle.set(this.searchMessage, "display", "none"); 
+				
 				this.searchMessage.innerText = "";
 			},
 
 			_executeSearch : function (whereClause) {
-				this._hideMessage(); 
+				this._showMessage("searching...");
 				
 				var query = new Query();
 				query.where = whereClause;
