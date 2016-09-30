@@ -111,11 +111,15 @@ define([
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 
 				this._filterValues = []; 
+				
+				this._searchParams["limitToMapExtent"] = this.config.limitToMapExtent; 
+				
 			},
 
 			_initSearchForm : function () {
 
 				this.optionListPrompt.innerText = this.config.prompt;
+				this.limitToMapExtent.checked = this.config.limitToMapExtent; 
 
 				array.forEach(this.config.options, lang.hitch(this, function (opt) {
 						var optionDiv = domConstruct.create("div");
