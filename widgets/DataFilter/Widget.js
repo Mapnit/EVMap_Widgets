@@ -47,7 +47,7 @@ define([
 		Memory, Filter, LoadingIndicator, Popup, ComboBox, DateTextBox, NumberSpinner) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
-			name : 'dataFilter',
+			name : 'DataFilter',
 			baseClass : 'ev-widget-dataFilter',
 			_graphicLayer : null,
 			_symbols : {
@@ -166,9 +166,7 @@ define([
 				this._targetValues.store = valueStore;
 			},
 			
-			_onBtnEndClicked : function () {
-				this._hideMessage();
-				
+			_onBtnEndClicked : function () {				
 				var filterObj = this._jimuFilter.toJson(); 
 				if (filterObj.parts && filterObj.parts.length > 0) {
 					var whereClause = filterObj.expr; 
@@ -214,13 +212,19 @@ define([
 					domClass.add(this.searchMessage, "message-info");
 				}
 				this.searchMessage.innerText = textMsg;
+				
+				domStyle.set(this.searchMessage, "display", "block"); 
 			},
 
 			_hideMessage : function () {
+				domStyle.set(this.searchMessage, "display", "none"); 
+				
 				this.searchMessage.innerText = "";
 			},
 
-			_executeSearch : function (layerUrl, whereClause) {
+			_executeSearch : function (layerUrl, whereClause) {				
+				this._showMessage("searching..."); 
+				
 				var query = new Query();
 				query.where = whereClause;
 				query.outSpatialReference = this.map.spatialReference;
@@ -235,7 +239,12 @@ define([
 				var queryTask = new QueryTask(layerUrl); 
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							this._showMessage(resultSet.features.length + " feature(s) found");
+							if (resultSet.exceededTransferLimit === true) {
+								this._showMessage("exceed search limit. only first " 
+									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+							} else {
+								this._showMessage(resultSet.features.length + " feature(s) found");
+							}
 							this._drawResultsOnMap(resultSet);
 						} else {
 							this._showMessage("no feature found", "warning");
@@ -245,8 +254,11 @@ define([
 					}));
 			},
 
-			_drawResultsOnMap : function (resultSet) {
-				this._graphicLayer.clear();
+			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._graphicLayer.clear();
+				}
+				
 				var resultExtent = null,
 				highlightSymbol;
 
