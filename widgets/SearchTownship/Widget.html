@@ -1,47 +1,94 @@
 <div>
 	<label class="search-prompt" data-dojo-attach-point="searchPrompt">${nls.searchPrompt}</label>
-	<form>
-		<div>
-		  <label class="param-label">${nls.stateLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="stateInput"/>
+	<div class="filter-input">
+	<!--
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.stateLabel}</label>
+		  <input type="text" data-dojo-attach-point="stateInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.sectionLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="sectionInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.sectionLabel}</label>
+		  <input type="text" data-dojo-attach-point="sectionInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.townshipLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="townshipInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.townshipLabel}</label>
+		  <input type="text" data-dojo-attach-point="townshipInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.rangeLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="rangeInput"/>
-		</div>		
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.rangeLabel}</label>
+		  <input type="text" data-dojo-attach-point="rangeInput"/>
+		</div> 
+	-->
 		<table>
 			<tr>
 				<td>
-					<div>
+					<label class="filter-input-label">${nls.stateLabel}</label>
+				</td>
+				<td>
+					<input type="text" data-dojo-attach-point="stateInput"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="filter-input-label">${nls.sectionLabel}</label>
+				</td>
+				<td>
+					<input type="text" data-dojo-attach-point="sectionInput"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="filter-input-label">${nls.townshipLabel}</label>
+				</td>
+				<td>
+					<input type="text" data-dojo-attach-point="townshipInput"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="filter-input-label">${nls.rangeLabel}</label>
+				</td>
+				<td>
+					<input type="text" data-dojo-attach-point="rangeInput"/>
+				</td>
+			</tr>
+		</table>	
+		<table>
+			<tr>
+				<td>
+					<div class="filter-input-field">
 					  <input type="radio" name="vtlDirList" value="N" data-dojo-attach-point="vtlDirNorth" data-dojo-attach-event="change:_onVtlDirChanged">
-					  <label data-dojo-attach-point="vtlDirNorthLabel">${nls.northDirLabel}</label>
+					  <label class="filter-input-label" data-dojo-attach-point="vtlDirNorthLabel">${nls.northDirLabel}</label>
+					</div>
+				</td>
+				<td>
+					<div class="filter-input-field">
 					  <input type="radio" name="vtlDirList" value="S" data-dojo-attach-point="vtlDirSouth" data-dojo-attach-event="change:_onVtlDirChanged">
-					  <label data-dojo-attach-point="vtlDirSouthLabel">${nls.southDirLabel}</label>
+					  <label class="filter-input-label" data-dojo-attach-point="vtlDirSouthLabel">${nls.southDirLabel}</label>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<div>
+					<div class="filter-input-field">
 					  <input type="radio" name="hrzDirList" value="E" data-dojo-attach-point="hrzDirEast" data-dojo-attach-event="change:_onHrzDirChanged">
-					  <label data-dojo-attach-point="hrzDirEastLabel">${nls.eastDirLabel}</label>
+					  <label class="filter-input-label" data-dojo-attach-point="hrzDirEastLabel">${nls.eastDirLabel}</label>
+					</div>
+				</td>
+				<td>
+					<div class="filter-input-field">
 					  <input type="radio" name="hrzDirList" value="W" data-dojo-attach-point="hrzDirWest" data-dojo-attach-event="change:_onHrzDirChanged">
-					  <label data-dojo-attach-point="hrzDirWestLabel">${nls.westDirLabel}</label>
+					  <label class="filter-input-label" data-dojo-attach-point="hrzDirWestLabel">${nls.westDirLabel}</label>
 					</div>
 				</td>
 			</tr>
 		</table>
-	</form>
+	</div>
+	<hr/>
 	<div class="nav-section">
 		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
 	</div>
-	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+	<div class="message-section">
+		<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+	</div>
 </div>
