@@ -115,9 +115,11 @@ define([
 				
 				this._jimuFilter = new Filter({
 					noFilterTip: this.nls.noFilterTip,
-					style: "width:100%;margin-top:22px;"
-				}, this.filterSection);
-				this._jimuFilter.startup(); 				
+					style: "width:100%;border:2px groove;"
+				}, this.filterInput);
+				this._jimuFilter.startup(); 
+				
+				jimuUtils.combineRadioCheckBoxWithLabel(this.limitToMapExtent, this.limitToMapExtentLabel);
 			},
 			
 			onOpen : function() {				
