@@ -21,7 +21,7 @@
 	"field": "ADDR"
   },
   "subdiv": {
-	"field": "SUB_NBR"
+	"field": "SUB_NAME"
   },
   "block": {
 	"field": "BLOCK_NBR"
