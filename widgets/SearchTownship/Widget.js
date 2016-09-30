@@ -82,6 +82,7 @@ define([
 					}
 				}
 			},
+			_stateValues: null, 
 			_vtlDirValue: null,
 			_hrzDirValue: null, 
 
@@ -98,6 +99,15 @@ define([
 			},
 
 			_initSearchForm : function () {	
+			
+				this._stateValues = new ComboBox({
+						hasDownArrow: true,
+						style: "width: 175px; height:25px",
+						store: new Memory({data: []}),
+						searchAttr: "name",
+						onChange: lang.hitch(this, this._onStateNameChanged)
+					}, this.stateInput);
+				this._stateValues.startup();			
 			
 				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirNorth, this.vtlDirNorthLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirSouth, this.vtlDirSouthLabel);
@@ -123,6 +133,11 @@ define([
 			startup : function () {
 				this.inherited(arguments);
 
+				this._fetchStateNames();
+			},
+			
+			_onStateNameChanged : function() {
+				this._hideMessage();
 			},
 			
 			_onVtlDirChanged: function(evt) {
@@ -140,7 +155,7 @@ define([
 			},
 			
 			_onBtnEndClicked : function () {
-				var whereClause = this.config.state.field + " = '" + this.stateInput.value + "'";
+				var whereClause = this.config.state.field + " = '" + this._stateValues.get('value') + "'";
 				if (this.sectionInput.value.trim().length > 0) {
 					whereClause += (" and " + this.config.section.field + " = '" + this.sectionInput.value + "'");
 				}
@@ -159,6 +174,40 @@ define([
 				
 				this._executeSearch(whereClause);
 			},
+			
+			_fetchStateNames : function() {
+				this._showMessage("retrieving states...");
+				
+				this._stateValues.store = new Memory({data: []});
+
+				var query = new Query();
+				query.where = "1=1"; 
+				query.returnGeometry = false;
+				query.outFields = [this.config.state.field];
+				query.orderByFields = [this.config.state.field];
+				query.returnDistinctValues = true; 
+				
+				var queryTask = new QueryTask(this.config.state.layer); 
+				queryTask.execute(query, lang.hitch(this, function (resultSet) {
+						if (resultSet && resultSet.features && resultSet.features.length > 0) {
+							var valueStore = new Memory({data: []});
+							
+							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
+								valueStore.put({
+										"id" : i,
+										"name" : feature.attributes[this.config.state.field]
+									});
+								}));
+							this._stateValues.store = valueStore;
+							
+							this._hideMessage();
+						} else {
+							this._showMessage("no state found", "warning");
+						}
+					}), lang.hitch(this, function (err) {
+						this._showMessage(err.message, "error");
+					}));				
+			}, 
 
 			_showMessage : function (textMsg, lvl) {
 				domClass.remove(this.searchMessage);
