@@ -342,21 +342,19 @@ define([
 			},			
 			
 			_onBtnEndClicked : function () {
-				var whereClause = null; 
+				var whereClause = this.config.abstract.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'"; 
 				switch(this._searchTarget) {
 				case "abstract":
-					whereClause = 
-						this.config.abstract.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'" 
-						+ " and " + this.config.abstract.field + " = '" + this._abstractValues.get('value') + "'" ;
+					whereClause += 
+						(" and " + this.config.abstract.field + " = '" + this._abstractValues.get('value') + "'");
 					break;
 				case "section":
-					whereClause = 
-						this.config.section.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'" 
-						+ " and " + this.config.section.field + " = '" + this._sectionValues.get('value') + "'" ;
+					whereClause += 
+						(" and " + this.config.section.field + " = '" + this._sectionValues.get('value') + "'");
 					break;
 				default: 
-					this._showMessage("invalid search", "error"); 
-					
+					this._showMessage("invalid search parameters", "error"); 
+					return; 
 				}
 				if (whereClause) {
 					this._executeSearch(whereClause);
