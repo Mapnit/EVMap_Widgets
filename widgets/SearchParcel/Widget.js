@@ -218,25 +218,31 @@ define([
 					critera.push(this.config.county.field + " = '" + this._countyValues.get('value').trim() + "'"); 
 				}
 				if (this.cityInput.value.trim()) {
-					critera.push(this.config.city.field + " = '" + this.cityInput.value.trim() + "'"); 
+					critera.push(this.config.city.field + " like '%" + this.cityInput.value.trim() + "%'"); 
 				}
 				if (this.zipcodeInput.value.trim()) {
-					critera.push(this.config.zipcode.field + " = '" + this.zipcodeInput.value.trim() + "'"); 
+					critera.push(this.config.zipcode.field + " like '%" + this.zipcodeInput.value.trim() + "%'"); 
 				}
 				if (this.addressInput.value.trim()) {
-					critera.push(this.config.address.field + " = '" + this.addressInput.value.trim() + "'"); 
+					critera.push(this.config.address.field + " like '%" + this.addressInput.value.trim() + "%'"); 
 				}
 				if (this.subdivInput.value.trim()) {
-					critera.push(this.config.subdiv.field + " = '" + this.subdivInput.value.trim() + "'"); 
+					critera.push(this.config.subdiv.field + " like '%" + this.subdivInput.value.trim() + "%'"); 
 				}
 				if (this.blockInput.value.trim()) {
-					critera.push(this.config.block.field + " = '" + this.blockInput.value.trim() + "'"); 
+					critera.push(this.config.block.field + " like '%" + this.blockInput.value.trim() + "%'"); 
 				}
 				if (this.lotInput.value.trim()) {
-					critera.push(this.config.lot.field + " = '" + this.lotInput.value.trim() + "'"); 
+					critera.push(this.config.lot.field + " like '%" + this.lotInput.value.trim() + "%'"); 
 				}
 				if (this.apnInput.value.trim()) {
-					critera.push(this.config.apn.field + " = '" + this.apnInput.value.trim() + "'"); 
+					critera.push(this.config.apn.field + " like '%" + this.apnInput.value.trim() + "%'"); 
+				}
+				if (this.firstNameInput.value.trim()) {
+					critera.push(this.config.firstName.field + " like '%" + this.firstNameInput.value.trim() + "%'"); 
+				}
+				if (this.lastNameInput.value.trim()) {
+					critera.push(this.config.lastName.field + " like '%" + this.lastNameInput.value.trim() + "%'"); 
 				}
 				
 				var whereClause = critera.join(" and "); 
