@@ -24,11 +24,6 @@
 	padding: 2px; 
 }
 
-.ev-widget-searchData .filter-input-field{
-    padding-top: 0.35em;
-    padding-bottom: 0.35em;
-}
-
 .ev-widget-searchData .filter-section{
 }
 
@@ -42,8 +37,14 @@
 	padding-top: 10px; 	
 }
 
-.ev-widget-searchData .filter-input-prompt{
+.ev-widget-searchData .filter-input-field{
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
+}
+
+.ev-widget-searchData .filter-input-label{
 	vertical-align: top;
+	padding-top: 5px; 
 	padding-right: 5px; 
 }
 

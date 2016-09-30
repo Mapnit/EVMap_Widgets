@@ -129,7 +129,9 @@ define([
 						var radioLabel = domConstruct.create("label", {
 								"innerHTML" : opt.label
 							});
+						domClass.add(radioLabel, "filter-input-label");
 						optionDiv.appendChild(radioLabel);
+						
 						this.optionList.appendChild(optionDiv);
 
 						jimuUtils.combineRadioCheckBoxWithLabel(radioBtn, radioLabel);
@@ -256,7 +258,7 @@ define([
 					var filterLabel = domConstruct.create("label", {
 							"innerHTML" : this._selectedOption.label
 						});
-					domClass.add(filterLabel, "filter-input-prompt");
+					domClass.add(filterLabel, "filter-input-label");
 					this.filterInput.appendChild(filterLabel);
 					
 					switch (this._selectedOption.input) {
@@ -333,7 +335,7 @@ define([
 							var limitLabel = domConstruct.create("label", {
 								"innerHTML": lbl
 							});
-							domClass.add(limitLabel, "filter-input-prompt");
+							domClass.add(limitLabel, "filter-input-label");
 							limitLabelCell.appendChild(limitLabel);
 							valueRow.appendChild(limitLabelCell);
 							
