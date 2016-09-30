@@ -262,8 +262,11 @@ define([
 					}));
 			},
 
-			_drawResultsOnMap : function (resultSet) {
-				this._graphicLayer.clear();
+			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._graphicLayer.clear();
+				}
+				
 				var resultExtent = null,
 				highlightSymbol;
 
