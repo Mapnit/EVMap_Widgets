@@ -1,7 +1,6 @@
 define({
   root: ({
     _widgetLabel: "Search Parcels",
-	searchTitle: "Search Parcels",
 	searchPrompt: "Enter your search in the form below. Note that County and State are required. Other fields are optional, you can choose any combination.", 
 	stateLabel: "State", 
 	countyLabel: "County",
