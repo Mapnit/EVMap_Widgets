@@ -124,6 +124,8 @@ define([
 
 			_initSearchForm : function () {
 
+				domStyle.set(this.logAliasFieldList, "display", "none"); 
+
 				array.forEach(this.config.logAliases, lang.hitch(this, function (opt) {
 						var optionDiv = domConstruct.create("div");
 						var checkBtn = domConstruct.create("input", {
@@ -137,6 +139,7 @@ define([
 							});
 						domClass.add(checkLabel, "filter-input-label");
 						optionDiv.appendChild(checkLabel);
+						
 						this.logAliasFieldList.appendChild(optionDiv);
 
 						jimuUtils.combineRadioCheckBoxWithLabel(checkBtn, checkLabel);
@@ -154,7 +157,7 @@ define([
 					domStyle.set(this.includePurchasedLogsSection, "display", "block"); 
 				} else {
 					domStyle.set(this.includePurchasedLogsSection, "display", "none"); 
-				}
+				}				
 			},
 			
 			onOpen : function() {
