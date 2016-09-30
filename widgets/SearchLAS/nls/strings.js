@@ -1,6 +1,6 @@
 define({
   root: ({
-    _widgetLabel: "SearchLAS",
+    _widgetLabel: "Search TSG LAS Data",
 	drawPrompt: "To begin, click the polygon icon, then draw the area on the map you wish to search, ending with a double click", 
 	selectByPolygonButton: "Select by polygon",
 	polygonCaptured: "Geometry captured", 

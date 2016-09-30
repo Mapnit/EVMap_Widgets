@@ -1,6 +1,6 @@
 define({
   root: ({
-    _widgetLabel: "SearchSurvey",
+    _widgetLabel: "Search TX Abstracts",
 	searchTitle: "Search Survey - Texas", 
 	searchPrompt: "Please select the County and/or Abstract", 
 	stateLabel: "State", 
