@@ -135,6 +135,7 @@ define([
 						var checkLabel = domConstruct.create("label", {
 								"innerHTML" : opt.label
 							});
+						domClass.add(checkLabel, "filter-input-label");
 						optionDiv.appendChild(checkLabel);
 						this.logAliasFieldList.appendChild(optionDiv);
 

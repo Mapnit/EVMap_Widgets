@@ -22,18 +22,19 @@
 		<div class="log-alias-field-list" data-dojo-attach-point="logAliasFieldList">
 		</div>
 		<div class="filter-input-field">
-			<label>${nls.curveName}</label><input type="text" data-dojo-attach-point="curveName"/>
+			<label class="filter-input-label">${nls.curveName}</label>
+			<input type="text" data-dojo-attach-point="curveName"/>
 		</div>
 		<div>
 			<fieldset class="filter-input-fieldset">
 				<legend>${nls.wellTDRange}</legend>
 				<table>
 					<tr>
-						<td><label>${nls.wellTDMinValue}</label></td>
+						<td><label class="filter-input-label">${nls.wellTDMinValue}</label></td>
 						<td><input type="text" data-dojo-attach-point="wellTDMinValue"/></td>
 					</tr>
 					<tr>
-						<td><label>${nls.wellTDMaxValue}</label></td>
+						<td><label class="filter-input-label">${nls.wellTDMaxValue}</label></td>
 						<td><input type="text" data-dojo-attach-point="wellTDMaxValue"/></td>
 					</tr>
 				</table>
@@ -45,9 +46,9 @@
 			<fieldset class="filter-input-fieldset">
 				<legend>${nls.queryType}</legend>
 				<input type="radio" name="queryTypeOpr" value="OR" checked="checked" data-dojo-attach-point="queryTypeOr" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
-				<label data-dojo-attach-point="queryTypeOrLabel">${nls.queryTypeOR}</label>
+				<label class="filter-input-label" data-dojo-attach-point="queryTypeOrLabel">${nls.queryTypeOR}</label>
 				<input type="radio" name="queryTypeOpr" value="AND" data-dojo-attach-point="queryTypeAnd" data-dojo-attach-event="onchange:_onQueryTypeChanged"/>
-				<label data-dojo-attach-point="queryTypeAndLabel">${nls.queryTypeAND}</label>
+				<label class="filter-input-label" data-dojo-attach-point="queryTypeAndLabel">${nls.queryTypeAND}</label>
 			</fieldset>		
   	    </div>
 	  </div>

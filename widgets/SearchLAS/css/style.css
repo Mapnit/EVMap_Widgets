@@ -64,12 +64,9 @@
     padding-bottom: 0.35em;
 }
 
-.ev-widget-searchLAS .log-alias-field-list{
-	border: 2px groove;
-	padding: 5px 0px 5px 7px; 
-	margin-left: 5px; 
-	margin-top: 5px; 
-	display: none; 
+.ev-widget-searchLAS .filter-input-label{
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
 }
 
 .ev-widget-searchLAS .nav-section{
