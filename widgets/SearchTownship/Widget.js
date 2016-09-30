@@ -247,7 +247,12 @@ define([
 				var queryTask = new QueryTask(this.config.layer);
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							this._showMessage(resultSet.features.length + " feature(s) found");
+							if (resultSet.exceededTransferLimit === true) {
+								this._showMessage("exceed search limit. only first " 
+									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+							} else {
+								this._showMessage(resultSet.features.length + " feature(s) found");
+							}
 							this._drawResultsOnMap(resultSet);
 						} else {
 							this._showMessage("no feature found", "warning");
