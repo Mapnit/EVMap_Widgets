@@ -99,7 +99,7 @@ define([
 
 			_initSearchForm : function () {				
 				this._stateValues = new ComboBox({
-						hasDownArrow: false,
+						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
@@ -108,7 +108,7 @@ define([
 				this._stateValues.startup();
 
 				this._countyValues = new ComboBox({
-						hasDownArrow: false,
+						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name"
@@ -140,10 +140,14 @@ define([
 
 			_onStateNameChanged: function() {
 				
-				this._fetchCountiesByState();
+				var stateName = this._stateValues.get('value');
+
+				this._fetchCountiesByState(stateName);
 			},
 			
 			_fetchStateNames : function() {
+				this._showMessage("retrieving states...");
+				
 				this._stateValues.store = new Memory({data: []});
 
 				var query = new Query();
@@ -165,6 +169,8 @@ define([
 									});
 								}));
 							this._stateValues.store = valueStore;
+							
+							this._hideMessage();
 						} else {
 							this._showMessage("no state found", "warning");
 						}
@@ -173,13 +179,11 @@ define([
 					}));
 			},
 
-			_fetchCountiesByState : function() {
+			_fetchCountiesByState : function(stateName) {
+				this._showMessage("retrieving counties for " + stateName + "...");
+				
 				this._countyValues.store = new Memory({data: []});
 				this._countyValues.set('value', '');
-				
-				this._hideMessage(); 
-				
-				var stateName = this._stateValues.get('value');
 				
 				var query = new Query();
 				query.where = this.config.county.relatedFields["state"] + " like '" + stateName + "%'";
@@ -200,6 +204,8 @@ define([
 									});
 								}));
 							this._countyValues.store = valueStore;
+							
+							this._hideMessage();
 						} else {
 							this._showMessage("no county found", "warning");
 						} 
@@ -248,7 +254,9 @@ define([
 				var whereClause = critera.join(" and "); 
 				if (whereClause) {
 					this._executeSearch(whereClause);
-				}				
+				} else {
+					this._showMessage("invalid search parameters", "error");
+				}
 			},
 
 			_showMessage : function (textMsg, lvl) {
@@ -267,14 +275,18 @@ define([
 					domClass.add(this.searchMessage, "message-info");
 				}
 				this.searchMessage.innerText = textMsg;
+				
+				domStyle.set(this.searchMessage, "display", "block"); 
 			},
 
 			_hideMessage : function () {
+				domStyle.set(this.searchMessage, "display", "none"); 
+				
 				this.searchMessage.innerText = "";
 			},
 
 			_executeSearch : function (whereClause) {
-				this._hideMessage(); 
+				this._showMessage("searching...");
 				
 				var query = new Query();
 				query.where = whereClause;
@@ -285,7 +297,12 @@ define([
 				var queryTask = new QueryTask(this.config.layer);
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							this._showMessage(resultSet.features.length + " feature(s) found");
+							if (resultSet.exceededTransferLimit === true) {
+								this._showMessage("exceed search limit. only first " 
+									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+							} else {
+								this._showMessage(resultSet.features.length + " feature(s) found");
+							}
 							this._drawResultsOnMap(resultSet);
 						} else {
 							this._showMessage("no feature found", "warning");
@@ -295,8 +312,11 @@ define([
 					}));
 			},
 
-			_drawResultsOnMap : function (resultSet) {
-				this._graphicLayer.clear();
+			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._graphicLayer.clear();
+				}
+				
 				var resultExtent = null,
 				highlightSymbol;
 
