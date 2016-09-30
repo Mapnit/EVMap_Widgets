@@ -1,60 +1,63 @@
 <div>
 	<label class="search-prompt" data-dojo-attach-point="searchPrompt">${nls.searchPrompt}</label>
-	<form>
-		<div>
-		  <label class="param-label">${nls.stateLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="stateInput"/>
+	<div class="filter-input">
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.stateLabel}</label>
+		  <input type="text" data-dojo-attach-point="stateInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.countyLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="countyInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.countyLabel}</label>
+		  <input type="text" data-dojo-attach-point="countyInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.cityLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="cityInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.cityLabel}</label>
+		  <input type="text" data-dojo-attach-point="cityInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.zipcodeLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="zipcodeInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.zipcodeLabel}</label>
+		  <input type="text" data-dojo-attach-point="zipcodeInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.addressLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="addressInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.addressLabel}</label>
+		  <input type="text" data-dojo-attach-point="addressInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.blockLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="blockInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.blockLabel}</label>
+		  <input type="text" data-dojo-attach-point="blockInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.lotLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="lotInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.lotLabel}</label>
+		  <input type="text" data-dojo-attach-point="lotInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.subdivLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="subdivInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.subdivLabel}</label>
+		  <input type="text" data-dojo-attach-point="subdivInput"/>
 		</div>
-		<div>
-		  <label class="param-label">${nls.apnLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="apnInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.apnLabel}</label>
+		  <input type="text" data-dojo-attach-point="apnInput"/>
 		</div>
-		<fieldset>
+		<fieldset class="filter-input-fieldset">
 			<legend>${nls.ownerLabel}</legend>
-			<div>
-			  <label class="param-label">${nls.fistNameLabel}</label>
-			  <input type="text" class="param-input" data-dojo-attach-point="firstNameInput"/>
+			<div class="filter-input-field">
+			  <label class="filter-input-label">${nls.fistNameLabel}</label>
+			  <input type="text" data-dojo-attach-point="firstNameInput"/>
 			</div>
-			<div>
-			  <label class="param-label">${nls.lastNameLabel}</label>
-			  <input type="text" class="param-input" data-dojo-attach-point="lastNameInput"/>
+			<div class="filter-input-field">
+			  <label class="filter-input-label">${nls.lastNameLabel}</label>
+			  <input type="text" data-dojo-attach-point="lastNameInput"/>
 			</div>
 		</fieldset>
-		<div>
-		  <label class="param-label">${nls.legalDesptLabel}</label>
-		  <input type="text" class="param-input" data-dojo-attach-point="legalDesptInput"/>
+		<div class="filter-input-field">
+		  <label class="filter-input-label">${nls.legalDesptLabel}</label>
+		  <input type="text" data-dojo-attach-point="legalDesptInput"/>
 		</div>
-	</form>
+	</div>
+	<hr/>
 	<div class="nav-section">
 		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
 	</div>
-	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+	<div class="message-section">
+		<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+	</div>
 </div>
