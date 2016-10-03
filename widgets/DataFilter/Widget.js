@@ -50,7 +50,7 @@ define([
 			name : 'DataFilter',
 			baseClass : 'ev-widget-dataFilter',
 			_graphicLayer : null,
-			_symbols : {
+			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
@@ -100,6 +100,10 @@ define([
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 				
 				this._limitToMapExtent = this.config.limitToMapExtent; 
+				
+				if (this.config.renderSymbols) {
+					this._symbols = this.config.renderSymbols; 
+				}
 			},
 
 			_initSearchForm : function () {

@@ -1,22 +1,56 @@
 {  
-  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/3", 
-  "state": {	
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/3", 
-	"field": "STATE"
-  },
-  "section": {
-	"field": "SEC"
-  },
-  "township": {
-	"field": "TWP"
-  },
-  "range": {
-	"field": "RNG"
-  },
-  "hrzDir": {
-	"field": "RDIR"
-  },
-  "vtlDir": {
-	"field": "TDIR"
-  }
+	"state": {	
+		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/3", 
+		"field": "STATE"
+	},
+	"section": {
+		"field": "SEC"
+	},
+	"township": {
+		"field": "TWP"
+	},
+	"range": {
+		"field": "RNG"
+	},
+	"hrzDir": {
+		"field": "RDIR"
+	},
+	"vtlDir": {
+		"field": "TDIR"
+	}, 
+	"renderSymbols": {
+		"esriGeometryPolygon" : {
+			"type" : "esriSFS",
+			"style" : "esriSFSSolid",
+			"color" : [0, 255, 255, 64],
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 2
+			}
+		},
+		"esriGeometryPolyline" : {
+			"type" : "esriSLS",
+			"style" : "esriSLSSolid",
+			"color" : [0, 255, 255, 255],
+			"width" : 2
+		},
+		"esriGeometryPoint" : {
+			"type" : "esriSMS",
+			"style" : "esriSMSCircle",
+			"color" : [0, 255, 255, 128],
+			"size" : 8,
+			"angle" : 0,
+			"xoffset" : 0,
+			"yoffset" : 0,
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 1
+			}
+		}
+	}
 }

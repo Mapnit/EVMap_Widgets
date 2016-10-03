@@ -50,7 +50,7 @@ define([
 			partialMatchMaxNumber : 100, 
 			partialMatchMinInputLength : 3, 			
 			_graphicLayer : null,
-			_symbols : {
+			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
@@ -99,6 +99,10 @@ define([
 			_initSearch : function () {
 
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
+				
+				if (this.config.renderSymbols) {
+					this._symbols = this.config.renderSymbols; 
+				}
 			},
 
 			_initSearchForm : function () {

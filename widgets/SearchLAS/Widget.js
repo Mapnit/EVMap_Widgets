@@ -57,7 +57,7 @@ define([
 			_searchParams : {}, 
 			_queryTask : null,
 			_graphicLayer : null,
-			_symbols : {
+			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
@@ -120,6 +120,10 @@ define([
 					"includePurchasedLogs": false, 
 					"queryTypeOpr": "OR"
 				}; 
+				
+				if (this.config.renderSymbols) {
+					this._symbols = this.config.renderSymbols; 
+				}
 			},
 
 			_initSearchForm : function () {

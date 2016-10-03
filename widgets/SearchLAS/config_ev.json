@@ -1,44 +1,78 @@
 {
-  "title": "Search EV LAS",
-  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Geology/Well_EV_LAS/MapServer/4", 
-  "logAliases": [{
-	"field": "Evdphi",
-	"label": "EVDPHI"
-  }, {
-	"field": "Evdt",
-	"label": "EVDT"
-  }, {
-	"field": "Evdts",
-	"label": "EVDTS"
-  }, {
-	"field": "Evgr",
-	"label": "EVGR"
-  }, {
-	"field": "Evnphi",
-	"label": "EVNPHI"
-  }, {
-	"field": "Evpe",
-	"label": "EVPE"
-  }, {
-	"field": "Evresd",
-	"label": "EVRESD"
-  }, {
-	"field": "Evresm",
-	"label": "EVRESM"
-  }, {
-	"field": "Evress",
-	"label": "EVRESS"
-  }, {
-	"field": "Evrhob",
-	"label": "EVRHOB"
-  }, {
-	"field": "Evsp",
-	"label": "EVSP"
-  }], 
-  "curveName": {
-	"field": "Curves"
-  },
-  "wellTDValue": {
-	"field": "TOT_DEPTH"
-  }  
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Geology/Well_EV_LAS/MapServer/4", 
+	"logAliases": [{
+			"field": "Evdphi",
+			"label": "EVDPHI"
+		}, {
+			"field": "Evdt",
+			"label": "EVDT"
+		}, {
+			"field": "Evdts",
+			"label": "EVDTS"
+		}, {
+			"field": "Evgr",
+			"label": "EVGR"
+		}, {
+			"field": "Evnphi",
+			"label": "EVNPHI"
+		}, {
+			"field": "Evpe",
+			"label": "EVPE"
+		}, {
+			"field": "Evresd",
+			"label": "EVRESD"
+		}, {
+			"field": "Evresm",
+			"label": "EVRESM"
+		}, {
+			"field": "Evress",
+			"label": "EVRESS"
+		}, {
+			"field": "Evrhob",
+			"label": "EVRHOB"
+		}, {
+			"field": "Evsp",
+			"label": "EVSP"
+		}
+	], 
+	"curveName": {
+		"field": "Curves"
+	},
+	"wellTDValue": {
+		"field": "TOT_DEPTH"
+	}, 
+	"renderSymbols": {
+		"esriGeometryPolygon" : {
+			"type" : "esriSFS",
+			"style" : "esriSFSSolid",
+			"color" : [0, 255, 255, 64],
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 2
+			}
+		},
+		"esriGeometryPolyline" : {
+			"type" : "esriSLS",
+			"style" : "esriSLSSolid",
+			"color" : [0, 255, 255, 255],
+			"width" : 2
+		},
+		"esriGeometryPoint" : {
+			"type" : "esriSMS",
+			"style" : "esriSMSCircle",
+			"color" : [0, 255, 255, 128],
+			"size" : 8,
+			"angle" : 0,
+			"xoffset" : 0,
+			"yoffset" : 0,
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 1
+			}
+		}
+	}
 }

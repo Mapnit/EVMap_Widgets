@@ -48,7 +48,7 @@ define([
 			name : 'SearchTownship',
 			baseClass : 'ev-widget-searchTownship',
 			_graphicLayer : null,
-			_symbols : {
+			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
@@ -96,6 +96,10 @@ define([
 			_initSearch : function () {
 
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
+				
+				if (this.config.renderSymbols) {
+					this._symbols = this.config.renderSymbols; 
+				}
 			},
 
 			_initSearchForm : function () {	

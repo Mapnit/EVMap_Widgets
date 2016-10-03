@@ -45,5 +45,39 @@
 		"rangeLabels": ["From", "To"],
 		"prompt": "Use the fields below to specify the date range you wish to search"	
 	}],
-	"limitToMapExtent": true
+	"limitToMapExtent": false, 
+	"renderSymbols": {
+		"esriGeometryPolygon" : {
+			"type" : "esriSFS",
+			"style" : "esriSFSSolid",
+			"color" : [0, 255, 255, 64],
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 2
+			}
+		},
+		"esriGeometryPolyline" : {
+			"type" : "esriSLS",
+			"style" : "esriSLSSolid",
+			"color" : [0, 255, 255, 255],
+			"width" : 2
+		},
+		"esriGeometryPoint" : {
+			"type" : "esriSMS",
+			"style" : "esriSMSCircle",
+			"color" : [0, 255, 255, 128],
+			"size" : 8,
+			"angle" : 0,
+			"xoffset" : 0,
+			"yoffset" : 0,
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 1
+			}
+		}
+	}
 }

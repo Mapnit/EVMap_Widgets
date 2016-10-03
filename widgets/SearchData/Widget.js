@@ -56,7 +56,7 @@ define([
 			_selectedOption : null,
 			_queryTask : null,
 			_graphicLayer : null,
-			_symbols : {
+			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
 					"style" : "esriSFSSolid",
@@ -114,6 +114,9 @@ define([
 				
 				this._searchParams["limitToMapExtent"] = this.config.limitToMapExtent; 
 				
+				if (this.config.renderSymbols) {
+					this._symbols = this.config.renderSymbols; 
+				}
 			},
 
 			_initSearchForm : function () {
