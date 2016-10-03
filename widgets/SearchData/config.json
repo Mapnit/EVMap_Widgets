@@ -1,43 +1,68 @@
 {
-	"title": "Find Aries Wells",
-	"prompt": "How do you want to search for aries wells?",
-	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/3",
+	"prompt": "How do you want to search for Oil Pipelines?",
+	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Midstream/Pipelines/MapServer/0", 
 	"options": [{
-		"name": "propNum",
-		"label": "Prop Num",
-		"field": "PROPNUM",
-		"dataType": "text",
-		"input": "single",
-		"prompt": "Enter a propNum below, as you type matching propNum will be provided",
-		"default": true
+	  "name": "operator",
+	  "label": "Operator",
+	  "field": "OPERATOR",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter an operator name below, as you type matching operator names will be provided"
 	}, {
-		"name": "propertyNumber",
-		"label": "Property Number",
-		"field": "PROPERTY_NUM",
-		"dataType": "text",
-		"input": "single",
-		"prompt": "Enter a property number below, as you type matching property numbers will be provided"
+	  "name": "owner",
+	  "label": "Owner",
+	  "field": "OWNER",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter an owner name below, as you type matching owner names will be provided"
 	}, {
-		"name": "lease",
-		"label": "Lease",
-		"field": "LEASE",
-		"dataType": "text",
-		"input": "single",
-		"prompt": "Enter a lease number below, as you type matching lease numbers will be provided"
+	  "name": "systemName",
+	  "label": "System Name",
+	  "field": "SYS_NAME",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a system name below, as you type matching system names will be provided"
 	}, {
-		"name": "wellName",
-		"label": "Well Name",
-		"field": "LEASE_WELLNAME",
-		"dataType": "text",
-		"input": "single",
-		"prompt": "Enter a well name below, as you type matching well names will be provided"
-	}, {
-		"name": "wellApi",
-		"label": "API",
-		"field": "API",
-		"dataType": "text",
-		"input": "single",
-		"prompt": "Enter a well API below, as you type matching well APIs will be provided"
+	  "name": "status",
+	  "label": "Status",
+	  "field": "OPER_STAT",
+	  "dataType": "text",
+	  "input": "select",
+	  "prompt": "Select at least one status from the following list:"
 	}],
-	"limitToMapExtent": true
+	"limitToMapExtent": false, 
+	"renderSymbols": {
+		"esriGeometryPolygon" : {
+			"type" : "esriSFS",
+			"style" : "esriSFSSolid",
+			"color" : [0, 255, 255, 64],
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 2
+			}
+		},
+		"esriGeometryPolyline" : {
+			"type" : "esriSLS",
+			"style" : "esriSLSSolid",
+			"color" : [0, 255, 255, 255],
+			"width" : 2
+		},
+		"esriGeometryPoint" : {
+			"type" : "esriSMS",
+			"style" : "esriSMSCircle",
+			"color" : [0, 255, 255, 128],
+			"size" : 8,
+			"angle" : 0,
+			"xoffset" : 0,
+			"yoffset" : 0,
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 1
+			}
+		}
+	}
 }
