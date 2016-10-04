@@ -297,7 +297,7 @@ define([
 				this.searchMessage.innerText = "";
 			},
 
-			_executeSearch : function (whereClause) {
+			_executeSearch : function (whereClause, boundByMapExtent) {
 				this._showMessage("searching..."); 
 				
 				var query = new Query();
@@ -305,6 +305,11 @@ define([
 				query.outSpatialReference = this.map.spatialReference;
 				query.returnGeometry = true;
 				query.outFields = ["*"];
+				
+				if (boundByMapExtent === true) {
+					query.geometry = this.map.extent;
+					query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				}
 
 				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features) {
