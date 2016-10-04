@@ -43,7 +43,8 @@
 	}, 
 	"purchasedLogs": {
 		"field": "LAS"
-	}, 
+	},  
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",

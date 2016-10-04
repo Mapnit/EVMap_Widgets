@@ -40,7 +40,8 @@
 	},
 	"wellTDValue": {
 		"field": "TOT_DEPTH"
-	}, 
+	},  
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",
