@@ -49,8 +49,9 @@ define([
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchTownship',
 			baseClass : 'ev-widget-searchTownship',
+			_queryTask : null, 
 			_renderType : null /*graphicLayer (default) or featureLayer*/,
-			_featureLayer : null, 			
+			_featureLayer : null, 
 			_graphicLayer : null,
 			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
@@ -97,7 +98,8 @@ define([
 				this._initSearchForm();
 			},
 
-			_initSearch : function () {
+			_initSearch : function () {				
+				this._queryTask = new QueryTask(this.config.layer);
 
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 				
@@ -171,10 +173,21 @@ define([
 			},
 
 			onClose : function () {
+				// clear the message
 				this._hideMessage(); 
 				
-				this._graphicLayer.clear();
-				this.map.removeLayer(this._graphicLayer);
+				if (this._renderType === "featureLayer") {
+					// close the AttributeTable widget
+					this._closeAttributeTable(); 
+					// clean up featureLayer
+					this.map.removeLayer(this._featureLayer); 
+					this._featureLayer.clear(); 
+					this._featureLayer = null; 
+				} else {
+					this.map.removeLayer(this._graphicLayer); 
+					this._graphicLayer.clear();
+					this._graphicLayer = null; 
+				}
 			},
 
 			destroy : function () {},
@@ -285,7 +298,7 @@ define([
 			},
 
 			_executeSearch : function (whereClause) {
-				this._showMessage("searching...");
+				this._showMessage("searching..."); 
 				
 				var query = new Query();
 				query.where = whereClause;
@@ -293,25 +306,40 @@ define([
 				query.returnGeometry = true;
 				query.outFields = ["*"];
 
-				var queryTask = new QueryTask(this.config.layer);
-				queryTask.execute(query, lang.hitch(this, function (resultSet) {
-						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							if (resultSet.exceededTransferLimit === true) {
-								this._showMessage("exceed search limit. only first " 
-									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
+						if (resultSet && resultSet.features) {
+							if (resultSet.features.length > 0) {
+								if (resultSet.exceededTransferLimit === true) {
+									this._showMessage("exceed search limit. only first " 
+										+ resultSet.features.length + " feature(s) displayed", "warning"); 
+								} else {
+									this._showMessage(resultSet.features.length + " feature(s) found");
+								}
 							} else {
-								this._showMessage(resultSet.features.length + " feature(s) found");
-							}
-							this._drawResultsOnMap(resultSet);
+								this._showMessage("no feature found", "warning");
+							} 
 						} else {
-							this._showMessage("no feature found", "warning");
-						}
+							// in case null resultSet, set empty value
+							resultSet = {"features": []}; 
+						} 
+						if (this._renderType === "featureLayer") {
+							this._drawFeaturesOnMap(resultSet); 
+						} else {
+							this._drawGraphicsOnMap(resultSet); 
+						} 
 					}), lang.hitch(this, function (err) {
 						this._showMessage(err.message, "error");
-					}));
+						// clear the render layer
+						if (this._renderType === "featureLayer") {
+							this._featureLayer.clear(); 
+						} else {
+							this._graphicLayer.clear(); 
+						} 
+					})
+				);
 			},
 
-			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+			_drawGraphicsOnMap : function (resultSet, clearFirst/*default: true*/) {
 				if (clearFirst !== false) {
 					this._graphicLayer.clear();
 				}
@@ -329,26 +357,27 @@ define([
 				case "esriGeometryPolygon":
 					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
 					break;
+				default: 
+					this._showMessage("not support such geometry", "error"); 
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
-						this._graphicLayer.add(new Graphic(
-							feature.geometry,
-							highlightSymbol,
-							feature.attributes,
-							this._infoTemplate));
+						var graphic = new Graphic(feature.geometry);
+						graphic.setSymbol(highlightSymbol);
+						graphic.setAttributes(feature.attributes);
+						this._graphicLayer.add(graphic);
 
 						if (resultSet.geometryType === "esriGeometryPoint") {
 							if (resultExtent) {
 								resultExtent = resultExtent.union(new Extent(
-									feature.geometry.x, feature.geometry.y,
-									feature.geometry.x, feature.geometry.y,
-									feature.geometry.spatialReference));
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.spatialReference));
 							} else {
 								resultExtent = new Extent(
-									feature.geometry.x, feature.geometry.y,
-									feature.geometry.x, feature.geometry.y,
-									feature.geometry.spatialReference);
+										feature.geometry.x, feature.geometry.y,
+										feature.geometry.x, feature.geometry.y,
+										feature.geometry.spatialReference);
 							}
 						} else {
 							if (resultExtent) {
@@ -357,17 +386,100 @@ define([
 								resultExtent = feature.geometry.getExtent();
 							}
 						}
-					}));
+					})
+				);
 
+				this._zoomToExtent(resultExtent); 
+			}, 
+
+			_drawFeaturesOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._featureLayer.clear();
+				}
+				
+				var resultExtent = null,
+					featureArray = []; 
+				
+				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
+						var graphic = new Graphic(feature.geometry); 
+						graphic.setAttributes(feature.attributes);
+						featureArray.push(graphic);
+
+						if (resultSet.geometryType === "esriGeometryPoint") {
+							if (resultExtent) {
+								resultExtent = resultExtent.union(new Extent(
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.spatialReference));
+							} else {
+								resultExtent = new Extent(
+										feature.geometry.x, feature.geometry.y,
+										feature.geometry.x, feature.geometry.y,
+										feature.geometry.spatialReference);
+							}
+						} else {
+							if (resultExtent) {
+								resultExtent = resultExtent.union(feature.geometry.getExtent());
+							} else {
+								resultExtent = feature.geometry.getExtent();
+							}
+						}
+					})
+				);
+
+				this._zoomToExtent(resultExtent); 
+
+				if (featureArray.length > 0) {
+					this._featureLayer.applyEdits(featureArray, null, null, 
+						lang.hitch(this, function() {
+							console.debug("resultset is added into FeatureLayer");  
+							// open AttributeTable and display the results 
+							this._showResultsInAttributeTable(); 
+						}), 
+						lang.hitch(this, function(err) {
+							this._showMessage(err.message || "failed to show search results", "error"); 
+						})
+					); 	
+				} else {
+					// close AttributeTable
+					this._closeAttributeTable(); 
+				}
+				
+			}, 
+			
+			_zoomToExtent: function(resultExtent) {
 				if (resultExtent) {
 					if (resultExtent.getHeight() === 0 || resultExtent.getWidth() === 0) {
 						this.map.centerAndZoom(resultExtent.getCenter(), 15);
 					} else {
 						this.map.setExtent(resultExtent, true);
 					}
-				}
+				} 
+			},
+			
+			_showResultsInAttributeTable : function() {
+				var attributeTableWidgetEle =
+					this.appConfig.getConfigElementsByName("AttributeTable")[0];
+				var widgetManager = WidgetManager.getInstance();
+				widgetManager.triggerWidgetOpen(attributeTableWidgetEle.id).then(
+					lang.hitch(this, function() {
+						this.publishData({
+							'target': 'AttributeTable',
+							'layer': this._featureLayer
+						});
+					})
+				);	
+			}, 
+			
+			_closeAttributeTable : function() {
+				var attributeTableWidgetEle =
+					this.appConfig.getConfigElementsByName("AttributeTable")[0];
+				var widgetManager = WidgetManager.getInstance();
+				var attributeTableWidget = widgetManager.getWidgetById(attributeTableWidgetEle.id); 
+				if (attributeTableWidget) {
+					widgetManager.closeWidget(attributeTableWidget);
+				} 
 			}
-
 		});
 
 	return clazz;
