@@ -13,6 +13,7 @@ define([
 		'dojo/dom-style',
 		'dojo/dom-class',
 		'esri/config',
+		'esri/request', 
 		'esri/graphic',
 		'esri/tasks/QueryTask',
 		'esri/tasks/query',
@@ -22,12 +23,12 @@ define([
 		'esri/geometry/Polygon',
 		'esri/geometry/webMercatorUtils',
 		'esri/tasks/GeometryService',
+		'esri/layers/FeatureLayer',
 		'esri/layers/GraphicsLayer',
 		'esri/symbols/SimpleMarkerSymbol',
 		'esri/symbols/SimpleLineSymbol',
 		'esri/symbols/SimpleFillSymbol',
-		'esri/InfoTemplate',
-		'esri/layers/FeatureLayer',
+		'esri/InfoTemplate', 
 		'jimu/dijit/ViewStack',
 		'jimu/utils',
 		'jimu/SpatialReference/wkidUtils',
@@ -42,9 +43,9 @@ define([
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
-		esriConfig, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
-		GeometryService, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
-		InfoTemplate, FeatureLayer, ViewStack, jimuUtils, wkidUtils, LayerInfos,
+		esriConfig, esriRequest, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
+		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
+		InfoTemplate, ViewStack, jimuUtils, wkidUtils, LayerInfos,
 		Memory, LoadingIndicator, Popup, ComboBox, DateTextBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
@@ -55,6 +56,8 @@ define([
 			_searchParams : {},
 			_selectedOption : null,
 			_queryTask : null,
+			_renderType : null /*graphicLayer (default) or featureLayer*/,
+			_featureLayer : null, 
 			_graphicLayer : null,
 			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
@@ -114,6 +117,8 @@ define([
 				
 				this._searchParams["limitToMapExtent"] = this.config.limitToMapExtent; 
 				
+				this._renderType = this.config.renderType || "graphicLayer"; 
+				
 				if (this.config.renderSymbols) {
 					this._symbols = this.config.renderSymbols; 
 				}
@@ -151,13 +156,66 @@ define([
 			},
 			
 			onOpen : function() {
-				this._graphicLayer = new GraphicsLayer();
-				this.map.addLayer(this._graphicLayer);				
+				// clear the message
+				this._hideMessage(); 
+
+				// show the 1st view
+				this._currentViewIndex = 0; 
+				this.viewStack.switchView(this._currentViewIndex);
+				
+				if (this._renderType === "featureLayer") {
+					esriRequest({
+						"url": this.config.layer,
+						"content": {
+						  "f": "json"
+						}
+					}).then(lang.hitch(this, function(layerInfo) {
+						var featureCollection = {
+							"featureSet": {
+								"features": [],
+								"geometryType": layerInfo.geometryType
+							}, 
+							"layerDefinition": {
+								"geometryType": layerInfo.geometryType,
+								"objectIdField": layerInfo.objectIdField,
+								"drawingInfo": {
+									"renderer": {
+										"type": "simple",
+										"symbol": this._symbols[layerInfo.geometryType], 
+									}
+								},
+								"fields": layerInfo.fields 
+							}
+						};
+						this._featureLayer = new FeatureLayer(featureCollection, {
+							id: layerInfo.name + "_searchResults", 
+							infoTemplate: this._infoTemplate
+						});
+						this.map.addLayer(this._featureLayer); 
+						console.debug("the search results to be rendered as features"); 
+					}), lang.hitch(this, function(err) {
+						this._showMessage(err.message, "error");
+					}));
+				} else { 
+					this._graphicLayer = new GraphicsLayer({
+						id: this.name + "_searchResults", 
+						infoTemplate: this._infoTemplate
+					});
+					this.map.addLayer(this._graphicLayer);	
+					console.debug("the search results to be rendered as graphics"); 
+				}
 			},
 
 			onClose : function () {
-				this._graphicLayer.clear();
-				this.map.removeLayer(this._graphicLayer);
+				if (this._renderType === "featureLayer") {
+					this.map.removeLayer(this._featureLayer); 
+					this._featureLayer.clear(); 
+					this._featureLayer = null; 
+				} else {
+					this.map.removeLayer(this._graphicLayer); 
+					this._graphicLayer.clear();
+					this._graphicLayer = null; 
+				}
 			},
 
 			destroy : function () {},
@@ -166,7 +224,6 @@ define([
 				this.inherited(arguments);
 
 				this.viewStack.startup();
-				this.viewStack.switchView(this._currentViewIndex);
 			},
 
 			_onBtnCancelClicked : function () {
@@ -498,17 +555,22 @@ define([
 								} else {
 									this._showMessage(resultSet.features.length + " feature(s) found");
 								}
-								this._drawResultsOnMap(resultSet);
+								if (this._renderType === "featureLayer") {
+									this._drawFeaturesOnMap(resultSet); 
+								} else {
+									this._drawGraphicsOnMap(resultSet); 
+								} 
 							} else {
 								this._showMessage("no feature found", "warning");
 							}
 						}), lang.hitch(this, function (err) {
 							this._showMessage(err.message, "error");
-						}));
+						})
+					);
 				}
 			},
 
-			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+			_drawGraphicsOnMap : function (resultSet, clearFirst/*default: true*/) {
 				if (clearFirst !== false) {
 					this._graphicLayer.clear();
 				}
@@ -531,11 +593,9 @@ define([
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
-						var graphic = new Graphic(
-							feature.geometry,
-							highlightSymbol,
-							feature.attributes,
-							this._infoTemplate);
+						var graphic = new Graphic(feature.geometry);
+						graphic.setSymbol(highlightSymbol);
+						graphic.setAttributes(feature.attributes);
 						this._graphicLayer.add(graphic);
 
 						if (resultSet.geometryType === "esriGeometryPoint") {
@@ -557,8 +617,60 @@ define([
 								resultExtent = feature.geometry.getExtent();
 							}
 						}
-					}));
+					})
+				);
 
+				this._zoomToExtent(resultExtent); 
+			}, 
+
+			_drawFeaturesOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._featureLayer.clear();
+				}
+				
+				var resultExtent = null,
+					featureArray = []; 
+				
+				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
+						var graphic = new Graphic(feature.geometry); 
+						graphic.setAttributes(feature.attributes);
+						featureArray.push(graphic);
+
+						if (resultSet.geometryType === "esriGeometryPoint") {
+							if (resultExtent) {
+								resultExtent = resultExtent.union(new Extent(
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.spatialReference));
+							} else {
+								resultExtent = new Extent(
+										feature.geometry.x, feature.geometry.y,
+										feature.geometry.x, feature.geometry.y,
+										feature.geometry.spatialReference);
+							}
+						} else {
+							if (resultExtent) {
+								resultExtent = resultExtent.union(feature.geometry.getExtent());
+							} else {
+								resultExtent = feature.geometry.getExtent();
+							}
+						}
+					})
+				);
+
+				this._featureLayer.applyEdits(featureArray, null, null, 
+					lang.hitch(this, function() {
+						console.debug("resultset is added into FeatureLayer");  
+					}), 
+					lang.hitch(this, function(err) {
+						this._showMessage(err.message || "failed to show search results", "error"); 
+					})
+				); 
+				
+				this._zoomToExtent(resultExtent); 
+			}, 
+			
+			_zoomToExtent: function(resultExtent) {
 				if (resultExtent) {
 					if (resultExtent.getHeight() === 0 || resultExtent.getWidth() === 0) {
 						this.map.centerAndZoom(resultExtent.getCenter(), 15);
