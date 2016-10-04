@@ -48,7 +48,7 @@ define([
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
-		esriConfig, Graphic, Draw, Edit, Menu, MenuItem, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
+		esriConfig, esriRequest, Graphic, Draw, Edit, Menu, MenuItem, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
 		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
 		InfoTemplate, WidgetManager, ViewStack, jimuUtils, wkidUtils, LayerInfos,
 		Memory, LoadingIndicator, Popup, ComboBox, DateTextBox) {
@@ -59,8 +59,9 @@ define([
 			_searchParams : {}, 
 			_queryTask : null,
 			_renderType : null /*graphicLayer (default) or featureLayer*/,
-			_featureLayer : null, 
-			_graphicLayer : null,
+			_featureLayer : null,
+			_graphicLayer : null,			
+			_queryGraphicLayer : null,
 			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
@@ -175,25 +176,82 @@ define([
 				this._currentViewIndex = 0; 
 				this.viewStack.switchView(this._currentViewIndex);
 				
-				this._graphicLayer = new GraphicsLayer();
-				this.map.addLayer(this._graphicLayer);	
+				// init queryGraphicLayer to show the user drawn polygon
+				this._queryGraphicLayer = new GraphicsLayer();
+				this.map.addLayer(this._queryGraphicLayer);	
 				
-				this._createGraphicsMenu(this._graphicLayer); 
-
-				this._currentViewIndex = 0;
-				this.viewStack.switchView(this._currentViewIndex);
+				this._createGraphicsMenu(this._queryGraphicLayer); 
+				
+				// init the render layer for search results
+				if (this._renderType === "featureLayer") {
+					esriRequest({
+						"url": this.config.layer,
+						"content": {
+						  "f": "json"
+						}
+					}).then(lang.hitch(this, function(layerInfo) {
+						var featureCollection = {
+							"featureSet": {
+								"features": [],
+								"geometryType": layerInfo.geometryType
+							}, 
+							"layerDefinition": {
+								"geometryType": layerInfo.geometryType,
+								"objectIdField": layerInfo.objectIdField,
+								"drawingInfo": {
+									"renderer": {
+										"type": "simple",
+										"symbol": this._symbols[layerInfo.geometryType], 
+									}
+								},
+								"fields": layerInfo.fields 
+							}
+						};
+						this._featureLayer = new FeatureLayer(featureCollection, {
+							id: layerInfo.name + "_searchResults", 
+							infoTemplate: this._infoTemplate
+						});
+						this.map.addLayer(this._featureLayer); 
+						console.debug("the search results to be rendered as features"); 
+					}), lang.hitch(this, function(err) {
+						this._showMessage(err.message, "error");
+					}));
+				} else { 
+					this._graphicLayer = new GraphicsLayer({
+						id: this.name + "_searchResults", 
+						infoTemplate: this._infoTemplate
+					});
+					this.map.addLayer(this._graphicLayer);	
+					console.debug("the search results to be rendered as graphics"); 
+				}				
 			},
 
 			onClose : function () {
-				this._graphicLayer.clear();
+				// clear the message
+				this._hideMessage();
+				
+				this._queryGraphicLayer.clear();
 				//TODO: remove the event handlers on graphicLayer
-				this.map.removeLayer(this._graphicLayer);
-				this._graphicLayer = null; 
+				this.map.removeLayer(this._queryGraphicLayer);
+				this._queryGraphicLayer = null; 
 				
 				if (this._drawTool) {
 					this._drawTool.deactivate(); 
 				}
 				this.map.enableMapNavigation();	
+				
+				if (this._renderType === "featureLayer") {
+					// close the AttributeTable widget
+					this._closeAttributeTable(); 
+					// clean up featureLayer
+					this.map.removeLayer(this._featureLayer); 
+					this._featureLayer.clear(); 
+					this._featureLayer = null; 
+				} else {
+					this.map.removeLayer(this._graphicLayer); 
+					this._graphicLayer.clear();
+					this._graphicLayer = null; 
+				}
 			},
 
 			destroy : function () {},
@@ -281,7 +339,7 @@ define([
 			_onSelectByPolygonClicked : function (evt) {
 				this._searchPolygon = null; 
 				// clear the old one
-				this._graphicLayer.clear(); 
+				this._queryGraphicLayer.clear(); 
 				this._searchParams["searchPolygon"] = null; 
 				// draw a new one
 				if (!this._drawTool) {
@@ -301,7 +359,7 @@ define([
 
 				var highlightSymbol = new SimpleFillSymbol(this._symbols["esriGeometryPolygon"]);				
 				this._searchPolygon = new Graphic(evt.geometry, highlightSymbol); 
-				this._graphicLayer.add(this._searchPolygon);				
+				this._queryGraphicLayer.add(this._searchPolygon);				
 				
 				// create context menu for graphic editing
 				if (!this._editTool) {
@@ -403,27 +461,44 @@ define([
 				query.outSpatialReference = this.map.spatialReference;
 				query.returnGeometry = true;
 				query.outFields = ["*"];
+				
 				query.geometry = this._searchPolygon.geometry;
-				query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;				
 
 				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
-						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							if (resultSet.exceededTransferLimit === true) {
-								this._showMessage("exceed search limit. only first " 
-									+ resultSet.features.length + " feature(s) displayed", "warning"); 
+						if (resultSet && resultSet.features) {
+							if (resultSet.features.length > 0) {
+								if (resultSet.exceededTransferLimit === true) {
+									this._showMessage("exceed search limit. only first " 
+										+ resultSet.features.length + " feature(s) displayed", "warning"); 
+								} else {
+									this._showMessage(resultSet.features.length + " feature(s) found");
+								}
 							} else {
-								this._showMessage(resultSet.features.length + " feature(s) found");
-							}
-							this._drawResultsOnMap(resultSet, false);
+								this._showMessage("no feature found", "warning");
+							} 
 						} else {
-							this._showMessage("no feature found", "warning");
-						}
+							// in case null resultSet, set empty value
+							resultSet = {"features": []}; 
+						} 
+						if (this._renderType === "featureLayer") {
+							this._drawFeaturesOnMap(resultSet); 
+						} else {
+							this._drawGraphicsOnMap(resultSet); 
+						} 
 					}), lang.hitch(this, function (err) {
 						this._showMessage(err.message, "error");
-					}));
+						// clear the render layer
+						if (this._renderType === "featureLayer") {
+							this._featureLayer.clear(); 
+						} else {
+							this._graphicLayer.clear(); 
+						} 
+					})
+				);
 			},
 
-			_drawResultsOnMap : function (resultSet, clearFirst/*default: true*/) {
+			_drawGraphicsOnMap : function (resultSet, clearFirst/*default: true*/) {
 				if (clearFirst !== false) {
 					this._graphicLayer.clear();
 				}
@@ -442,45 +517,131 @@ define([
 					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
 					break;
 				default: 
-					this._showMessage("not support such a geometry", "error"); 
+					this._showMessage("not support such geometry", "error"); 
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
-						var graphic = new Graphic(
-							feature.geometry,
-							highlightSymbol,
-							feature.attributes,
-							this._infoTemplate);
+						var graphic = new Graphic(feature.geometry);
+						graphic.setSymbol(highlightSymbol);
+						graphic.setAttributes(feature.attributes);
 						this._graphicLayer.add(graphic);
 
-						if (resultSet.geometryType === "esriGeometryPoint") {
-							if (resultExtent) {
-								resultExtent = resultExtent.union(new Extent(
+						if (feature.geometry) {
+							if (resultSet.geometryType === "esriGeometryPoint") {
+								if (resultExtent) {
+									resultExtent = resultExtent.union(new Extent(
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.spatialReference));
+								} else {
+									resultExtent = new Extent(
 											feature.geometry.x, feature.geometry.y,
 											feature.geometry.x, feature.geometry.y,
-											feature.geometry.spatialReference));
+											feature.geometry.spatialReference);
+								}
 							} else {
-								resultExtent = new Extent(
-										feature.geometry.x, feature.geometry.y,
-										feature.geometry.x, feature.geometry.y,
-										feature.geometry.spatialReference);
-							}
-						} else {
-							if (resultExtent) {
-								resultExtent = resultExtent.union(feature.geometry.getExtent());
-							} else {
-								resultExtent = feature.geometry.getExtent();
+								if (resultExtent) {
+									resultExtent = resultExtent.union(feature.geometry.getExtent());
+								} else {
+									resultExtent = feature.geometry.getExtent();
+								}
 							}
 						}
-					}));
+					})
+				);
 
+				this._zoomToExtent(resultExtent); 
+			}, 
+
+			_drawFeaturesOnMap : function (resultSet, clearFirst/*default: true*/) {
+				if (clearFirst !== false) {
+					this._featureLayer.clear();
+				}
+				
+				var resultExtent = null,
+					featureArray = []; 
+				
+				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
+						var graphic = new Graphic(feature.geometry); 
+						graphic.setAttributes(feature.attributes);
+						featureArray.push(graphic);
+
+						if (feature.geometry) {
+							if (resultSet.geometryType === "esriGeometryPoint") {
+								if (resultExtent) {
+									resultExtent = resultExtent.union(new Extent(
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.spatialReference));
+								} else {
+									resultExtent = new Extent(
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.x, feature.geometry.y,
+											feature.geometry.spatialReference);
+								}
+							} else {
+								if (resultExtent) {
+									resultExtent = resultExtent.union(feature.geometry.getExtent());
+								} else {
+									resultExtent = feature.geometry.getExtent();
+								}
+							}
+						}
+					})
+				);
+
+				this._zoomToExtent(resultExtent); 
+
+				if (featureArray.length > 0) {
+					this._featureLayer.applyEdits(featureArray, null, null, 
+						lang.hitch(this, function() {
+							console.debug("resultset is added into FeatureLayer");  
+							// open AttributeTable and display the results 
+							this._showResultsInAttributeTable(); 
+						}), 
+						lang.hitch(this, function(err) {
+							this._showMessage(err.message || "failed to show search results", "error"); 
+						})
+					); 	
+				} else {
+					// close AttributeTable
+					this._closeAttributeTable(); 
+				}
+				
+			}, 
+			
+			_zoomToExtent: function(resultExtent) {
 				if (resultExtent) {
 					if (resultExtent.getHeight() === 0 || resultExtent.getWidth() === 0) {
 						this.map.centerAndZoom(resultExtent.getCenter(), 15);
 					} else {
 						this.map.setExtent(resultExtent, true);
 					}
-				}
+				} 
+			},
+			
+			_showResultsInAttributeTable : function() {
+				var attributeTableWidgetEle =
+					this.appConfig.getConfigElementsByName("AttributeTable")[0];
+				var widgetManager = WidgetManager.getInstance();
+				widgetManager.triggerWidgetOpen(attributeTableWidgetEle.id).then(
+					lang.hitch(this, function() {
+						this.publishData({
+							'target': 'AttributeTable',
+							'layer': this._featureLayer
+						});
+					})
+				);	
+			}, 
+			
+			_closeAttributeTable : function() {
+				var attributeTableWidgetEle =
+					this.appConfig.getConfigElementsByName("AttributeTable")[0];
+				var widgetManager = WidgetManager.getInstance();
+				var attributeTableWidget = widgetManager.getWidgetById(attributeTableWidgetEle.id); 
+				if (attributeTableWidget) {
+					widgetManager.closeWidget(attributeTableWidget);
+				} 
 			}
 
 		});
