@@ -298,7 +298,7 @@ define([
 					this._showMessage("invalid search option", "error"); 
 				}
 				if (whereClause) {
-					this._executeSearch(whereClause);
+					this._executeSearch(whereClause, this._searchParams["limitToMapExtent"]);
 				} else {
 					this._showMessage("invalid search criteria", "error");
 				}
@@ -538,7 +538,7 @@ define([
 				return deferred.promise;
 			},
 
-			_executeSearch : function (whereClause) {
+			_executeSearch : function (whereClause, boundByMapExtent) {
 				this._showMessage("searching..."); 
 				
 				var query = new Query();
@@ -547,7 +547,7 @@ define([
 				query.returnGeometry = true;
 				query.outFields = ["*"];
 
-				if (this._searchParams["limitToMapExtent"] === true) {
+				if (boundByMapExtent === true) {
 					query.geometry = this.map.extent;
 					query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
 				}
