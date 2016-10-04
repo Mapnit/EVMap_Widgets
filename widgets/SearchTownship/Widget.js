@@ -372,23 +372,25 @@ define([
 						graphic.setAttributes(feature.attributes);
 						this._graphicLayer.add(graphic);
 
-						if (resultSet.geometryType === "esriGeometryPoint") {
-							if (resultExtent) {
-								resultExtent = resultExtent.union(new Extent(
+						if (feature.geometry) {
+							if (resultSet.geometryType === "esriGeometryPoint") {
+								if (resultExtent) {
+									resultExtent = resultExtent.union(new Extent(
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.spatialReference));
+								} else {
+									resultExtent = new Extent(
 											feature.geometry.x, feature.geometry.y,
 											feature.geometry.x, feature.geometry.y,
-											feature.geometry.spatialReference));
+											feature.geometry.spatialReference);
+								}
 							} else {
-								resultExtent = new Extent(
-										feature.geometry.x, feature.geometry.y,
-										feature.geometry.x, feature.geometry.y,
-										feature.geometry.spatialReference);
-							}
-						} else {
-							if (resultExtent) {
-								resultExtent = resultExtent.union(feature.geometry.getExtent());
-							} else {
-								resultExtent = feature.geometry.getExtent();
+								if (resultExtent) {
+									resultExtent = resultExtent.union(feature.geometry.getExtent());
+								} else {
+									resultExtent = feature.geometry.getExtent();
+								}
 							}
 						}
 					})
@@ -410,23 +412,25 @@ define([
 						graphic.setAttributes(feature.attributes);
 						featureArray.push(graphic);
 
-						if (resultSet.geometryType === "esriGeometryPoint") {
-							if (resultExtent) {
-								resultExtent = resultExtent.union(new Extent(
+						if (feature.geometry) {
+							if (resultSet.geometryType === "esriGeometryPoint") {
+								if (resultExtent) {
+									resultExtent = resultExtent.union(new Extent(
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.x, feature.geometry.y,
+												feature.geometry.spatialReference));
+								} else {
+									resultExtent = new Extent(
 											feature.geometry.x, feature.geometry.y,
 											feature.geometry.x, feature.geometry.y,
-											feature.geometry.spatialReference));
+											feature.geometry.spatialReference);
+								}
 							} else {
-								resultExtent = new Extent(
-										feature.geometry.x, feature.geometry.y,
-										feature.geometry.x, feature.geometry.y,
-										feature.geometry.spatialReference);
-							}
-						} else {
-							if (resultExtent) {
-								resultExtent = resultExtent.union(feature.geometry.getExtent());
-							} else {
-								resultExtent = feature.geometry.getExtent();
+								if (resultExtent) {
+									resultExtent = resultExtent.union(feature.geometry.getExtent());
+								} else {
+									resultExtent = feature.geometry.getExtent();
+								}
 							}
 						}
 					})
