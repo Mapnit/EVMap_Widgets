@@ -35,6 +35,7 @@
 	"lastName": {
 		"field": "OWN1_LAST"
 	}, 
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",
