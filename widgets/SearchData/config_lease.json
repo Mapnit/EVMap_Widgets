@@ -46,6 +46,7 @@
 	  "prompt": "Use the fields below to specify the date range you wish to search"
 	}],
 	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",

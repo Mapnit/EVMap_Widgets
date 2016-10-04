@@ -38,6 +38,7 @@
 		"prompt": "Enter a well API below, as you type matching well APIs will be provided"
 	}],
 	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",

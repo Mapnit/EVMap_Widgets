@@ -24,6 +24,7 @@
 		"prompt": "Enter a bolo number below, as you type matching bolo numbers will be provided"
 	}],
 	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",

@@ -31,6 +31,7 @@
 	  "prompt": "Select at least one status from the following list:"
 	}],
 	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",
