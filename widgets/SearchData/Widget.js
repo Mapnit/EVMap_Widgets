@@ -28,7 +28,8 @@ define([
 		'esri/symbols/SimpleMarkerSymbol',
 		'esri/symbols/SimpleLineSymbol',
 		'esri/symbols/SimpleFillSymbol',
-		'esri/InfoTemplate', 
+		'esri/InfoTemplate',
+		'jimu/WidgetManager', 
 		'jimu/dijit/ViewStack',
 		'jimu/utils',
 		'jimu/SpatialReference/wkidUtils',
@@ -45,7 +46,7 @@ define([
 		domConstruct, html, lang, Color, array, domStyle, domClass,
 		esriConfig, esriRequest, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
 		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
-		InfoTemplate, ViewStack, jimuUtils, wkidUtils, LayerInfos,
+		InfoTemplate, WidgetManager, ViewStack, jimuUtils, wkidUtils, LayerInfos,
 		Memory, LoadingIndicator, Popup, ComboBox, DateTextBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
@@ -208,6 +209,9 @@ define([
 
 			onClose : function () {
 				if (this._renderType === "featureLayer") {
+					// close the AttributeTable widget
+					this._closeAttributeTable(); 
+					// clean up featureLayer
 					this.map.removeLayer(this._featureLayer); 
 					this._featureLayer.clear(); 
 					this._featureLayer = null; 
@@ -661,6 +665,8 @@ define([
 				this._featureLayer.applyEdits(featureArray, null, null, 
 					lang.hitch(this, function() {
 						console.debug("resultset is added into FeatureLayer");  
+						// open AttributeTable and display the results 
+						this._showResultsInAttributeTable(); 
 					}), 
 					lang.hitch(this, function(err) {
 						this._showMessage(err.message || "failed to show search results", "error"); 
@@ -678,6 +684,28 @@ define([
 						this.map.setExtent(resultExtent, true);
 					}
 				} 
+			},
+			
+			_showResultsInAttributeTable : function() {
+				var attributeTableWidgetEle =
+					this.appConfig.getConfigElementsByName("AttributeTable")[0];
+				var widgetManager = WidgetManager.getInstance();
+				widgetManager.triggerWidgetOpen(attributeTableWidgetEle.id).then(
+					lang.hitch(this, function() {
+						this.publishData({
+							'target': 'AttributeTable',
+							'layer': this._featureLayer
+						});
+					})
+				);	
+			}, 
+			
+			_closeAttributeTable : function() {
+				var attributeTableWidgetEle =
+					this.appConfig.getConfigElementsByName("AttributeTable")[0];
+				var widgetManager = WidgetManager.getInstance();
+				var attributeTableWidget = widgetManager.getWidgetById(attributeTableWidgetEle.id); 
+				widgetManager.closeWidget(attributeTableWidget);
 			}
 			
 		});
