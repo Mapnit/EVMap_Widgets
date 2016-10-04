@@ -205,6 +205,9 @@ define([
 			},
 
 			onClose : function () {
+				// clear the message
+				this._hideMessage(); 
+				
 				if (this._renderType === "featureLayer") {
 					// close the AttributeTable widget
 					this._closeAttributeTable(); 
