@@ -391,7 +391,7 @@ define([
 					case "range":
 						this._hideMessage();
 						var valueContainer = domConstruct.create("table"); 
-						this.filterInput.appendChild(valueContainer);						
+						this.filterInput.appendChild(valueContainer); 
 						array.forEach(this._selectedOption.rangeLabels, lang.hitch(this, function(lbl, i) {
 							var valueRow = domConstruct.create("tr");
 							
@@ -441,7 +441,7 @@ define([
 				this._searchParams["limitToMapExtent"] = evt.currentTarget.checked;
 			},
 
-			_onFilterValueEntered : function (evt) {				
+			_onFilterValueEntered : function (evt) { 
 				var fltrValue = this._filterValues[0].get('value'); 
 				if (fltrValue) {
 					var textInput = fltrValue.trim();
@@ -457,7 +457,7 @@ define([
 											valueStore.put({
 												"id" : i,
 												"name" : valItem
-											});											
+											});	
 										}));
 									this._filterValues[0].store = valueStore;
 									this._showMessage("click the dropdown arrow to show partial matches");
@@ -677,9 +677,9 @@ define([
 					} else {
 						this.map.setExtent(resultExtent, true);
 					}
-				}
+				} 
 			}
-
+			
 		});
 
 	return clazz;
