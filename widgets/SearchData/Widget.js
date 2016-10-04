@@ -537,52 +537,50 @@ define([
 			},
 
 			_executeSearch : function (whereClause) {
-				if (this._selectedOption) {
-					this._showMessage("searching..."); 
-					
-					var query = new Query();
-					query.where = whereClause;
-					query.outSpatialReference = this.map.spatialReference;
-					query.returnGeometry = true;
-					query.outFields = ["*"];
+				this._showMessage("searching..."); 
+				
+				var query = new Query();
+				query.where = whereClause;
+				query.outSpatialReference = this.map.spatialReference;
+				query.returnGeometry = true;
+				query.outFields = ["*"];
 
-					if (this._searchParams["limitToMapExtent"] === true) {
-						query.geometry = this.map.extent;
-						query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
-					}
-
-					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
-							if (resultSet && resultSet.features) {
-								if (resultSet.features.length > 0) {
-									if (resultSet.exceededTransferLimit === true) {
-										this._showMessage("exceed search limit. only first " 
-											+ resultSet.features.length + " feature(s) displayed", "warning"); 
-									} else {
-										this._showMessage(resultSet.features.length + " feature(s) found");
-									}
-								} else {
-									this._showMessage("no feature found", "warning");
-								} 
-							} else {
-								// in case null resultSet, set empty value
-								resultSet = {"features": []}; 
-							} 
-							if (this._renderType === "featureLayer") {
-								this._drawFeaturesOnMap(resultSet); 
-							} else {
-								this._drawGraphicsOnMap(resultSet); 
-							} 
-						}), lang.hitch(this, function (err) {
-							this._showMessage(err.message, "error");
-							// clear the render layer
-							if (this._renderType === "featureLayer") {
-								this._featureLayer.clear(); 
-							} else {
-								this._graphicLayer.clear(); 
-							} 
-						})
-					);
+				if (this._searchParams["limitToMapExtent"] === true) {
+					query.geometry = this.map.extent;
+					query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
 				}
+
+				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
+						if (resultSet && resultSet.features) {
+							if (resultSet.features.length > 0) {
+								if (resultSet.exceededTransferLimit === true) {
+									this._showMessage("exceed search limit. only first " 
+										+ resultSet.features.length + " feature(s) displayed", "warning"); 
+								} else {
+									this._showMessage(resultSet.features.length + " feature(s) found");
+								}
+							} else {
+								this._showMessage("no feature found", "warning");
+							} 
+						} else {
+							// in case null resultSet, set empty value
+							resultSet = {"features": []}; 
+						} 
+						if (this._renderType === "featureLayer") {
+							this._drawFeaturesOnMap(resultSet); 
+						} else {
+							this._drawGraphicsOnMap(resultSet); 
+						} 
+					}), lang.hitch(this, function (err) {
+						this._showMessage(err.message, "error");
+						// clear the render layer
+						if (this._renderType === "featureLayer") {
+							this._featureLayer.clear(); 
+						} else {
+							this._graphicLayer.clear(); 
+						} 
+					})
+				);
 			},
 
 			_drawGraphicsOnMap : function (resultSet, clearFirst/*default: true*/) {
