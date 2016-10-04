@@ -552,23 +552,34 @@ define([
 					}
 
 					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
-							if (resultSet && resultSet.features && resultSet.features.length > 0) {
-								if (resultSet.exceededTransferLimit === true) {
-									this._showMessage("exceed search limit. only first " 
-										+ resultSet.features.length + " feature(s) displayed", "warning"); 
+							if (resultSet && resultSet.features) {
+								if (resultSet.features.length > 0) {
+									if (resultSet.exceededTransferLimit === true) {
+										this._showMessage("exceed search limit. only first " 
+											+ resultSet.features.length + " feature(s) displayed", "warning"); 
+									} else {
+										this._showMessage(resultSet.features.length + " feature(s) found");
+									}
 								} else {
-									this._showMessage(resultSet.features.length + " feature(s) found");
-								}
-								if (this._renderType === "featureLayer") {
-									this._drawFeaturesOnMap(resultSet); 
-								} else {
-									this._drawGraphicsOnMap(resultSet); 
-								} 
+									this._showMessage("no feature found", "warning");
+								}								
 							} else {
-								this._showMessage("no feature found", "warning");
-							}
+								// in case null resultSet, set empty value
+								resultSet = {"features": []}; 
+							} 
+							if (this._renderType === "featureLayer") {
+								this._drawFeaturesOnMap(resultSet); 
+							} else {
+								this._drawGraphicsOnMap(resultSet); 
+							} 							
 						}), lang.hitch(this, function (err) {
 							this._showMessage(err.message, "error");
+							// clear the render layer
+							if (this._renderType === "featureLayer") {
+								this._featureLayer.clear(); 
+							} else {
+								this._graphicLayer.clear(); 
+							} 
 						})
 					);
 				}
@@ -662,18 +673,24 @@ define([
 					})
 				);
 
-				this._featureLayer.applyEdits(featureArray, null, null, 
-					lang.hitch(this, function() {
-						console.debug("resultset is added into FeatureLayer");  
-						// open AttributeTable and display the results 
-						this._showResultsInAttributeTable(); 
-					}), 
-					lang.hitch(this, function(err) {
-						this._showMessage(err.message || "failed to show search results", "error"); 
-					})
-				); 
-				
 				this._zoomToExtent(resultExtent); 
+
+				if (featureArray.length > 0) {
+					this._featureLayer.applyEdits(featureArray, null, null, 
+						lang.hitch(this, function() {
+							console.debug("resultset is added into FeatureLayer");  
+							// open AttributeTable and display the results 
+							this._showResultsInAttributeTable(); 
+						}), 
+						lang.hitch(this, function(err) {
+							this._showMessage(err.message || "failed to show search results", "error"); 
+						})
+					); 	
+				} else {
+					// close AttributeTable
+					this._closeAttributeTable(); 
+				}
+				
 			}, 
 			
 			_zoomToExtent: function(resultExtent) {
@@ -705,7 +722,9 @@ define([
 					this.appConfig.getConfigElementsByName("AttributeTable")[0];
 				var widgetManager = WidgetManager.getInstance();
 				var attributeTableWidget = widgetManager.getWidgetById(attributeTableWidgetEle.id); 
-				widgetManager.closeWidget(attributeTableWidget);
+				if (attributeTableWidget) {
+					widgetManager.closeWidget(attributeTableWidget);
+				}				
 			}
 			
 		});
