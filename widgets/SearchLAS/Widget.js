@@ -13,6 +13,7 @@ define([
 		'dojo/dom-style',
 		'dojo/dom-class',
 		'esri/config',
+		'esri/request', 
 		'esri/graphic',
 		'esri/toolbars/draw', 
 		'esri/toolbars/edit', 
@@ -26,12 +27,13 @@ define([
 		'esri/geometry/Polygon',
 		'esri/geometry/webMercatorUtils',
 		'esri/tasks/GeometryService',
+		'esri/layers/FeatureLayer',
 		'esri/layers/GraphicsLayer',
 		'esri/symbols/SimpleMarkerSymbol',
 		'esri/symbols/SimpleLineSymbol',
 		'esri/symbols/SimpleFillSymbol',
 		'esri/InfoTemplate',
-		'esri/layers/FeatureLayer',
+		'jimu/WidgetManager', 
 		'jimu/dijit/ViewStack',
 		'jimu/utils',
 		'jimu/SpatialReference/wkidUtils',
@@ -47,8 +49,8 @@ define([
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
 		esriConfig, Graphic, Draw, Edit, Menu, MenuItem, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
-		GeometryService, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
-		InfoTemplate, FeatureLayer, ViewStack, jimuUtils, wkidUtils, LayerInfos,
+		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
+		InfoTemplate, WidgetManager, ViewStack, jimuUtils, wkidUtils, LayerInfos,
 		Memory, LoadingIndicator, Popup, ComboBox, DateTextBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
@@ -56,6 +58,8 @@ define([
 			baseClass : 'ev-widget-searchLAS',
 			_searchParams : {}, 
 			_queryTask : null,
+			_renderType : null /*graphicLayer (default) or featureLayer*/,
+			_featureLayer : null, 
 			_graphicLayer : null,
 			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
@@ -121,6 +125,8 @@ define([
 					"queryTypeOpr": "OR"
 				}; 
 				
+				this._renderType = this.config.renderType || "graphicLayer"; 
+				
 				if (this.config.renderSymbols) {
 					this._symbols = this.config.renderSymbols; 
 				}
@@ -165,6 +171,10 @@ define([
 			},
 			
 			onOpen : function() {
+				// show the 1st view
+				this._currentViewIndex = 0; 
+				this.viewStack.switchView(this._currentViewIndex);
+				
 				this._graphicLayer = new GraphicsLayer();
 				this.map.addLayer(this._graphicLayer);	
 				

@@ -157,9 +157,6 @@ define([
 			},
 			
 			onOpen : function() {
-				// clear the message
-				this._hideMessage(); 
-
 				// show the 1st view
 				this._currentViewIndex = 0; 
 				this.viewStack.switchView(this._currentViewIndex);
@@ -562,7 +559,7 @@ define([
 									}
 								} else {
 									this._showMessage("no feature found", "warning");
-								}								
+								} 
 							} else {
 								// in case null resultSet, set empty value
 								resultSet = {"features": []}; 
@@ -571,7 +568,7 @@ define([
 								this._drawFeaturesOnMap(resultSet); 
 							} else {
 								this._drawGraphicsOnMap(resultSet); 
-							} 							
+							} 
 						}), lang.hitch(this, function (err) {
 							this._showMessage(err.message, "error");
 							// clear the render layer
@@ -724,7 +721,7 @@ define([
 				var attributeTableWidget = widgetManager.getWidgetById(attributeTableWidgetEle.id); 
 				if (attributeTableWidget) {
 					widgetManager.closeWidget(attributeTableWidget);
-				}				
+				} 
 			}
 			
 		});

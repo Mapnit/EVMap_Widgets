@@ -18,7 +18,8 @@
 	},
 	"vtlDir": {
 		"field": "TDIR"
-	}, 
+	},  
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",

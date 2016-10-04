@@ -13,6 +13,7 @@ define([
 		'dojo/dom-style',
 		'dojo/dom-class',
 		'esri/config',
+		'esri/request', 
 		'esri/graphic',
 		'esri/tasks/QueryTask',
 		'esri/tasks/query',
@@ -22,12 +23,13 @@ define([
 		'esri/geometry/Polygon',
 		'esri/geometry/webMercatorUtils',
 		'esri/tasks/GeometryService',
+		'esri/layers/FeatureLayer',
 		'esri/layers/GraphicsLayer',
 		'esri/symbols/SimpleMarkerSymbol',
 		'esri/symbols/SimpleLineSymbol',
 		'esri/symbols/SimpleFillSymbol',
 		'esri/InfoTemplate',
-		'esri/layers/FeatureLayer',
+		'jimu/WidgetManager', 
 		'jimu/dijit/ViewStack',
 		'jimu/utils',
 		'jimu/SpatialReference/wkidUtils',
@@ -39,14 +41,16 @@ define([
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
-		esriConfig, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
-		GeometryService, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
-		InfoTemplate, FeatureLayer, ViewStack, jimuUtils, wkidUtils, LayerInfos,
+		esriConfig, esriRequest, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
+		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
+		InfoTemplate, WidgetManager, ViewStack, jimuUtils, wkidUtils, LayerInfos,
 		Memory, LoadingIndicator, Popup, ComboBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
 			name : 'SearchTownship',
 			baseClass : 'ev-widget-searchTownship',
+			_renderType : null /*graphicLayer (default) or featureLayer*/,
+			_featureLayer : null, 			
 			_graphicLayer : null,
 			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
@@ -97,6 +101,8 @@ define([
 
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 				
+				this._renderType = this.config.renderType || "graphicLayer"; 
+				
 				if (this.config.renderSymbols) {
 					this._symbols = this.config.renderSymbols; 
 				}
@@ -121,8 +127,47 @@ define([
 			},
 			
 			onOpen : function () {
-				this._graphicLayer = new GraphicsLayer();
-				this.map.addLayer(this._graphicLayer);	
+				if (this._renderType === "featureLayer") {
+					esriRequest({
+						"url": this.config.layer,
+						"content": {
+						  "f": "json"
+						}
+					}).then(lang.hitch(this, function(layerInfo) {
+						var featureCollection = {
+							"featureSet": {
+								"features": [],
+								"geometryType": layerInfo.geometryType
+							}, 
+							"layerDefinition": {
+								"geometryType": layerInfo.geometryType,
+								"objectIdField": layerInfo.objectIdField,
+								"drawingInfo": {
+									"renderer": {
+										"type": "simple",
+										"symbol": this._symbols[layerInfo.geometryType], 
+									}
+								},
+								"fields": layerInfo.fields 
+							}
+						};
+						this._featureLayer = new FeatureLayer(featureCollection, {
+							id: layerInfo.name + "_searchResults", 
+							infoTemplate: this._infoTemplate
+						});
+						this.map.addLayer(this._featureLayer); 
+						console.debug("the search results to be rendered as features"); 
+					}), lang.hitch(this, function(err) {
+						this._showMessage(err.message, "error");
+					}));
+				} else { 
+					this._graphicLayer = new GraphicsLayer({
+						id: this.name + "_searchResults", 
+						infoTemplate: this._infoTemplate
+					});
+					this.map.addLayer(this._graphicLayer);	
+					console.debug("the search results to be rendered as graphics"); 
+				}
 			},
 
 			onClose : function () {
