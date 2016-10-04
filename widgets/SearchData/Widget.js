@@ -294,6 +294,8 @@ define([
 					}
 					whereClause = rangeLimits.join(' and ');
 					break;
+				default: 
+					this._showMessage("invalid search option", "error"); 
 				}
 				if (whereClause) {
 					this._executeSearch(whereClause);
