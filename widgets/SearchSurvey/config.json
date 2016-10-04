@@ -17,7 +17,8 @@
 		"relatedFields": {
 			"county": "COUNTY"
 		}
-	}, 
+	},  
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",
