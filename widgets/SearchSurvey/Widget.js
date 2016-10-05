@@ -515,6 +515,7 @@ define([
 					break;
 				default: 
 					this._showMessage("not support such geometry", "error"); 
+					return; 
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {

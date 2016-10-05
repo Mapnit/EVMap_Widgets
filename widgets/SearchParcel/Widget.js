@@ -409,6 +409,9 @@ define([
 				case "esriGeometryPolygon":
 					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
 					break;
+				default: 
+					this._showMessage("not support such geometry", "error"); 
+					return; 					
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
