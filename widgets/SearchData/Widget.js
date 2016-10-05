@@ -603,7 +603,7 @@ define([
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
 						var graphic = new Graphic(feature.geometry);
-						graphic.setSymbol(renderSymbol);
+						graphic.setSymbol(highlightSymbol);
 						graphic.setAttributes(feature.attributes);
 						this._graphicLayer.add(graphic);
 
