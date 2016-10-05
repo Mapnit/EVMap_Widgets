@@ -39,7 +39,8 @@ define([
 		'jimu/dijit/Popup',
 		'dijit/form/ComboBox',
 		'dijit/form/DateTextBox',
-		'dijit/form/NumberSpinner'
+		'dijit/form/NumberSpinner', 
+		'dijit/form/Button'
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		html, lang, Color, array, domConstruct, domStyle, domClass,
