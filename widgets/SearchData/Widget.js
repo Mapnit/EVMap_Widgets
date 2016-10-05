@@ -40,7 +40,8 @@ define([
 		'dijit/form/ComboBox',
 		'dijit/form/DateTextBox',
 		'dijit/form/Select',
-		'dijit/form/NumberSpinner'
+		'dijit/form/NumberSpinner', 
+		'dijit/form/Button'
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
