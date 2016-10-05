@@ -17,7 +17,7 @@ define({
 	queryTypeOR: "OR",
 	queryTypeAND: "AND",
     cancelSteps: "Cancel",
-    nextStep: "Select",
+    nextStep: "Next",
 	prevStep: "Back", 
     endSteps: "Search"
   })
