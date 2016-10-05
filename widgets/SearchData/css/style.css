@@ -59,9 +59,21 @@
 	display: none; 
 }
 
+.ev-widget-searchData .nav-btn-cancel-icon{
+	background-image: url(../images/cancel.png);
+	width: 16px;
+	height: 16px;
+}
+
 .ev-widget-searchData .nav-btn-prev{
 	float: left;
 	margin-left: 5px; 
+}
+
+.ev-widget-searchData .nav-btn-prev-icon{
+	background-image: url(../images/prev.png);
+	width: 16px;
+	height: 16px;
 }
 
 .ev-widget-searchData .nav-btn-next{
@@ -69,14 +81,26 @@
 	margin-right: 5px; 
 }
 
+.ev-widget-searchData .nav-btn-next-icon{
+	background-image: url(../images/next.png);
+	width: 16px;
+	height: 16px;
+}
+
 .ev-widget-searchData .nav-btn-end{
 	float: right;
 	margin-right: 5px; 
 }
 
+.ev-widget-searchData .nav-btn-end-icon{
+	background-image: url(../images/search.png);
+	width: 16px;
+	height: 16px;
+}
+
 .ev-widget-searchData .message-section{
 	width: 100%; 
-	margin-top: 20px; 
+	margin-top: 25px; 
 	text-align: center; 
 }
 

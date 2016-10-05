@@ -10,8 +10,14 @@
 	  </div>
 	  <hr/>
       <div class="nav-section">
-        <button class="nav-btn-cancel" data-dojo-attach-event="onclick:_onBtnCancelClicked">${nls.cancelSteps}</button>
-        <button class="nav-btn-next" data-dojo-attach-event="onclick:_onBtnGoToNextClicked">${nls.nextStep}</button>
+		<div class="nav-btn-cancel" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-cancel-icon'" 
+			data-dojo-attach-event="onClick:_onBtnCancelClicked">
+            ${nls.cancelSteps}
+        </div>
+		<div class="nav-btn-next" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-next-icon'" 
+			data-dojo-attach-event="onClick:_onBtnGoToNextClicked">
+            ${nls.nextStep}
+        </div>
       </div>
     </div>
     <div class="filter-section" data-dojo-attach-point="filterSection">
@@ -20,9 +26,18 @@
       </div>
 	  <hr/>
       <div class="nav-section">
-        <button class="nav-btn-cancel" data-dojo-attach-event="onclick:_onBtnCancelClicked">${nls.cancelSteps}</button>
-        <button class="nav-btn-prev" data-dojo-attach-event="onclick:_onBtnGoToPrevClicked">${nls.prevStep}</button>
-        <button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
+		<div class="nav-btn-cancel" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-cancel-icon'" 
+			data-dojo-attach-event="onClick:_onBtnCancelClicked">
+            ${nls.cancelSteps}
+        </div>
+		<div class="nav-btn-prev" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-prev-icon'" 
+			data-dojo-attach-event="onClick:_onBtnGoToPrevClicked">
+            ${nls.prevStep}
+        </div>
+		<div class="nav-btn-end" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-end-icon'" 
+			data-dojo-attach-event="onClick:_onBtnEndClicked">
+            ${nls.endSteps}
+        </div>
       </div>
     </div>  
   </div>
