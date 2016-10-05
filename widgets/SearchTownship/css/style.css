@@ -29,6 +29,7 @@
     padding-left: 0.75em;
     padding-right: 0.75em;
     border: 2px groove;	
+	border-radius: 5px;
 }
 
 .ev-widget-searchTownship .filter-input-field{

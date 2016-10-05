@@ -126,7 +126,7 @@ define([
 				
 				this._jimuFilter = new Filter({
 					noFilterTip: this.nls.noFilterTip,
-					style: "width:100%;border:2px groove;"
+					style: "width:100%;border:2px groove;border-radius:5px;"
 				}, this.filterInput);
 				this._jimuFilter.startup(); 
 				
