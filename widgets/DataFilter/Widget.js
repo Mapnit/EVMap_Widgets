@@ -357,14 +357,16 @@ define([
 				case "esriGeometryPolygon":
 					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
 					break;
+				default: 
+					this._showMessage("not support such geometry", "error");
+					return; 
 				};
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
-						this._graphicLayer.add(new Graphic(
-								feature.geometry,
-								highlightSymbol,
-								feature.attributes,
-								this._infoTemplate));
+						var graphic = new Graphic(feature.geometry);
+						graphic.setSymbol(highlightSymbol);
+						graphic.setAttributes(feature.attributes);
+						this._graphicLayer.add(graphic);
 
 						if (feature.geometry) {
 							if (resultSet.geometryType === "esriGeometryPoint") {
