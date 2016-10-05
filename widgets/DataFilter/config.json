@@ -1,5 +1,6 @@
 {
 	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {
 			"type" : "esriSFS",
