@@ -388,6 +388,8 @@ define([
 												});
 											this._filterValues[0].appendChild(valOption);
 										}));
+									domStyle.set(this._filterValues[0], 'height', 
+										Math.min(Math.max(30*valueArray.length, 100), 250) + "px");
 									this._hideMessage(); 
 								}), lang.hitch(this, function (err) {
 									this._showMessage(err.message, "error");
