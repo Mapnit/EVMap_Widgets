@@ -505,66 +505,6 @@ define([
 				);
 			},			
 
-			_initRenderLayer : function() {
-				if (this._renderType === "featureLayer") {
-					esriRequest({
-						"url": this.config.layer,
-						"content": {
-						  "f": "json"
-						}
-					}).then(lang.hitch(this, function(layerInfo) {
-						var renderSymbol = this._getRenderSymbol(layerInfo.geometryType); 
-						var featureCollection = {
-							"featureSet": {
-								"features": [],
-								"geometryType": layerInfo.geometryType
-							}, 
-							"layerDefinition": {
-								"geometryType": layerInfo.geometryType,
-								"objectIdField": layerInfo.objectIdField,
-								"drawingInfo": {
-									"renderer": {
-										"type": "simple",
-										"symbol": renderSymbol, 
-									}
-								},
-								"fields": layerInfo.fields 
-							}
-						};
-						this._featureLayer = new FeatureLayer(featureCollection, {
-							id: layerInfo.name + "_searchResults", 
-							infoTemplate: this._infoTemplate
-						});
-						this.map.addLayer(this._featureLayer); 
-						console.debug("the search results to be rendered as features"); 
-					}), lang.hitch(this, function(err) {
-						this._showMessage(err.message, "error");
-					}));
-				} else { 
-					this._graphicLayer = new GraphicsLayer({
-						id: this.name + "_searchResults", 
-						infoTemplate: this._infoTemplate
-					});
-					this.map.addLayer(this._graphicLayer);	
-					console.debug("the search results to be rendered as graphics"); 
-				}				
-			}, 
-			
-			_clearRenderLayer : function() {
-				if (this._renderType === "featureLayer") {
-					// close the AttributeTable widget
-					this._closeAttributeTable(); 
-					// clean up featureLayer
-					this.map.removeLayer(this._featureLayer); 
-					this._featureLayer.clear(); 
-					this._featureLayer = null; 
-				} else {
-					this.map.removeLayer(this._graphicLayer); 
-					this._graphicLayer.clear();
-					this._graphicLayer = null; 
-				}
-			}, 
-
 			_getRenderSymbol : function(geometryType) {
 				if (this._symbols) {
 					switch (geometryType) {
