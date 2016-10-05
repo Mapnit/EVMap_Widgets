@@ -23,7 +23,10 @@
 	</div>
 	<hr/>
 	<div class="nav-section">
-		<button class="nav-btn-end" data-dojo-attach-event="onclick:_onBtnEndClicked">${nls.endSteps}</button>
+		<div class="nav-btn-end" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-end-icon'" 
+			data-dojo-attach-event="onClick:_onBtnEndClicked">
+            ${nls.endSteps}
+        </div>
 	</div>
 	<div class="message-section">
 		<label class="message-info" data-dojo-attach-point="searchMessage"></label>
