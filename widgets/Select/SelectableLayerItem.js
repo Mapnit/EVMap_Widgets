@@ -21,6 +21,7 @@ define(['dojo/_base/declare',
   'dojo/_base/event',
   'dojo/on',
   'dojo/Evented',
+  'dojo/dom-style', 
   'dojo/dom-geometry',
   'jimu/FeatureActionManager',
   'jimu/utils',
@@ -30,7 +31,7 @@ define(['dojo/_base/declare',
   'dijit/_WidgetsInTemplateMixin',
   'dojo/text!./SelectableLayerItem.html',
   './ClearSelectionAction'
-], function(declare, html, lang, array, Event, on, Evented, domGeom,
+], function(declare, html, lang, array, Event, on, Evented, domStyle, domGeom,
 FeatureActionManager, jimuUtils, PopupMenu, _WidgetBase, _TemplatedMixin,
 _WidgetsInTemplateMixin, template, ClearSelectionAction) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Evented], {
@@ -92,6 +93,7 @@ _WidgetsInTemplateMixin, template, ClearSelectionAction) {
       this.layerNameNode.title = this.layerName;
 
       if(!this.layerVisible) {
+        domStyle.set(this.domNode, 'display', 'none'); 
         html.addClass(this.domNode, 'invisible');
       }
 
@@ -124,8 +126,10 @@ _WidgetsInTemplateMixin, template, ClearSelectionAction) {
         this.layerVisible = visible;
 
         if(this.layerVisible) {
+          domStyle.set(this.domNode, 'display', 'block');
           html.removeClass(this.domNode, 'invisible');
         } else {
+          domStyle.set(this.domNode, 'display', 'none');
           html.addClass(this.domNode, 'invisible');
         }
         this.emit('stateChange', {
