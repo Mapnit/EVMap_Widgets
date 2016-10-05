@@ -278,7 +278,7 @@ define(['dojo/_base/lang',
     var json = {};
     json.name = layerInfo.name || layerInfo.title;
     json.id = layerInfo.id;
-    json.show = layerInfo.isShowInMap();
+    json.show = layerInfo.isShowInMap() && layerInfo.isInScale();
     json.layer = {
       url: layerInfo.getUrl()
     };
