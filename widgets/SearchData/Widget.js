@@ -32,6 +32,7 @@ define([
 		'jimu/WidgetManager', 
 		'jimu/dijit/ViewStack',
 		'jimu/utils',
+		'jimu/symbolUtils', 
 		'jimu/SpatialReference/wkidUtils',
 		'jimu/LayerInfos/LayerInfos',
 		"dojo/store/Memory",
@@ -47,7 +48,7 @@ define([
 		domConstruct, html, lang, Color, array, domStyle, domClass,
 		esriConfig, esriRequest, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
 		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
-		InfoTemplate, WidgetManager, ViewStack, jimuUtils, wkidUtils, LayerInfos,
+		InfoTemplate, WidgetManager, ViewStack, jimuUtils, symbolUtils, wkidUtils, LayerInfos,
 		Memory, LoadingIndicator, Popup, ComboBox, DateTextBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
@@ -61,40 +62,7 @@ define([
 			_renderType : null /*graphicLayer (default) or featureLayer*/,
 			_featureLayer : null, 
 			_graphicLayer : null,
-			_symbols : { /*default rendering symbols*/
-				"esriGeometryPolygon" : {
-					"type" : "esriSFS",
-					"style" : "esriSFSSolid",
-					"color" : [0, 255, 255, 64],
-					"outline" : {
-						"type" : "esriSLS",
-						"style" : "esriSLSSolid",
-						"color" : [0, 255, 255, 255],
-						"width" : 2
-					}
-				},
-				"esriGeometryPolyline" : {
-					"type" : "esriSLS",
-					"style" : "esriSLSDashDot",
-					"color" : [0, 255, 255, 255],
-					"width" : 2
-				},
-				"esriGeometryPoint" : {
-					"type" : "esriSMS",
-					"style" : "esriSMSCircle",
-					"color" : [0, 255, 255, 128],
-					"size" : 8,
-					"angle" : 0,
-					"xoffset" : 0,
-					"yoffset" : 0,
-					"outline" : {
-						"type" : "esriSLS",
-						"style" : "esriSLSSolid",
-						"color" : [0, 255, 255, 255],
-						"width" : 1,
-					}
-				}
-			},
+			_symbols : null,
 			_currentViewIndex : 0,
 			_filterValues : [],
 
@@ -161,66 +129,15 @@ define([
 				// show the 1st view
 				this._currentViewIndex = 0; 
 				this.viewStack.switchView(this._currentViewIndex);
-				
-				if (this._renderType === "featureLayer") {
-					esriRequest({
-						"url": this.config.layer,
-						"content": {
-						  "f": "json"
-						}
-					}).then(lang.hitch(this, function(layerInfo) {
-						var featureCollection = {
-							"featureSet": {
-								"features": [],
-								"geometryType": layerInfo.geometryType
-							}, 
-							"layerDefinition": {
-								"geometryType": layerInfo.geometryType,
-								"objectIdField": layerInfo.objectIdField,
-								"drawingInfo": {
-									"renderer": {
-										"type": "simple",
-										"symbol": this._symbols[layerInfo.geometryType], 
-									}
-								},
-								"fields": layerInfo.fields 
-							}
-						};
-						this._featureLayer = new FeatureLayer(featureCollection, {
-							id: layerInfo.name + "_searchResults", 
-							infoTemplate: this._infoTemplate
-						});
-						this.map.addLayer(this._featureLayer); 
-						console.debug("the search results to be rendered as features"); 
-					}), lang.hitch(this, function(err) {
-						this._showMessage(err.message, "error");
-					}));
-				} else { 
-					this._graphicLayer = new GraphicsLayer({
-						id: this.name + "_searchResults", 
-						infoTemplate: this._infoTemplate
-					});
-					this.map.addLayer(this._graphicLayer);	
-					console.debug("the search results to be rendered as graphics"); 
-				}
-			},
 
+				this._initRenderLayer(); 
+			},
+			
 			onClose : function () {
 				// clear the message
 				this._hideMessage(); 
 				
-				if (this._renderType === "featureLayer") {
-					// close the AttributeTable widget
-					this._closeAttributeTable(); 
-					// clean up featureLayer
-					this.map.removeLayer(this._featureLayer); 
-					this._featureLayer.clear(); 
-					this._featureLayer = null; 
-				} else {
-					this.map.removeLayer(this._graphicLayer); 
-					this._graphicLayer.clear();
-					this._graphicLayer = null; 
-				}
+				this._clearRenderLayer();
 			},
 
 			destroy : function () {},
@@ -586,6 +503,29 @@ define([
 						} 
 					})
 				);
+			},			
+
+			_getRenderSymbol : function(geometryType) {
+				if (this._symbols) {
+					switch (geometryType) {
+						case "esriGeometryPoint":
+							return new SimpleMarkerSymbol(this._symbols[geometryType]);
+						case "esriGeometryPolyline":
+							return new SimpleLineSymbol(this._symbols[geometryType]);
+						case "esriGeometryPolygon":
+							return new SimpleFillSymbol(this._symbols[geometryType]);
+					}
+				} else {
+					switch (geometryType) {
+						case "esriGeometryPoint":
+							return symbolUtils.getDefaultMarkerSymbol();
+						case "esriGeometryPolyline":
+							return symbolUtils.getDefaultLineSymbol();
+						case "esriGeometryPolygon":
+							return symbolUtils.getDefaultFillSymbol();
+					}
+				}
+				return null; 
 			},
 
 			_drawGraphicsOnMap : function (resultSet, clearFirst/*default: true*/) {
@@ -594,22 +534,12 @@ define([
 				}
 				
 				var resultExtent = null,
-				highlightSymbol;
+				renderSymbol = this._getRenderSymbol(resultSet.geometryType);
 
-				switch (resultSet.geometryType) {
-				case "esriGeometryPoint":
-					highlightSymbol = new SimpleMarkerSymbol(this._symbols[resultSet.geometryType]);
-					break;
-				case "esriGeometryPolyline":
-					highlightSymbol = new SimpleLineSymbol(this._symbols[resultSet.geometryType]);
-					break;
-				case "esriGeometryPolygon":
-					highlightSymbol = new SimpleFillSymbol(this._symbols[resultSet.geometryType]);
-					break;
-				default: 
+				if (!renderSymbol) {
 					this._showMessage("not support such geometry", "error"); 
 					return; 
-				};
+				}
 
 				array.forEach(resultSet.features, lang.hitch(this, function (feature) {
 						var graphic = new Graphic(feature.geometry);
