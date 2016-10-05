@@ -37,7 +37,8 @@ define([
 		"dojo/store/Memory",
 		'jimu/dijit/LoadingIndicator',
 		'jimu/dijit/Popup',
-		'dijit/form/ComboBox'
+		'dijit/form/ComboBox', 
+		'dijit/form/Button'
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
