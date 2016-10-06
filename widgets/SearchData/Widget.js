@@ -729,10 +729,7 @@ define([
 				var attributeTableWidgetEle =
 					this.appConfig.getConfigElementsByName("AttributeTable")[0];
 				var widgetManager = WidgetManager.getInstance();
-				var attributeTableWidget = widgetManager.getWidgetById(attributeTableWidgetEle.id); 
-				if (attributeTableWidget) {
-					widgetManager.closeWidget(attributeTableWidget);
-				} 
+				widgetManager.closeWidget(attributeTableWidgetEle.id);
 			}
 			
 		});
