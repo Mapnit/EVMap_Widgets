@@ -177,8 +177,6 @@ define([
 				this._hideMessage(); 
 				
 				if (this._renderType === "featureLayer") {
-					// close the AttributeTable widget
-					this._closeAttributeTable(); 
 					// clean up featureLayer
 					this.map.removeLayer(this._featureLayer); 
 					this._featureLayer.clear(); 
@@ -497,9 +495,6 @@ define([
 							this._showMessage(err.message || "failed to show search results", "error"); 
 						})
 					); 	
-				} else {
-					// close AttributeTable
-					this._closeAttributeTable(); 
 				}
 				
 			}, 
