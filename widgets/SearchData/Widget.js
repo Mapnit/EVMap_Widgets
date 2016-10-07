@@ -537,7 +537,7 @@ define([
 							if (resultSet && resultSet.features && resultSet.features.length > 0) {
 								array.forEach(resultSet.features, lang.hitch(this, function (feature, i) {
 										valueArray.push(feature.attributes[this._selectedOption.field]);
-										console.debug("partial match: " + feature.attributes[this._selectedOption.field]);
+										//console.debug("partial match: " + feature.attributes[this._selectedOption.field]);
 									}));
 							} else {
 								this._showMessage("no feature found", "warning");
