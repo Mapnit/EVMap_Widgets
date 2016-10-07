@@ -259,7 +259,12 @@ define([
 				this._onCountyNameChanged();
 			},
 			
-			_onFilterSectionValueEntered: function() {
+			_onFilterSectionValueEntered: function(evt) {
+				//console.debug(evt.key + " pressed ");
+				if (this._isKeyPrintable(evt.keyCode) !== true) {
+					// ignore any non-printable char
+					return; 
+				}
 				var countyName = this._countyValues.get('value');
 				if (!countyName) {
 					this._showMessage("no county is selected", "error");
@@ -272,7 +277,12 @@ define([
 				}
 			}, 
 			
-			_onFilterAbstractValueEntered: function() {
+			_onFilterAbstractValueEntered: function(evt) {
+				//console.debug(evt.key + " pressed ");
+				if (this._isKeyPrintable(evt.keyCode) !== true) {
+					// ignore any non-printable char
+					return; 
+				}
 				var countyName = this._countyValues.get('value');
 				if (!countyName) {
 					this._showMessage("no county is selected", "error");
@@ -421,6 +431,17 @@ define([
 				}				
 			},
 
+			_isKeyPrintable : function(keyCode) {
+				return (
+					(evt.keyCode > 64 && evt.keyCode < 91)   || /* letter keys */
+					(evt.keyCode > 47 && evt.keyCode < 58)   || /* number keys */
+					(evt.keyCode > 95 && evt.keyCode < 112)  || /* numpad keys */ 
+					evt.keyCode == 32                    	 || /* spacebar */
+					(evt.keyCode > 185 && evt.keyCode < 193) || /* ;=,-./` (in order) */ 
+					(evt.keyCode > 218 && evt.keyCode < 223)    /* [\]' (in order)) */ 
+					); 
+			},
+			
 			_showMessage : function (textMsg, lvl) {
 				domClass.remove(this.searchMessage);
 				switch (lvl) {
