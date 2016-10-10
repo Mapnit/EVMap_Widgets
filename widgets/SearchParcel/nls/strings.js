@@ -10,7 +10,7 @@ define({
 	blockLabel: "Block Number",
 	lotLabel: "Lot Number",
 	subdivLabel: "Subdivision Name",
-	apnLabel: "APN",
+	apnLabel: "Parcel Number",
 	ownerLabel: "Owner",
 	fistNameLabel: "First Name",
 	lastNameLabel: "Last Name",
