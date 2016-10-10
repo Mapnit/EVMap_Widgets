@@ -6,7 +6,7 @@ define({
 	stateLabel: "State", 
 	countyLabel: "County",
 	abstractLabel: "Abstract",
-	sectionLabel: "Section",
+	sectionLabel: "Name",
 	searchOptionLabel: "Choose one",
     endSteps: "Search"
   })
