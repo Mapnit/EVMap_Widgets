@@ -488,7 +488,7 @@ define([
 					(keyCode > 64 && keyCode < 91)   || /* letter keys */
 					(keyCode > 47 && keyCode < 58)   || /* number keys */
 					(keyCode > 95 && keyCode < 112)  || /* numpad keys */ 
-					keyCode == 32                    	 || /* spacebar */
+					keyCode == 32 || keyCode == 8    || /* spacebar, backspace */
 					(keyCode > 185 && keyCode < 193) || /* ;=,-./` (in order) */ 
 					(keyCode > 218 && keyCode < 223)    /* [\]' (in order)) */ 
 					); 
