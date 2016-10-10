@@ -35,6 +35,9 @@
 	"lastName": {
 		"field": "OWN1_LAST"
 	}, 
+	"legalDespt": {
+		"field": "LEGAL1"
+	}, 
 	"renderType": "featureLayer", 
 	"renderSymbols": {
 		"esriGeometryPolygon" : {

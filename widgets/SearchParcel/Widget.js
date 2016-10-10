@@ -308,6 +308,9 @@ define([
 				if (this.lastNameInput.value.trim()) {
 					critera.push(this.config.lastName.field + " like '%" + this.lastNameInput.value.trim() + "%'"); 
 				}
+				if (this.legalDesptInput.value.trim()) {
+					critera.push(this.config.legalDespt.field + " like '%" + this.legalDesptInput.value.trim() + "%'"); 
+				}
 				
 				var whereClause = critera.join(" and "); 
 				if (whereClause) {
