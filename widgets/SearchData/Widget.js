@@ -485,12 +485,12 @@ define([
 
 			_isKeyPrintable : function(keyCode) {
 				return (
-					(evt.keyCode > 64 && evt.keyCode < 91)   || /* letter keys */
-					(evt.keyCode > 47 && evt.keyCode < 58)   || /* number keys */
-					(evt.keyCode > 95 && evt.keyCode < 112)  || /* numpad keys */ 
-					evt.keyCode == 32                    	 || /* spacebar */
-					(evt.keyCode > 185 && evt.keyCode < 193) || /* ;=,-./` (in order) */ 
-					(evt.keyCode > 218 && evt.keyCode < 223)    /* [\]' (in order)) */ 
+					(keyCode > 64 && keyCode < 91)   || /* letter keys */
+					(keyCode > 47 && keyCode < 58)   || /* number keys */
+					(keyCode > 95 && keyCode < 112)  || /* numpad keys */ 
+					keyCode == 32                    	 || /* spacebar */
+					(keyCode > 185 && keyCode < 193) || /* ;=,-./` (in order) */ 
+					(keyCode > 218 && keyCode < 223)    /* [\]' (in order)) */ 
 					); 
 			},
 			
