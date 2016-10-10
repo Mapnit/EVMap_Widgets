@@ -1,6 +1,6 @@
 define({
   root: ({
-    _widgetLabel: "Search Leases",
+    _widgetLabel: "SearchData",
     limitToMapExtent: "Limit to Current Map Extent",
     cancelSteps: "Cancel",
     nextStep: "Next",
