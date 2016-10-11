@@ -124,6 +124,12 @@ define([
 				if (this.config.renderSymbols) {
 					this._symbols = this.config.renderSymbols; 
 				}
+				
+				if (!this.config.visibleLayers) {
+					this.config.visibleLayers = []; 
+				} 
+				// by default, display the query layer 
+				this.config.visibleLayers.push(this.config.layer); 
 			},
 
 			_initSearchForm : function () {
@@ -580,7 +586,9 @@ define([
 								}
 							} else {
 								this._showMessage("no feature found", "warning");
-							} 
+							}
+							// turn on query layer and other relevant layers
+							this._displayMapLayers(this.config.visibleLayers); 
 						} else {
 							// in case null resultSet, set empty value
 							resultSet = {"features": []}; 
@@ -741,6 +749,31 @@ define([
 					this.appConfig.getConfigElementsByName("AttributeTable")[0];
 				var widgetManager = WidgetManager.getInstance();
 				widgetManager.closeWidget(attributeTableWidgetEle.id);
+			}, 
+			
+			_displayMapLayers : function(layerUrls) {
+				if (layerUrls && layerUrls.length > 0)  {
+					array.forEach(this.map.layerIds, lang.hitch(this, function(layerId) {
+						var dynamicLayer = this.map.getLayer(layerId); 
+						var subLayersVisible = dynamicLayer.visibleLayers; 
+						var visibilityChanged = false; 
+						array.forEach(layerUrls, lang.hitch(this, function(layerUrl) {
+							if (layerUrl.indexOf(dynamicLayer.url) > -1) {
+								var layerUrlParts = layerUrl.split("/"); 
+								var subLayerIndex = layerUrlParts[layerUrlParts.length-1]; 
+								if (array.indexOf(subLayersVisible, subLayerIndex) == -1) {
+									subLayersVisible.push(Number(subLayerIndex)); 
+									visibilityChanged = true; 
+								} 
+							}
+						}));
+						if (visibilityChanged == true) {
+							subLayersVisible.sort(); 
+							dynamicLayer.setVisibleLayers(subLayersVisible); 
+							dynamicLayer.setVisibility(true); 
+						}
+					})); 
+				}
 			}
 			
 		});
