@@ -1,6 +1,9 @@
 {
 	"prompt": "How do you want to search for IHS wells?",
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/IHS_Wells/MapServer/0",
+	"visibleLayers": [
+		"https://hdc-arcgis01t.enervest.net/arcgis/rest/services/Wells/IHS_Wells/MapServer/2"
+	],
 	"options": [{
 		"name": "wellUWI",
 		"label": "API(UWI)",
