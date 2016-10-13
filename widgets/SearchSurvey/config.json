@@ -7,10 +7,7 @@
 	"abstractNumber": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "ABSNO",
-		"dataType": "number",
-		"relatedFields": {
-			"county": "COUNTY"
-		}
+		"dataType": "number"
 	},  
 	"abstractName": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
@@ -22,10 +19,7 @@
 	"surveyNumber": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "SURVNO",
-		"dataType": "number",
-		"relatedFields": {
-			"county": "COUNTY"
-		}
+		"dataType": "number"
 	},
 	"surveyName": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
@@ -37,10 +31,7 @@
 	"blockNumber": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "BLOCKNO",
-		"dataType": "number",
-		"relatedFields": {
-			"county": "COUNTY"
-		}
+		"dataType": "number"
 	},
 	"blockName": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
