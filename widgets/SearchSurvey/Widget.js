@@ -91,9 +91,6 @@ define([
 					}
 				}
 			},
-			_abstractNames : null,
-			_surveyNames : null, 
-			_blockNames : null, 
 			_searchTarget : null, 
 
 			postCreate : function () {
@@ -122,41 +119,15 @@ define([
 			},
 
 			_initSearchForm : function () {
-				this.abstractNumberInput.set('disabled', true); 
-
-				this._abstractNames = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						disabled: true, 
-						onKeyUp: lang.hitch(this, this._onFilterInputValueEntered)
-					}, this.abstractNameInput);
-				this._abstractNames.startup(); 
 				
-				this.blockNumberInput.set('disabled', true); 
-
-				this._blockNames = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						disabled: true, 
-						onKeyUp: lang.hitch(this, this._onFilterInputValueEntered)
-					}, this.blockNameInput);
-				this._blockNames.startup(); 	
+				this.abstractNumberInput.set('disabled', true); 
+				this.abstractNameInput.set('disabled', true); 
+				
+				this.blockNumberInput.set('disabled', true); 	
+				this.blockNameInput.set('disabled', true); 
 				
 				this.surveyNumberInput.set('disabled', true); 
-
-				this._surveyNames = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						disabled: true, 
-						onKeyUp: lang.hitch(this, this._onFilterInputValueEntered)
-					}, this.surveyNameInput);
-				this._surveyNames.startup(); 	
+				this.surveyNameInput.set('disabled', true); 
 				
 				jimuUtils.combineRadioCheckBoxWithLabel(this.abstractNumberInputRadio, this.abstractNumberInputLabel);	
 				jimuUtils.combineRadioCheckBoxWithLabel(this.abstractNameInputRadio, this.abstractNameInputLabel);	
@@ -213,11 +184,11 @@ define([
 			onClose : function () {
 				this.countyInput.set('value', '');
 				this.abstractNumberInput.set('value', ''); 
-				this._abstractNames.set('value', '');
+				this.abstractNameInput.set('value', '');
 				this.blockNumberInput.set('value', ''); 
-				this._blockNames.set('value', '');
+				this.blockNameInput.set('value', '');
 				this.surveyNumberInput.set('value', ''); 
-				this._surveyNames.set('value', '');
+				this.surveyNameInput.set('value', '');
 				
 				this._hideMessage(); 
 				
@@ -243,11 +214,11 @@ define([
 			
 			_onCountyNameChanged: function() { 
 				this.abstractNumberInput.set('value', ''); 
-				this._abstractNames.set('value', '');
+				this.abstractNameInput.set('value', '');
 				this.blockNumberInput.set('value', ''); 
-				this._blockNames.set('value', '');
+				this.blockNameInput.set('value', '');
 				this.surveyNumberInput.set('value', '');
-				this._surveyNames.set('value', '');	
+				this.surveyNameInput.set('value', '');	
 				
 				var countyName = this.countyInput.get('value');
 				if (!countyName) {
@@ -277,27 +248,27 @@ define([
 				if (this.abstractNumberInput.get('disabled')) {
 					this.abstractNumberInput.set('value', '');
 				}
-				this._abstractNames.set('disabled', this._searchTarget !== "abstractName");
-				if (this._abstractNames.get('disabled')) {
-					this._abstractNames.set('value', '');
+				this.abstractNameInput.set('disabled', this._searchTarget !== "abstractName");
+				if (this.abstractNameInput.get('disabled')) {
+					this.abstractNameInput.set('value', '');
 				}
 
 				this.blockNumberInput.set('disabled', this._searchTarget !== "blockNumber");
 				if (this.blockNumberInput.get('disabled')) {
 					this.blockNumberInput.set('value', '');
 				}
-				this._blockNames.set('disabled', this._searchTarget !== "blockName");
-				if (this._blockNames.get('disabled')) {
-					this._blockNames.set('value', '');
+				this.blockNameInput.set('disabled', this._searchTarget !== "blockName");
+				if (this.blockNameInput.get('disabled')) {
+					this.blockNameInput.set('value', '');
 				}
 
 				this.surveyNumberInput.set('disabled', this._searchTarget !== "surveyNumber");
 				if (this.surveyNumberInput.get('disabled')) {
 					this.surveyNumberInput.set('value', '');
 				}
-				this._surveyNames.set('disabled', this._searchTarget !== "surveyName");
-				if (this._surveyNames.get('disabled')) {
-					this._surveyNames.set('value', '');
+				this.surveyNameInput.set('disabled', this._searchTarget !== "surveyName");
+				if (this.surveyNameInput.get('disabled')) {
+					this.surveyNameInput.set('value', '');
 				}
 				
 				// manually call the event handler
@@ -319,19 +290,19 @@ define([
 
 				switch(this._searchTarget) {
 					case "abstractName":
-						var blockNameInputValue = this._blockNames.get('value');
+						var blockNameInputValue = this.blockNameInput.get('value');
 						if (blockNameInputValue && blockNameInputValue.length >= this.partialMatchMinInputLength) {
-							this._fetchblockNamesByCounty(countyName, blockNameInputValue);
+							this._fetchAbstractNamesByCounty(countyName, blockNameInputValue);
 						}
 						break;
 					case "blockName":
-						var blockNameInputValue = this._blockNames.get('value');
+						var blockNameInputValue = this.blockNameInput.get('value');
 						if (blockNameInputValue && blockNameInputValue.length >= this.partialMatchMinInputLength) {
-							this._fetchblockNamesByCounty(countyName, blockNameInputValue);
+							this._fetchBlockNamesByCounty(countyName, blockNameInputValue);
 						}
 						break;					
 					case "surveyName":
-						var surveyNameInputValue = this._surveyNames.get('value');
+						var surveyNameInputValue = this.surveyNameInput.get('value');
 						if (surveyNameInputValue && surveyNameInputValue.length >= this.partialMatchMinInputLength) {
 							this._fetchSurveyNamesByCounty(countyName, surveyNameInputValue);
 						}
@@ -377,8 +348,8 @@ define([
 			_fetchAbstractNamesByCounty : function(countyName, filterAbstractName) {
 				this._showMessage("retrieving abstract names for " + countyName + "...");
 
-				this._abstractNames.store = new Memory({data: []});
-				//this._abstractNames.set('value', '');
+				this.abstractNameInput.store = new Memory({data: []});
+				//this.abstractNameInput.set('value', '');
 				
 				var whereClause = this.config.abstractName.relatedFields["county"] + " like '" + countyName + "%'";
 				if (filterAbstractName) {
@@ -404,7 +375,7 @@ define([
 										"name" : feature.attributes[this.config.abstractName.field]
 									});
 								}));
-							this._abstractNames.store = valueStore;
+							this.abstractNameInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -418,8 +389,8 @@ define([
 			_fetchBlockNamesByCounty : function(countyName, filterBlockName) {
 				this._showMessage("retrieving block names for " + countyName + "...");
 
-				this._blockNames.store = new Memory({data: []});
-				//this._blockNames.set('value', '');	
+				this.blockNameInput.store = new Memory({data: []});
+				//this.blockNameInput.set('value', '');	
 				
 				var whereClause = this.config.blockName.relatedFields["county"] + " like '" + countyName + "%'"; 
 				if (filterBlockName) {
@@ -445,7 +416,7 @@ define([
 										"name" : feature.attributes[this.config.blockName.field]
 									});
 								}));
-							this._blockNames.store = valueStore;
+							this.blockNameInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -459,8 +430,8 @@ define([
 			_fetchSurveyNamesByCounty : function(countyName, filterSurveyNameName) {
 				this._showMessage("retrieving survey names for " + countyName + "...");
 
-				this._surveyNames.store = new Memory({data: []});
-				//this._surveyNames.set('value', '');	
+				this.surveyNameInput.store = new Memory({data: []});
+				//this.surveyNameInput.set('value', '');	
 				
 				var whereClause = this.config.surveyName.relatedFields["county"] + " like '" + countyName + "%'"; 
 				if (filterSurveyNameName) {
@@ -486,7 +457,7 @@ define([
 										"name" : feature.attributes[this.config.surveyName.field]
 									});
 								}));
-							this._surveyNames.store = valueStore;
+							this.surveyNameInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -506,7 +477,7 @@ define([
 					break;
 				case "abstractName":
 					whereClause += 
-						(" and " + this.config.abstractName.field + " = '" + this._abstractNames.get('value') + "'");
+						(" and " + this.config.abstractName.field + " = '" + this.abstractNameInput.get('value') + "'");
 					break;
 				case "blockNumber":
 					whereClause += 
@@ -514,7 +485,7 @@ define([
 					break;
 				case "blockName":
 					whereClause += 
-						(" and " + this.config.blockName.field + " = '" + this._blockNames.get('value') + "'");
+						(" and " + this.config.blockName.field + " = '" + this.blockNameInput.get('value') + "'");
 					break;
 				case "surveyNumber":
 					whereClause += 
@@ -522,7 +493,7 @@ define([
 					break;
 				case "surveyName":
 					whereClause += 
-						(" and " + this.config.surveyName.field + " = '" + this._surveyNames.get('value') + "'");
+						(" and " + this.config.surveyName.field + " = '" + this.surveyNameInput.get('value') + "'");
 					break;
 				default: 
 					this._showMessage("invalid search parameters", "error"); 

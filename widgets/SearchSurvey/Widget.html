@@ -17,7 +17,7 @@
 			  <input type="radio" name="searchOption" value="abstractName" data-dojo-attach-point="abstractNameInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
 			  <label class="filter-input-label" data-dojo-attach-point="abstractNameInputLabel">${nls.abstractNameLabel}</label>
-			  <input type="text" data-dojo-attach-point="abstractNameInput"/>
+			  <input type="text" data-dojo-type="dijit/form/ComboBox" data-dojo-props="searchAttr:'name',style:'width:175px;height:25px'" data-dojo-attach-event="onKeyUp:_onFilterInputValueEntered" data-dojo-attach-point="abstractNameInput"/>
 			</div>
 			<div class="filter-input-field">
 			  <input type="radio" name="searchOption" value="blockNumber" data-dojo-attach-point="blockNumberInputRadio"
@@ -29,7 +29,7 @@
 			  <input type="radio" name="searchOption" value="blockName" data-dojo-attach-point="blockNameInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
 			  <label class="filter-input-label" data-dojo-attach-point="blockNameInputLabel">${nls.blockNameLabel}</label>
-			  <input type="text" data-dojo-attach-point="blockNameInput"/>
+			  <input type="text" data-dojo-type="dijit/form/ComboBox" data-dojo-props="searchAttr:'name',style:'width:175px;height:25px'" data-dojo-attach-event="onKeyUp:_onFilterInputValueEntered" data-dojo-attach-point="blockNameInput"/>
 			</div>
 			<div class="filter-input-field">
 			  <input type="radio" name="searchOption" value="surveyNumber" data-dojo-attach-point="surveyNumberInputRadio"
@@ -41,7 +41,7 @@
 			  <input type="radio" name="searchOption" value="surveyName" data-dojo-attach-point="surveyNameInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
 			  <label class="filter-input-label" data-dojo-attach-point="surveyNameInputLabel">${nls.surveyNameLabel}</label>
-			  <input type="text" data-dojo-attach-point="surveyNameInput"/>
+			  <input type="text" data-dojo-type="dijit/form/ComboBox" data-dojo-props="searchAttr:'name',style:'width:175px;height:25px'" data-dojo-attach-event="onKeyUp:_onFilterInputValueEntered" data-dojo-attach-point="surveyNameInput"/>
 			</div>			
 		</fieldset>
 	</div>
