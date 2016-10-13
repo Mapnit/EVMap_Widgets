@@ -13,7 +13,7 @@ define({
 	apnLabel: "Parcel Number",
 	ownerLabel: "Owner",
 	fistNameLabel: "First Name",
-	lastNameLabel: "Last Name",
+	lastNameLabel: "Owner's Last Name",
 	legalDesptLabel: "Legal Description",
     cancelSteps: "Cancel",
     endSteps: "Search"
