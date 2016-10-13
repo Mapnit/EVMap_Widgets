@@ -375,7 +375,7 @@ define([
 			},				
 
 			_fetchAbstractNamesByCounty : function(countyName, filterAbstractName) {
-				this._showMessage("retrieving abstracts for " + countyName + "...");
+				this._showMessage("retrieving abstract names for " + countyName + "...");
 
 				this._abstractNames.store = new Memory({data: []});
 				//this._abstractNames.set('value', '');
@@ -457,7 +457,7 @@ define([
 			},
 			
 			_fetchSurveyNamesByCounty : function(countyName, filterSurveyNameName) {
-				this._showMessage("retrieving surveyNames for " + countyName + "...");
+				this._showMessage("retrieving survey names for " + countyName + "...");
 
 				this._surveyNames.store = new Memory({data: []});
 				//this._surveyNames.set('value', '');	
