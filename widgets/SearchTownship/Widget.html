@@ -36,25 +36,15 @@
 					<input type="text" data-dojo-attach-point="sectionInput"/>
 				</td>
 			</tr>
+		</table>
+		<table>
 			<tr>
 				<td>
 					<label class="filter-input-label">${nls.townshipLabel}</label>
 				</td>
 				<td>
-					<input type="text" data-dojo-attach-point="townshipInput"/>
+					<input type="text" size="10" data-dojo-attach-point="townshipInput"/>
 				</td>
-			</tr>
-			<tr>
-				<td>
-					<label class="filter-input-label">${nls.rangeLabel}</label>
-				</td>
-				<td>
-					<input type="text" data-dojo-attach-point="rangeInput"/>
-				</td>
-			</tr>
-		</table>	
-		<table>
-			<tr>
 				<td>
 					<div class="filter-input-field">
 					  <input type="radio" name="vtlDirList" value="N" data-dojo-attach-point="vtlDirNorth" data-dojo-attach-event="change:_onVtlDirChanged">
@@ -66,14 +56,14 @@
 					  <input type="radio" name="vtlDirList" value="S" data-dojo-attach-point="vtlDirSouth" data-dojo-attach-event="change:_onVtlDirChanged">
 					  <label class="filter-input-label" data-dojo-attach-point="vtlDirSouthLabel">${nls.southDirLabel}</label>
 					</div>
-				</td>
+				</td>				
 			</tr>
 			<tr>
 				<td>
-					<div class="filter-input-field">
-					  <input type="radio" name="hrzDirList" value="E" data-dojo-attach-point="hrzDirEast" data-dojo-attach-event="change:_onHrzDirChanged">
-					  <label class="filter-input-label" data-dojo-attach-point="hrzDirEastLabel">${nls.eastDirLabel}</label>
-					</div>
+					<label class="filter-input-label">${nls.rangeLabel}</label>
+				</td>
+				<td>
+					<input type="text" size="10" data-dojo-attach-point="rangeInput"/>
 				</td>
 				<td>
 					<div class="filter-input-field">
@@ -81,8 +71,14 @@
 					  <label class="filter-input-label" data-dojo-attach-point="hrzDirWestLabel">${nls.westDirLabel}</label>
 					</div>
 				</td>
+				<td>
+					<div class="filter-input-field">
+					  <input type="radio" name="hrzDirList" value="E" data-dojo-attach-point="hrzDirEast" data-dojo-attach-event="change:_onHrzDirChanged">
+					  <label class="filter-input-label" data-dojo-attach-point="hrzDirEastLabel">${nls.eastDirLabel}</label>
+					</div>
+				</td>
 			</tr>
-		</table>
+		</table>	
 	</div>
 	<hr/>
 	<div class="nav-section">
