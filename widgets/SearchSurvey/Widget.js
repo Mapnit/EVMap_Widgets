@@ -91,7 +91,6 @@ define([
 					}
 				}
 			},
-			_countyValues : null,
 			_abstractNames : null,
 			_surveyNames : null, 
 			_blockNames : null, 
@@ -123,16 +122,6 @@ define([
 			},
 
 			_initSearchForm : function () {
-				
-				this._countyValues = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						onChange: lang.hitch(this, this._onCountyNameChanged)
-					}, this.countyInput);
-				this._countyValues.startup();
-				
 				this.abstractNumberInput.set('disabled', true); 
 
 				this._abstractNames = new ComboBox({
@@ -222,7 +211,7 @@ define([
 			},
 
 			onClose : function () {
-				this._countyValues.set('value', '');
+				this.countyInput.set('value', '');
 				this.abstractNumberInput.set('value', ''); 
 				this._abstractNames.set('value', '');
 				this.blockNumberInput.set('value', ''); 
@@ -260,7 +249,7 @@ define([
 				this.surveyNumberInput.set('value', '');
 				this._surveyNames.set('value', '');	
 				
-				var countyName = this._countyValues.get('value');
+				var countyName = this.countyInput.get('value');
 				if (!countyName) {
 					this._showMessage("no county is selected", "error"); 
 				} else {
@@ -322,7 +311,7 @@ define([
 					return; 
 				}
 				
-				var countyName = this._countyValues.get('value');
+				var countyName = this.countyInput.get('value');
 				if (!countyName) {
 					this._showMessage("no county is selected", "error");
 					return; 
@@ -354,7 +343,7 @@ define([
 			_fetchCountyNames : function() {
 				this._showMessage("retrieving counties...");
 				
-				this._countyValues.store = new Memory({data: []});
+				this.countyInput.store = new Memory({data: []});
 
 				var query = new Query();
 				query.where = "1=1"; 
@@ -374,7 +363,7 @@ define([
 										"name" : feature.attributes[this.config.county.field]
 									});
 								}));
-							this._countyValues.store = valueStore;
+							this.countyInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -509,7 +498,7 @@ define([
 			},
 			
 			_onBtnEndClicked : function () {
-				var whereClause = this.config.county.field + " like '" + this._countyValues.get('value') + "%'"; 
+				var whereClause = this.config.county.field + " like '" + this.countyInput.get('value') + "%'"; 
 				switch(this._searchTarget) {
 				case "abstractNumber":
 					whereClause += 

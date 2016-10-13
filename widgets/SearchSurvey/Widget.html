@@ -3,7 +3,7 @@
 	<div class="filter-input">
 		<div class="filter-input-field">
 		  <label class="filter-input-label">${nls.countyLabel}</label>
-		  <input type="text" data-dojo-attach-point="countyInput"/>
+		  <input type="text" data-dojo-type="dijit/form/ComboBox" data-dojo-props="searchAttr:'name',style:'width:175px;height:25px'" data-dojo-attach-event="onChange:_onCountyNameChanged" data-dojo-attach-point="countyInput"/>
 		</div>
 		<fieldset class="filter-input-fieldset">
 			<legend>${nls.searchOptionLabel}</legend>
