@@ -8,17 +8,41 @@
 		<fieldset class="filter-input-fieldset">
 			<legend>${nls.searchOptionLabel}</legend>
 			<div class="filter-input-field">
-			  <input type="radio" name="searchOption" value="abstract" data-dojo-attach-point="abstractInputRadio"
+			  <input type="radio" name="searchOption" value="abstractNumber" data-dojo-attach-point="abstractNumberInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
-			  <label class="filter-input-label" data-dojo-attach-point="abstractInputLabel">${nls.abstractLabel}</label>
-			  <input type="text" data-dojo-attach-point="abstractInput"/>
+			  <label class="filter-input-label" data-dojo-attach-point="abstractNumberInputLabel">${nls.abstractNumberLabel}</label>
+			  <input type="text" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true,disabled:true,style:'width:175px;height:25px'" data-dojo-attach-point="abstractNumberInput"/>
 			</div>
 			<div class="filter-input-field">
-			  <input type="radio" name="searchOption" value="section" data-dojo-attach-point="sectionInputRadio"
+			  <input type="radio" name="searchOption" value="abstractName" data-dojo-attach-point="abstractNameInputRadio"
 				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
-			  <label class="filter-input-label" data-dojo-attach-point="sectionInputLabel">${nls.sectionLabel}</label>
-			  <input type="text" data-dojo-attach-point="sectionInput"/>
+			  <label class="filter-input-label" data-dojo-attach-point="abstractNameInputLabel">${nls.abstractNameLabel}</label>
+			  <input type="text" data-dojo-attach-point="abstractNameInput"/>
 			</div>
+			<div class="filter-input-field">
+			  <input type="radio" name="searchOption" value="blockNumber" data-dojo-attach-point="blockNumberInputRadio"
+				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
+			  <label class="filter-input-label" data-dojo-attach-point="blockNumberInputLabel">${nls.blockNumberLabel}</label>
+			  <input type="text" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true,disabled:true,style:'width:175px;height:25px'" data-dojo-attach-point="blockNumberInput"/>
+			</div>
+			<div class="filter-input-field">
+			  <input type="radio" name="searchOption" value="blockName" data-dojo-attach-point="blockNameInputRadio"
+				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
+			  <label class="filter-input-label" data-dojo-attach-point="blockNameInputLabel">${nls.blockNameLabel}</label>
+			  <input type="text" data-dojo-attach-point="blockNameInput"/>
+			</div>
+			<div class="filter-input-field">
+			  <input type="radio" name="searchOption" value="surveyNumber" data-dojo-attach-point="surveyNumberInputRadio"
+				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
+			  <label class="filter-input-label" data-dojo-attach-point="surveyNumberInputLabel">${nls.surveyNumberLabel}</label>
+			  <input type="text" data-dojo-type="dijit/form/TextBox" data-dojo-props="trim:true,disabled:true,style:'width:175px;height:25px'" data-dojo-attach-point="surveyNumberInput"/>
+			</div>
+			<div class="filter-input-field">
+			  <input type="radio" name="searchOption" value="surveyName" data-dojo-attach-point="surveyNameInputRadio"
+				data-dojo-attach-event="onchange:_onSearchOptionChanged"/>
+			  <label class="filter-input-label" data-dojo-attach-point="surveyNameInputLabel">${nls.surveyNameLabel}</label>
+			  <input type="text" data-dojo-attach-point="surveyNameInput"/>
+			</div>			
 		</fieldset>
 	</div>
 	<hr/>

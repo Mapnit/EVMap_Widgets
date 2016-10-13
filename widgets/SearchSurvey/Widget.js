@@ -38,7 +38,8 @@ define([
 		'jimu/dijit/LoadingIndicator',
 		'jimu/dijit/Popup',
 		'dijit/form/ComboBox', 
-		'dijit/form/Button'
+		'dijit/form/Button', 
+		'dijit/form/TextBox'
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
@@ -91,8 +92,9 @@ define([
 				}
 			},
 			_countyValues : null,
-			_abstractValues : null,
-			_sectionValues : null, 
+			_abstractNames : null,
+			_surveyNames : null, 
+			_blockNames : null, 
 			_searchTarget : null, 
 
 			postCreate : function () {
@@ -130,29 +132,49 @@ define([
 						onChange: lang.hitch(this, this._onCountyNameChanged)
 					}, this.countyInput);
 				this._countyValues.startup();
+				
+				this.abstractNumberInput.disabled = true; 
 
-				this._abstractValues = new ComboBox({
+				this._abstractNames = new ComboBox({
 						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
 						disabled: true, 
-						onKeyUp: lang.hitch(this, this._onFilterAbstractValueEntered)
-					}, this.abstractInput);
-				this._abstractValues.startup(); 
+						onKeyUp: lang.hitch(this, this._onFilterInputValueEntered)
+					}, this.abstractNameInput);
+				this._abstractNames.startup(); 
 				
-				this._sectionValues = new ComboBox({
+				this.blockNumberInput.disabled = true; 
+
+				this._blockNames = new ComboBox({
 						hasDownArrow: true,
 						style: "width: 175px; height:25px",
 						store: new Memory({data: []}),
 						searchAttr: "name",
 						disabled: true, 
-						onKeyUp: lang.hitch(this, this._onFilterSectionValueEntered)
-					}, this.sectionInput);
-				this._sectionValues.startup(); 	
+						onKeyUp: lang.hitch(this, this._onFilterInputValueEntered)
+					}, this.blockNameInput);
+				this._blockNames.startup(); 	
 				
-				jimuUtils.combineRadioCheckBoxWithLabel(this.abstractInputRadio, this.abstractInputLabel);	
-				jimuUtils.combineRadioCheckBoxWithLabel(this.sectionInputRadio, this.sectionInputLabel);	
+				this.surveyNumberInput.disabled = true; 
+
+				this._surveyNames = new ComboBox({
+						hasDownArrow: true,
+						style: "width: 175px; height:25px",
+						store: new Memory({data: []}),
+						searchAttr: "name",
+						disabled: true, 
+						onKeyUp: lang.hitch(this, this._onFilterInputValueEntered)
+					}, this.surveyNameInput);
+				this._surveyNames.startup(); 	
+				
+				jimuUtils.combineRadioCheckBoxWithLabel(this.abstractNumberInputRadio, this.abstractNumberInputLabel);	
+				jimuUtils.combineRadioCheckBoxWithLabel(this.abstractNameInputRadio, this.abstractNameInputLabel);	
+				jimuUtils.combineRadioCheckBoxWithLabel(this.blockNumberInputRadio, this.blockNumberInputLabel);	
+				jimuUtils.combineRadioCheckBoxWithLabel(this.blockNameInputRadio, this.blockNameInputLabel);	
+				jimuUtils.combineRadioCheckBoxWithLabel(this.surveyNumberInputRadio, this.surveyNumberInputLabel);	
+				jimuUtils.combineRadioCheckBoxWithLabel(this.surveyNameInputRadio, this.surveyNameInputLabel);	
 			},
 			
 			onOpen : function () {
@@ -201,8 +223,12 @@ define([
 
 			onClose : function () {
 				this._countyValues.set('value', '');
-				this._abstractValues.set('value', '');
-				this._sectionValues.set('value', '');
+				this.abstractNumberInput.value = ''; 
+				this._abstractNames.set('value', '');
+				this.blockNumberInput.value = ''; 
+				this._blockNames.set('value', '');
+				this.surveyNumberInput.value = ''; 
+				this._surveyNames.set('value', '');
 				
 				this._hideMessage(); 
 				
@@ -226,20 +252,27 @@ define([
 				this._fetchCountyNames(); 
 			},
 			
-			_onCountyNameChanged: function() {				
-				this._abstractValues.set('value', '');
-				this._sectionValues.set('value', '');				
+			_onCountyNameChanged: function() { 
+				this.abstractNumberInput.set('value', ''); 
+				this._abstractNames.set('value', '');
+				this.blockNumberInput.set('value', ''); 
+				this._blockNames.set('value', '');
+				this.surveyNumberInput.set('value', '');
+				this._surveyNames.set('value', '');	
 				
 				var countyName = this._countyValues.get('value');
 				if (!countyName) {
 					this._showMessage("no county is selected", "error"); 
 				} else {
 					switch(this._searchTarget) {
-					case "abstract":
-						this._fetchAbstractNumbersByCounty(countyName);
+					case "abstractName":
+						this._fetchAbstractNamesByCounty(countyName);
 						break; 
-					case "section":
-						this._fetchSectionNamesByCounty(countyName);
+					case "blockName":
+						this._fetchBlockNamesByCounty(countyName);
+						break;
+					case "surveyName":
+						this._fetchSurveyNamesByCounty(countyName);
 						break;
 					} 
 				}
@@ -251,54 +284,71 @@ define([
 
 				this._searchTarget = rdoInput.value; 
 				
-				this._abstractValues.set('disabled', rdoInput.value !== "abstract");
-				if (this._abstractValues.get('disabled')) {
-					this._abstractValues.set('value', '');
+				this.abstractNumberInput.set('disabled', this._searchTarget !== "abstractNumber");
+				if (this.abstractNumberInput.get('disabled')) {
+					this.abstractNumberInput.set('value', '');
+				}
+				this._abstractNames.set('disabled', this._searchTarget !== "abstractName");
+				if (this._abstractNames.get('disabled')) {
+					this._abstractNames.set('value', '');
 				}
 
-				this._sectionValues.set('disabled', rdoInput.value !== "section");
-				if (this._sectionValues.get('disabled')) {
-					this._sectionValues.set('value', '');
+				this.blockNumberInput.set('disabled', this._searchTarget !== "blockNumber");
+				if (this.blockNumberInput.get('disabled')) {
+					this.blockNumberInput.set('value', '');
+				}
+				this._blockNames.set('disabled', this._searchTarget !== "blockName");
+				if (this._blockNames.get('disabled')) {
+					this._blockNames.set('value', '');
+				}
+
+				this.surveyNumberInput.set('disabled', this._searchTarget !== "surveyNumber");
+				if (this.surveyNumberInput.get('disabled')) {
+					this.surveyNumberInput.set('value', '');
+				}
+				this._surveyNames.set('disabled', this._searchTarget !== "surveyName");
+				if (this._surveyNames.get('disabled')) {
+					this._surveyNames.set('value', '');
 				}
 				
 				// manually call the event handler
 				this._onCountyNameChanged();
 			},
 			
-			_onFilterSectionValueEntered: function(evt) {
+			_onFilterInputValueEntered: function(evt) {
 				//console.debug(evt.key + " pressed ");
 				if (this._isKeyPrintable(evt.keyCode) !== true) {
 					// ignore any non-printable char
-					return; 
-				}
-				var countyName = this._countyValues.get('value');
-				if (!countyName) {
-					this._showMessage("no county is selected", "error");
 					return; 
 				}
 				
-				var sectionInputValue = this._sectionValues.get('value');
-				if (sectionInputValue && sectionInputValue.length >= this.partialMatchMinInputLength) {
-					this._fetchSectionNamesByCounty(countyName, sectionInputValue);
-				}
-			}, 
-			
-			_onFilterAbstractValueEntered: function(evt) {
-				//console.debug(evt.key + " pressed ");
-				if (this._isKeyPrintable(evt.keyCode) !== true) {
-					// ignore any non-printable char
-					return; 
-				}
 				var countyName = this._countyValues.get('value');
 				if (!countyName) {
 					this._showMessage("no county is selected", "error");
 					return; 
 				}
 
-				var abstractInputValue = this._abstractValues.get('value');
-				if (abstractInputValue && abstractInputValue.length >= this.partialMatchMinInputLength) {
-					this._fetchAbstractNumbersByCounty(countyName, abstractInputValue);
-				}				
+				switch(this._searchTarget) {
+					case "abstractName":
+						var blockNameInputValue = this._blockNames.get('value');
+						if (blockNameInputValue && blockNameInputValue.length >= this.partialMatchMinInputLength) {
+							this._fetchblockNamesByCounty(countyName, blockNameInputValue);
+						}
+						break;
+					case "blockName":
+						var blockNameInputValue = this._blockNames.get('value');
+						if (blockNameInputValue && blockNameInputValue.length >= this.partialMatchMinInputLength) {
+							this._fetchblockNamesByCounty(countyName, blockNameInputValue);
+						}
+						break;					
+					case "surveyName":
+						var surveyNameInputValue = this._surveyNames.get('value');
+						if (surveyNameInputValue && surveyNameInputValue.length >= this.partialMatchMinInputLength) {
+							this._fetchSurveyNamesByCounty(countyName, surveyNameInputValue);
+						}
+						break; 
+				}
+				
 			}, 
 			
 			_fetchCountyNames : function() {
@@ -335,67 +385,26 @@ define([
 					}));
 			},				
 
-			_fetchSectionNamesByCounty : function(countyName, filterSectionName) {
-				this._showMessage("retrieving sections for " + countyName + "...");
-
-				this._sectionValues.store = new Memory({data: []});
-				//this._sectionValues.set('value', '');	
-				
-				var whereClause = this.config.section.relatedFields["county"] + " like '" + countyName + "%'"; 
-				if (filterSectionName) {
-					whereClause += (" and " + this.config.section.field + " like '%" + filterSectionName + "%'");
-				}
-			
-				var query = new Query();
-				query.where = whereClause;
-				query.returnGeometry = false;
-				query.outFields = [this.config.section.field];
-				query.orderByFields = [this.config.section.field];
-				query.returnDistinctValues = true; 
-				query.num = this.partialMatchMaxNumber;
-
-				var queryTask = new QueryTask(this.config.section.layer); 
-				queryTask.execute(query, lang.hitch(this, function (resultSet) {
-						if (resultSet && resultSet.features && resultSet.features.length > 0) {
-							var valueStore = new Memory({data: []});
-							
-							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
-								valueStore.put({
-										"id" : i,
-										"name" : feature.attributes[this.config.section.field]
-									});
-								}));
-							this._sectionValues.store = valueStore;
-							
-							this._hideMessage();
-						} else {
-							this._showMessage("no section found", "warning");
-						} 
-					}), lang.hitch(this, function (err) {
-						this._showMessage(err.message, "error");
-					}));
-			},
-			
-			_fetchAbstractNumbersByCounty : function(countyName, filterAbstractName) {
+			_fetchAbstractNamesByCounty : function(countyName, filterAbstractName) {
 				this._showMessage("retrieving abstracts for " + countyName + "...");
 
-				this._abstractValues.store = new Memory({data: []});
-				//this._abstractValues.set('value', '');
+				this._abstractNames.store = new Memory({data: []});
+				//this._abstractNames.set('value', '');
 				
-				var whereClause = this.config.abstract.relatedFields["county"] + " like '" + countyName + "%'";
+				var whereClause = this.config.abstractName.relatedFields["county"] + " like '" + countyName + "%'";
 				if (filterAbstractName) {
-					whereClause += (" and " + this.config.abstract.field + " like '%" + filterAbstractName + "%'");
+					whereClause += (" and " + this.config.abstractName.field + " like '%" + filterAbstractName + "%'");
 				}
 				
 				var query = new Query();
 				query.where = whereClause;
 				query.returnGeometry = false;
-				query.outFields = [this.config.abstract.field];
-				query.orderByFields = [this.config.abstract.field];
+				query.outFields = [this.config.abstractName.field];
+				query.orderByFields = [this.config.abstractName.field];
 				query.returnDistinctValues = true; 
 				query.num = this.partialMatchMaxNumber;
 
-				var queryTask = new QueryTask(this.config.abstract.layer); 
+				var queryTask = new QueryTask(this.config.abstractName.layer); 
 				queryTask.execute(query, lang.hitch(this, function (resultSet) {
 						if (resultSet && resultSet.features && resultSet.features.length > 0) {
 							var valueStore = new Memory({data: []});
@@ -403,10 +412,10 @@ define([
 							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
 								valueStore.put({
 										"id" : i,
-										"name" : feature.attributes[this.config.abstract.field]
+										"name" : feature.attributes[this.config.abstractName.field]
 									});
 								}));
-							this._abstractValues.store = valueStore;
+							this._abstractNames.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -415,18 +424,116 @@ define([
 					}), lang.hitch(this, function (err) {
 						this._showMessage(err.message, "error");
 					}));
-			},			
+			},	
+			
+			_fetchBlockNamesByCounty : function(countyName, filterBlockName) {
+				this._showMessage("retrieving block names for " + countyName + "...");
+
+				this._blockNames.store = new Memory({data: []});
+				//this._blockNames.set('value', '');	
+				
+				var whereClause = this.config.blockName.relatedFields["county"] + " like '" + countyName + "%'"; 
+				if (filterBlockName) {
+					whereClause += (" and " + this.config.blockName.field + " like '%" + filterBlockName + "%'");
+				}
+			
+				var query = new Query();
+				query.where = whereClause;
+				query.returnGeometry = false;
+				query.outFields = [this.config.blockName.field];
+				query.orderByFields = [this.config.blockName.field];
+				query.returnDistinctValues = true; 
+				query.num = this.partialMatchMaxNumber;
+
+				var queryTask = new QueryTask(this.config.blockName.layer); 
+				queryTask.execute(query, lang.hitch(this, function (resultSet) {
+						if (resultSet && resultSet.features && resultSet.features.length > 0) {
+							var valueStore = new Memory({data: []});
+							
+							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
+								valueStore.put({
+										"id" : i,
+										"name" : feature.attributes[this.config.blockName.field]
+									});
+								}));
+							this._blockNames.store = valueStore;
+							
+							this._hideMessage();
+						} else {
+							this._showMessage("no block found", "warning");
+						} 
+					}), lang.hitch(this, function (err) {
+						this._showMessage(err.message, "error");
+					}));
+			},
+			
+			_fetchSurveyNamesByCounty : function(countyName, filterSurveyNameName) {
+				this._showMessage("retrieving surveyNames for " + countyName + "...");
+
+				this._surveyNames.store = new Memory({data: []});
+				//this._surveyNames.set('value', '');	
+				
+				var whereClause = this.config.surveyName.relatedFields["county"] + " like '" + countyName + "%'"; 
+				if (filterSurveyNameName) {
+					whereClause += (" and " + this.config.surveyName.field + " like '%" + filterSurveyNameName + "%'");
+				}
+			
+				var query = new Query();
+				query.where = whereClause;
+				query.returnGeometry = false;
+				query.outFields = [this.config.surveyName.field];
+				query.orderByFields = [this.config.surveyName.field];
+				query.returnDistinctValues = true; 
+				query.num = this.partialMatchMaxNumber;
+
+				var queryTask = new QueryTask(this.config.surveyName.layer); 
+				queryTask.execute(query, lang.hitch(this, function (resultSet) {
+						if (resultSet && resultSet.features && resultSet.features.length > 0) {
+							var valueStore = new Memory({data: []});
+							
+							array.forEach(resultSet.features, lang.hitch(this, function(feature, i) {
+								valueStore.put({
+										"id" : i,
+										"name" : feature.attributes[this.config.surveyName.field]
+									});
+								}));
+							this._surveyNames.store = valueStore;
+							
+							this._hideMessage();
+						} else {
+							this._showMessage("no survey found", "warning");
+						} 
+					}), lang.hitch(this, function (err) {
+						this._showMessage(err.message, "error");
+					}));
+			},
 			
 			_onBtnEndClicked : function () {
-				var whereClause = this.config.abstract.relatedFields["county"] + " like '" + this._countyValues.get('value') + "%'"; 
+				var whereClause = this.config.county.field + " like '" + this._countyValues.get('value') + "%'"; 
 				switch(this._searchTarget) {
-				case "abstract":
+				case "abstractNumber":
 					whereClause += 
-						(" and " + this.config.abstract.field + " = '" + this._abstractValues.get('value') + "'");
+						(" and " + this.config.abstractNumber.field + " = '" + this.abstractNumberInput.get('value') + "'");
 					break;
-				case "section":
+				case "abstractName":
 					whereClause += 
-						(" and " + this.config.section.field + " = '" + this._sectionValues.get('value') + "'");
+						(" and " + this.config.abstractName.field + " = '" + this._abstractNames.get('value') + "'");
+					break;
+				case "blockNumber":
+					whereClause += 
+						(" and " + this.config.blockNumber.field + " = '" + this.blockNumberInput.get('value') + "'");
+					break;
+				case "blockName":
+					whereClause += 
+						(" and " + this.config.blockName.field + " = '" + this._blockNames.get('value') + "'");
+					break;
+				case "surveyNumber":
+					whereClause += 
+						(" and " + this.config.surveyNumber.field + " = '" + this.surveyNumberInput.get('value') + "'");
+					break;
+				case "surveyName":
+					whereClause += 
+						(" and " + this.config.surveyName.field + " = '" + this._surveyNames.get('value') + "'");
 					break;
 				default: 
 					this._showMessage("invalid search parameters", "error"); 
@@ -439,12 +546,12 @@ define([
 
 			_isKeyPrintable : function(keyCode) {
 				return (
-					(evt.keyCode > 64 && evt.keyCode < 91)   || /* letter keys */
-					(evt.keyCode > 47 && evt.keyCode < 58)   || /* number keys */
-					(evt.keyCode > 95 && evt.keyCode < 112)  || /* numpad keys */ 
-					evt.keyCode == 32                    	 || /* spacebar */
-					(evt.keyCode > 185 && evt.keyCode < 193) || /* ;=,-./` (in order) */ 
-					(evt.keyCode > 218 && evt.keyCode < 223)    /* [\]' (in order)) */ 
+					(keyCode > 64 && keyCode < 91)   || /* letter keys */
+					(keyCode > 47 && keyCode < 58)   || /* number keys */
+					(keyCode > 95 && keyCode < 112)  || /* numpad keys */ 
+					keyCode == 32 || keyCode == 8    || /* spacebar or backspace */
+					(keyCode > 185 && keyCode < 193) || /* ;=,-./` (in order) */ 
+					(keyCode > 218 && keyCode < 223)    /* [\]' (in order)) */ 
 					); 
 			},
 			

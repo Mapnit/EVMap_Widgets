@@ -1,12 +1,15 @@
 define({
   root: ({
     _widgetLabel: "Search TX Abstracts",
-	searchTitle: "Search Survey - Texas", 
-	searchPrompt: "Please select the County and/or Abstract", 
+	searchPrompt: "Please select County, Abstract, Block or Survey", 
 	stateLabel: "State", 
 	countyLabel: "County",
-	abstractLabel: "Abstract",
-	sectionLabel: "Name",
+	abstractNumberLabel: "Abstract No.",
+	abstractNameLabel: "Abstract Name",
+	blockNumberLabel: "Block No.",
+	blockNameLabel: "Block Name",
+	surveyNumberLabel: "Survey No.",
+	surveyNameLabel: "Survey Name",
 	searchOptionLabel: "Choose one",
     endSteps: "Search"
   })
