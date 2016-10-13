@@ -133,7 +133,7 @@ define([
 					}, this.countyInput);
 				this._countyValues.startup();
 				
-				this.abstractNumberInput.disabled = true; 
+				this.abstractNumberInput.set('disabled', true); 
 
 				this._abstractNames = new ComboBox({
 						hasDownArrow: true,
@@ -145,7 +145,7 @@ define([
 					}, this.abstractNameInput);
 				this._abstractNames.startup(); 
 				
-				this.blockNumberInput.disabled = true; 
+				this.blockNumberInput.set('disabled', true); 
 
 				this._blockNames = new ComboBox({
 						hasDownArrow: true,
@@ -157,7 +157,7 @@ define([
 					}, this.blockNameInput);
 				this._blockNames.startup(); 	
 				
-				this.surveyNumberInput.disabled = true; 
+				this.surveyNumberInput.set('disabled', true); 
 
 				this._surveyNames = new ComboBox({
 						hasDownArrow: true,
@@ -223,11 +223,11 @@ define([
 
 			onClose : function () {
 				this._countyValues.set('value', '');
-				this.abstractNumberInput.value = ''; 
+				this.abstractNumberInput.set('value', ''); 
 				this._abstractNames.set('value', '');
-				this.blockNumberInput.value = ''; 
+				this.blockNumberInput.set('value', ''); 
 				this._blockNames.set('value', '');
-				this.surveyNumberInput.value = ''; 
+				this.surveyNumberInput.set('value', ''); 
 				this._surveyNames.set('value', '');
 				
 				this._hideMessage(); 
