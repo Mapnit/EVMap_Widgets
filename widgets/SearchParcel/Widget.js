@@ -88,8 +88,6 @@ define([
 					}
 				}
 			},
-			_stateValues : null,
-			_countyValues : null,
 
 			postCreate : function () {
 				this.inherited(arguments);
@@ -116,22 +114,7 @@ define([
 			},
 
 			_initSearchForm : function () {				
-				this._stateValues = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						onChange: lang.hitch(this, this._onStateNameChanged)
-					}, this.stateInput);
-				this._stateValues.startup();
 
-				this._countyValues = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name"
-					}, this.countyInput);
-				this._countyValues.startup(); 
 			},
 			
 			onOpen : function () {
@@ -179,7 +162,7 @@ define([
 			},
 
 			onClose : function () {
-				this._countyValues.set('value', '');
+				this.countyInput.set('value', '');
 				// clear the message
 				this._hideMessage(); 
 				
@@ -205,7 +188,7 @@ define([
 
 			_onStateNameChanged: function() {
 				
-				var stateName = this._stateValues.get('value');
+				var stateName = this.stateInput.get('value');
 
 				this._fetchCountiesByState(stateName);
 			},
@@ -213,7 +196,7 @@ define([
 			_fetchStateNames : function() {
 				this._showMessage("retrieving states...");
 				
-				this._stateValues.store = new Memory({data: []});
+				this.stateInput.store = new Memory({data: []});
 
 				var query = new Query();
 				query.where = "1=1"; 
@@ -233,7 +216,7 @@ define([
 										"name" : feature.attributes[this.config.state.field]
 									});
 								}));
-							this._stateValues.store = valueStore;
+							this.stateInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -247,8 +230,8 @@ define([
 			_fetchCountiesByState : function(stateName) {
 				this._showMessage("retrieving counties for " + stateName + "...");
 				
-				this._countyValues.store = new Memory({data: []});
-				this._countyValues.set('value', '');
+				this.countyInput.store = new Memory({data: []});
+				this.countyInput.set('value', '');
 				
 				var query = new Query();
 				query.where = this.config.county.relatedFields["state"] + " like '" + stateName + "%'";
@@ -268,7 +251,7 @@ define([
 										"name" : feature.attributes[this.config.county.field]
 									});
 								}));
-							this._countyValues.store = valueStore;
+							this.countyInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
@@ -282,11 +265,11 @@ define([
 			
 			_onBtnEndClicked : function () {
 				var critera = []; 
-				if (this._stateValues.get('value').trim()) {
-					critera.push(this.config.state.field + " = '" + this._stateValues.get('value').trim() + "'"); 
+				if (this.stateInput.get('value').trim()) {
+					critera.push(this.config.state.field + " = '" + this.stateInput.get('value').trim() + "'"); 
 				}
-				if (this._countyValues.get('value').trim()) {
-					critera.push(this.config.county.field + " = '" + this._countyValues.get('value').trim() + "'"); 
+				if (this.countyInput.get('value').trim()) {
+					critera.push(this.config.county.field + " = '" + this.countyInput.get('value').trim() + "'"); 
 				}
 				if (this.cityInput.get('value')) {
 					critera.push(this.config.city.field + " like '%" + this.cityInput.get('value') + "%'"); 

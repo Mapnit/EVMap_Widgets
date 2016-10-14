@@ -3,11 +3,11 @@
 	<div class="filter-input">
 		<div class="filter-input-field">
 		  <label class="filter-input-label">${nls.stateLabel}</label>
-		  <input type="text" data-dojo-attach-point="stateInput"/>
+		  <input type="text" data-dojo-type="dijit/form/ComboBox" data-dojo-props="searchAttr:'name',style:'width:175px;height:25px'" data-dojo-attach-event="onChange:_onStateNameChanged" data-dojo-attach-point="stateInput"/>
 		</div>
 		<div class="filter-input-field">
 		  <label class="filter-input-label">${nls.countyLabel}</label>
-		  <input type="text" data-dojo-attach-point="countyInput"/>
+		  <input type="text" data-dojo-type="dijit/form/ComboBox" data-dojo-props="searchAttr:'name',style:'width:175px;height:25px'" data-dojo-attach-point="countyInput"/>
 		</div>
 		<div class="filter-input-field">
 		  <label class="filter-input-label">${nls.apnLabel}</label>
