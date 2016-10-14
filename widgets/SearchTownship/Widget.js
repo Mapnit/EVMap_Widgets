@@ -38,7 +38,8 @@ define([
 		'jimu/dijit/LoadingIndicator',
 		'jimu/dijit/Popup',
 		'dijit/form/ComboBox', 
-		'dijit/form/Button'
+		'dijit/form/Button',
+		'dijit/form/TextBox'
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
@@ -213,14 +214,14 @@ define([
 			
 			_onBtnEndClicked : function () {
 				var whereClause = this.config.state.field + " = '" + this.stateInput.get('value') + "'";
-				if (this.sectionInput.value.trim().length > 0) {
-					whereClause += (" and " + this.config.section.field + " = '" + this.sectionInput.value + "'");
+				if (this.sectionInput.get('value').length > 0) {
+					whereClause += (" and " + this.config.section.field + " = '" + this.sectionInput.get('value') + "'");
 				}
-				if (this.townshipInput.value.trim().length > 0) {
-					whereClause += (" and " + this.config.township.field + " = '" + this.townshipInput.value + "'");
+				if (this.townshipInput.get('value').length > 0) {
+					whereClause += (" and " + this.config.township.field + " = '" + this.townshipInput.get('value') + "'");
 				}
-				if (this.rangeInput.value.trim().length > 0) {
-					whereClause += (" and " + this.config.range.field + " = '" + this.rangeInput.value + "'");
+				if (this.rangeInput.get('value').length > 0) {
+					whereClause += (" and " + this.config.range.field + " = '" + this.rangeInput.get('value') + "'");
 				}
 				if (this._vtlDirValue) {
 					whereClause += (" and " + this.config.vtlDir.field + " = '" + this._vtlDirValue + "'");
