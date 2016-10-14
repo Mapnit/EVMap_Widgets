@@ -38,7 +38,8 @@ define([
 		'jimu/dijit/LoadingIndicator',
 		'jimu/dijit/Popup',
 		'dijit/form/ComboBox', 
-		'dijit/form/Button'
+		'dijit/form/Button',
+		'dijit/form/TextBox'
 	],
 	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
 		domConstruct, html, lang, Color, array, domStyle, domClass,
@@ -287,35 +288,32 @@ define([
 				if (this._countyValues.get('value').trim()) {
 					critera.push(this.config.county.field + " = '" + this._countyValues.get('value').trim() + "'"); 
 				}
-				if (this.cityInput.value.trim()) {
-					critera.push(this.config.city.field + " like '%" + this.cityInput.value.trim() + "%'"); 
+				if (this.cityInput.get('value')) {
+					critera.push(this.config.city.field + " like '%" + this.cityInput.get('value') + "%'"); 
 				}
-				if (this.zipcodeInput.value.trim()) {
-					critera.push(this.config.zipcode.field + " like '%" + this.zipcodeInput.value.trim() + "%'"); 
+				if (this.zipcodeInput.get('value')) {
+					critera.push(this.config.zipcode.field + " like '%" + this.zipcodeInput.get('value') + "%'"); 
 				}
-				if (this.addressInput.value.trim()) {
-					critera.push(this.config.address.field + " like '%" + this.addressInput.value.trim() + "%'"); 
+				if (this.addressInput.get('value')) {
+					critera.push(this.config.address.field + " like '%" + this.addressInput.get('value') + "%'"); 
 				}
-				if (this.subdivInput.value.trim()) {
-					critera.push(this.config.subdiv.field + " like '%" + this.subdivInput.value.trim() + "%'"); 
+				if (this.subdivInput.get('value')) {
+					critera.push(this.config.subdiv.field + " like '%" + this.subdivInput.get('value') + "%'"); 
 				}
-				if (this.blockInput.value.trim()) {
-					critera.push(this.config.block.field + " like '%" + this.blockInput.value.trim() + "%'"); 
+				if (this.blockInput.get('value')) {
+					critera.push(this.config.block.field + " like '%" + this.blockInput.get('value') + "%'"); 
 				}
-				if (this.lotInput.value.trim()) {
-					critera.push(this.config.lot.field + " like '%" + this.lotInput.value.trim() + "%'"); 
+				if (this.lotInput.get('value')) {
+					critera.push(this.config.lot.field + " like '%" + this.lotInput.get('value') + "%'"); 
 				}
-				if (this.apnInput.value.trim()) {
-					critera.push(this.config.apn.field + " like '%" + this.apnInput.value.trim() + "%'"); 
+				if (this.apnInput.get('value')) {
+					critera.push(this.config.apn.field + " like '%" + this.apnInput.get('value') + "%'"); 
 				}
-				if (this.firstNameInput.value.trim()) {
-					critera.push(this.config.firstName.field + " like '%" + this.firstNameInput.value.trim() + "%'"); 
+				if (this.lastNameInput.get('value')) {
+					critera.push(this.config.lastName.field + " like '%" + this.lastNameInput.get('value') + "%'"); 
 				}
-				if (this.lastNameInput.value.trim()) {
-					critera.push(this.config.lastName.field + " like '%" + this.lastNameInput.value.trim() + "%'"); 
-				}
-				if (this.legalDesptInput.value.trim()) {
-					critera.push(this.config.legalDespt.field + " like '%" + this.legalDesptInput.value.trim() + "%'"); 
+				if (this.legalDesptInput.get('value')) {
+					critera.push(this.config.legalDespt.field + " like '%" + this.legalDesptInput.get('value') + "%'"); 
 				}
 				
 				var whereClause = critera.join(" and "); 
