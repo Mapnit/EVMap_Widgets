@@ -117,7 +117,7 @@ define([
 				this.config.visibleLayers.push(this.config.layer); 				
 			},
 
-			_initSearchForm : function () {			
+			_initSearchForm : function () {
 			
 				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirNorth, this.vtlDirNorthLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirSouth, this.vtlDirSouthLabel);
@@ -213,7 +213,13 @@ define([
 			},
 			
 			_onBtnEndClicked : function () {
-				var whereClause = this.config.state.field + " = '" + this.stateInput.get('value') + "'";
+				var whereClause = ""; 
+				if (this.stateInput.get('value').length > 0) {
+					whereClause += (this.config.state.field + " = '" + this.stateInput.get('value') + "'");
+				} else if (this.config.state.required === true) {
+					this._showMessage("the State field is required", "error"); 
+					return; 
+				}
 				if (this.sectionInput.get('value').length > 0) {
 					whereClause += (" and " + this.config.section.field + " = '" + this.sectionInput.get('value') + "'");
 				}

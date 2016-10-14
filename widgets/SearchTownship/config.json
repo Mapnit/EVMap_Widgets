@@ -2,7 +2,8 @@
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/3", 
 	"state": {	
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/3", 
-		"field": "STATE"
+		"field": "STATE", 
+		"required": true
 	},
 	"section": {
 		"field": "SEC"
