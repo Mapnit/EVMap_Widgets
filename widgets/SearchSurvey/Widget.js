@@ -469,7 +469,13 @@ define([
 			},
 			
 			_onBtnEndClicked : function () {
-				var whereClause = this.config.county.field + " like '" + this.countyInput.get('value') + "%'"; 
+				var whereClause = "";
+				if (this.countyInput.get('value').length > 0) {
+					whereClause += (this.config.county.field + " like '" + this.countyInput.get('value') + "%'"); 
+				} else if (this.config.county.required === true) {
+					this._showMessage("the County field can't be empty", "error"); 
+					return; 
+				}
 				switch(this._searchTarget) {
 				case "abstractNumber":
 					whereClause += 
