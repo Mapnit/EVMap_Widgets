@@ -265,37 +265,43 @@ define([
 			
 			_onBtnEndClicked : function () {
 				var critera = []; 
-				if (this.stateInput.get('value').trim()) {
+				if (this.stateInput.get('value').length > 0) {
 					critera.push(this.config.state.field + " = '" + this.stateInput.get('value').trim() + "'"); 
+				} else if (this.config.state.required === true) {
+					this._showMessage("the State field can't be empty", "error"); 
+					return;
 				}
-				if (this.countyInput.get('value').trim()) {
+				if (this.countyInput.get('value').length > 0) {
 					critera.push(this.config.county.field + " = '" + this.countyInput.get('value').trim() + "'"); 
+				} else if (this.config.county.required === true) {
+					this._showMessage("the County field can't be empty", "error"); 
+					return;
 				}
-				if (this.cityInput.get('value')) {
+				if (this.cityInput.get('value').length > 0) {
 					critera.push(this.config.city.field + " like '%" + this.cityInput.get('value') + "%'"); 
 				}
-				if (this.zipcodeInput.get('value')) {
+				if (this.zipcodeInput.get('value').length > 0) {
 					critera.push(this.config.zipcode.field + " like '%" + this.zipcodeInput.get('value') + "%'"); 
 				}
-				if (this.addressInput.get('value')) {
+				if (this.addressInput.get('value').length > 0) {
 					critera.push(this.config.address.field + " like '%" + this.addressInput.get('value') + "%'"); 
 				}
-				if (this.subdivInput.get('value')) {
+				if (this.subdivInput.get('value').length > 0) {
 					critera.push(this.config.subdiv.field + " like '%" + this.subdivInput.get('value') + "%'"); 
 				}
-				if (this.blockInput.get('value')) {
+				if (this.blockInput.get('value').length > 0) {
 					critera.push(this.config.block.field + " like '%" + this.blockInput.get('value') + "%'"); 
 				}
-				if (this.lotInput.get('value')) {
+				if (this.lotInput.get('value').length > 0) {
 					critera.push(this.config.lot.field + " like '%" + this.lotInput.get('value') + "%'"); 
 				}
-				if (this.apnInput.get('value')) {
+				if (this.apnInput.get('value').length > 0) {
 					critera.push(this.config.apn.field + " like '%" + this.apnInput.get('value') + "%'"); 
 				}
-				if (this.lastNameInput.get('value')) {
+				if (this.lastNameInput.get('value').length > 0) {
 					critera.push(this.config.lastName.field + " like '%" + this.lastNameInput.get('value') + "%'"); 
 				}
-				if (this.legalDesptInput.get('value')) {
+				if (this.legalDesptInput.get('value').length > 0) {
 					critera.push(this.config.legalDespt.field + " like '%" + this.legalDesptInput.get('value') + "%'"); 
 				}
 				

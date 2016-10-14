@@ -2,11 +2,13 @@
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/Parcels/MapServer/1", 
 	"state": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/Parcels/MapServer/1", 
-		"field": "STATE"
+		"field": "STATE",
+		"required": true
 	},
 	"county": {
 		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/Parcels/MapServer/1", 
 		"field": "COUNTY",
+		"required": true,
 		"relatedFields": {
 			"state": "STATE"
 		}

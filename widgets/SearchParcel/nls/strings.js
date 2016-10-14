@@ -2,8 +2,8 @@ define({
   root: ({
     _widgetLabel: "Search Parcels",
 	searchPrompt: "Enter your parcel search in the form below. Note that State* and County* are required fields. Other fields are optional, you can choose any combination.", 
-	stateLabel: "State", 
-	countyLabel: "County",
+	stateLabel: "State*", 
+	countyLabel: "County*",
 	cityLabel: "City",
 	zipcodeLabel: "Zip Code",
 	addressLabel: "Address",
