@@ -217,7 +217,7 @@ define([
 				if (this.stateInput.get('value').length > 0) {
 					whereClause += (this.config.state.field + " = '" + this.stateInput.get('value') + "'");
 				} else if (this.config.state.required === true) {
-					this._showMessage("the State field is required", "error"); 
+					this._showMessage("the State field can't be empty", "error"); 
 					return; 
 				}
 				if (this.sectionInput.get('value').length > 0) {
