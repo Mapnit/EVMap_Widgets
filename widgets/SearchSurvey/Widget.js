@@ -351,7 +351,7 @@ define([
 				this.abstractNameInput.store = new Memory({data: []});
 				//this.abstractNameInput.set('value', '');
 				
-				var whereClause = this.config.abstractName.relatedFields["county"] + " like '" + countyName + "%'";
+				var whereClause = this.config.abstractName.relatedFields["county"] + " = '" + countyName + "'";
 				if (filterAbstractName) {
 					whereClause += (" and " + this.config.abstractName.field + " like '%" + filterAbstractName + "%'");
 				}
@@ -392,7 +392,7 @@ define([
 				this.blockNameInput.store = new Memory({data: []});
 				//this.blockNameInput.set('value', '');	
 				
-				var whereClause = this.config.blockName.relatedFields["county"] + " like '" + countyName + "%'"; 
+				var whereClause = this.config.blockName.relatedFields["county"] + " = '" + countyName + "'"; 
 				if (filterBlockName) {
 					whereClause += (" and " + this.config.blockName.field + " like '%" + filterBlockName + "%'");
 				}
@@ -433,7 +433,7 @@ define([
 				this.surveyNameInput.store = new Memory({data: []});
 				//this.surveyNameInput.set('value', '');	
 				
-				var whereClause = this.config.surveyName.relatedFields["county"] + " like '" + countyName + "%'"; 
+				var whereClause = this.config.surveyName.relatedFields["county"] + " = '" + countyName + "'"; 
 				if (filterSurveyNameName) {
 					whereClause += (" and " + this.config.surveyName.field + " like '%" + filterSurveyNameName + "%'");
 				}
@@ -471,7 +471,7 @@ define([
 			_onBtnEndClicked : function () {
 				var whereClause = "";
 				if (this.countyInput.get('value').length > 0) {
-					whereClause += (this.config.county.field + " like '" + this.countyInput.get('value') + "%'"); 
+					whereClause += (this.config.county.field + " = '" + this.countyInput.get('value') + "'"); 
 				} else if (this.config.county.required === true) {
 					this._showMessage("the County field can't be empty", "error"); 
 					return; 

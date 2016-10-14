@@ -234,7 +234,7 @@ define([
 				this.countyInput.set('value', '');
 				
 				var query = new Query();
-				query.where = this.config.county.relatedFields["state"] + " like '" + stateName + "%'";
+				query.where = this.config.county.relatedFields["state"] + " = '" + stateName + "'";
 				query.returnGeometry = false;
 				query.outFields = [this.config.county.field];
 				query.orderByFields = [this.config.county.field];
@@ -262,7 +262,6 @@ define([
 					}));
 			},
 			
-			
 			_onBtnEndClicked : function () {
 				var critera = []; 
 				if (this.stateInput.get('value').length > 0) {
@@ -281,22 +280,22 @@ define([
 					critera.push(this.config.city.field + " like '%" + this.cityInput.get('value') + "%'"); 
 				}
 				if (this.zipcodeInput.get('value').length > 0) {
-					critera.push(this.config.zipcode.field + " like '%" + this.zipcodeInput.get('value') + "%'"); 
+					critera.push(this.config.zipcode.field + " = '" + this.zipcodeInput.get('value') + "'"); 
 				}
 				if (this.addressInput.get('value').length > 0) {
 					critera.push(this.config.address.field + " like '%" + this.addressInput.get('value') + "%'"); 
 				}
 				if (this.subdivInput.get('value').length > 0) {
-					critera.push(this.config.subdiv.field + " like '%" + this.subdivInput.get('value') + "%'"); 
+					critera.push(this.config.subdiv.field + " = '" + this.subdivInput.get('value') + "'"); 
 				}
 				if (this.blockInput.get('value').length > 0) {
-					critera.push(this.config.block.field + " like '%" + this.blockInput.get('value') + "%'"); 
+					critera.push(this.config.block.field + " = '" + this.blockInput.get('value') + "'"); 
 				}
 				if (this.lotInput.get('value').length > 0) {
-					critera.push(this.config.lot.field + " like '%" + this.lotInput.get('value') + "%'"); 
+					critera.push(this.config.lot.field + " = '" + this.lotInput.get('value') + "'"); 
 				}
 				if (this.apnInput.get('value').length > 0) {
-					critera.push(this.config.apn.field + " like '%" + this.apnInput.get('value') + "%'"); 
+					critera.push(this.config.apn.field + " = '" + this.apnInput.get('value') + "'"); 
 				}
 				if (this.lastNameInput.get('value').length > 0) {
 					critera.push(this.config.lastName.field + " like '%" + this.lastNameInput.get('value') + "%'"); 
