@@ -1,7 +1,7 @@
 {
 	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 	"county": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/1", 
+		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7", 
 		"field": "COUNTY",
 		"required": true
 	},
