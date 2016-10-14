@@ -87,8 +87,7 @@ define([
 						"width" : 1,
 					}
 				}
-			},
-			_stateValues: null, 
+			}, 
 			_vtlDirValue: null,
 			_hrzDirValue: null, 
 
@@ -117,16 +116,7 @@ define([
 				this.config.visibleLayers.push(this.config.layer); 				
 			},
 
-			_initSearchForm : function () {	
-			
-				this._stateValues = new ComboBox({
-						hasDownArrow: true,
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						onChange: lang.hitch(this, this._onStateNameChanged)
-					}, this.stateInput);
-				this._stateValues.startup();			
+			_initSearchForm : function () {			
 			
 				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirNorth, this.vtlDirNorthLabel);
 				jimuUtils.combineRadioCheckBoxWithLabel(this.vtlDirSouth, this.vtlDirSouthLabel);
@@ -222,7 +212,7 @@ define([
 			},
 			
 			_onBtnEndClicked : function () {
-				var whereClause = this.config.state.field + " = '" + this._stateValues.get('value') + "'";
+				var whereClause = this.config.state.field + " = '" + this.stateInput.get('value') + "'";
 				if (this.sectionInput.value.trim().length > 0) {
 					whereClause += (" and " + this.config.section.field + " = '" + this.sectionInput.value + "'");
 				}
@@ -245,7 +235,7 @@ define([
 			_fetchStateNames : function() {
 				this._showMessage("retrieving states...");
 				
-				this._stateValues.store = new Memory({data: []});
+				this.stateInput.store = new Memory({data: []});
 
 				var query = new Query();
 				query.where = "1=1"; 
@@ -265,7 +255,7 @@ define([
 										"name" : feature.attributes[this.config.state.field]
 									});
 								}));
-							this._stateValues.store = valueStore;
+							this.stateInput.store = valueStore;
 							
 							this._hideMessage();
 						} else {
