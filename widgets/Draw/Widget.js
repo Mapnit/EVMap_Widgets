@@ -266,10 +266,21 @@ define([
 						
 						// keep the editing lineage
 						this._activeGraphic.attributes["OID_PRED"] = this._activeGraphic.attributes[this._objectIdName]; 
-						this._activeGraphic.attributes["OPERATION"] = "modified"; 
-
+						this._activeGraphic.attributes[this._objectIdName] = this._objectIdCounter++; 
+						
 						// put it into undoManager
-						this._pushAddOperation([this._activeGraphic]);
+						if (this._activeGraphic.attributes["OID_MEASURE"]) {
+							switch(this._activeGraphic.geometry.type) {
+								case 'polyline':
+									this._addLineMeasure(this._activeGraphic.geometry, this._activeGraphic); 
+									break;
+								case 'polygon':
+									this._addPolygonMeasure(this._activeGraphic.geometry, this._activeGraphic); 
+									break;
+							}
+						} else {
+							this._pushAddOperation([this._activeGraphic]);
+						}
 						
 						// clear the active ones
 						this._activeGraphic = null; 
@@ -402,7 +413,12 @@ define([
         /*jshint unused: false*/
         this.drawBox.clear();
 
-        var geometry = graphic.geometry;
+		// assign OID 
+	    var attrs = graphic.attributes || {};
+	    attrs[this._objectIdName] = this._objectIdCounter++;
+	    graphic.setAttributes(attrs);
+
+		var geometry = graphic.geometry;
         if(geometry.type === 'extent'){
           var a = geometry;
           var polygon = new Polygon(a.spatialReference);
@@ -626,6 +642,16 @@ define([
 
           var textSymbol = new TextSymbol(lengthText, symbolFont, fontColor);
           var labelGraphic = new Graphic(center, textSymbol, null, null);
+		  
+		  // build up the OID connection
+		  var attrs = labelGraphic.attributes || {};
+		  attrs[this._objectIdName] = this._objectIdCounter++;
+		  attrs["OID_PRED"] = graphic.attributes["OID_MEASURE"];
+		  attrs["OID_SHAPE"] = graphic.attributes[this._objectIdName];
+		  labelGraphic.setAttributes(attrs);
+		  graphic.attributes["OID_MEASURE"] = labelGraphic.attributes[this._objectIdName];
+		  //
+		  
           this._pushAddOperation([graphic, labelGraphic]);
         }), lang.hitch(this, function(err){
           console.log(err);
@@ -665,6 +691,16 @@ define([
           var text = areaText + "    " + lengthText;
           var textSymbol = new TextSymbol(text, symbolFont, fontColor);
           var labelGraphic = new Graphic(center, textSymbol, null, null);
+		  
+		  // build up the OID connection
+		  var attrs = labelGraphic.attributes || {};
+		  attrs[this._objectIdName] = this._objectIdCounter++;
+		  attrs["OID_PRED"] = graphic.attributes["OID_MEASURE"];
+		  attrs["OID_SHAPE"] = graphic.attributes[this._objectIdName];
+		  labelGraphic.setAttributes(attrs);
+		  graphic.attributes["OID_MEASURE"] = labelGraphic.attributes[this._objectIdName];
+		  //
+		  
           this._pushAddOperation([graphic, labelGraphic]);
         }), lang.hitch(this, function(err){
           if(!this.domNode){
@@ -961,9 +997,6 @@ define([
 
       _pushAddOperation: function(graphics){
         array.forEach(graphics, lang.hitch(this, function(g){
-          var attrs = g.attributes || {};
-          attrs[this._objectIdName] = this._objectIdCounter++;
-          g.setAttributes(attrs);
           this._graphicsLayer.add(g);
         }));
         var addOperation = new customOp.Add({
