@@ -47,6 +47,9 @@ define([
     'jimu/LayerInfos/LayerInfos',
     'jimu/dijit/LoadingIndicator',
     'jimu/dijit/DrawBox',
+	'esri/toolbars/edit',
+	'dijit/Menu', 
+	'dijit/MenuItem', 	
     'jimu/dijit/SymbolChooser',
     'dijit/form/Select',
     'dijit/form/NumberSpinner'
@@ -55,7 +58,7 @@ define([
     esriConfig, Graphic, Polyline, Polygon, TextSymbol, Font, esriUnits, webMercatorUtils,
     geodesicUtils, GeometryService, AreasAndLengthsParameters, LengthsParameters, UndoManager,
     OperationBase, GraphicsLayer, FeatureLayer, ViewStack, jimuUtils, wkidUtils, LayerInfos,
-    LoadingIndicator) {
+    LoadingIndicator, DrawBox, Edit, Menu, MenuItem) {
     //custom operations
     var customOp = {};
     customOp.Add = declare(OperationBase, {
@@ -111,6 +114,9 @@ define([
       _polylineLayer: null,
       _polygonLayer: null,
       _labelLayer: null,
+	  _editTool: null, 
+	  _activeGraphic: null, 
+	  _editCxtMenu: {}, 
 
       postMixInProperties: function(){
         this.inherited(arguments);
@@ -149,7 +155,7 @@ define([
       },
 
       _initLayers: function(){
-        this._graphicsLayer = new GraphicsLayer();
+        this._graphicsLayer = new GraphicsLayer({"id":"draw_widget_graphicsLayer"});
 
         if(this.config.isOperationalLayer){
           var layerDefinition = {
@@ -212,14 +218,20 @@ define([
             console.error("Can not get LayerInfos instance", err);
           }));
         }else{
-          this._pointLayer = new GraphicsLayer();
-          this._polylineLayer = new GraphicsLayer();
-          this._polygonLayer = new GraphicsLayer();
-          this._labelLayer = new GraphicsLayer();
-          this.map.addLayer(this._polygonLayer);
-          this.map.addLayer(this._polylineLayer);
+          this._pointLayer = new GraphicsLayer({"id":"draw_widget_graphicsLayer_point"});
+          this._polylineLayer = new GraphicsLayer({"id":"draw_widget_graphicsLayer_line"});
+          this._polygonLayer = new GraphicsLayer({"id":"draw_widget_graphicsLayer_polygon"});
+          this._labelLayer = new GraphicsLayer({"id":"draw_widget_graphicsLayer_label"});
+		  
           this.map.addLayer(this._pointLayer);
+          this.map.addLayer(this._polylineLayer);
+          this.map.addLayer(this._polygonLayer);
           this.map.addLayer(this._labelLayer);
+		  
+		  this._createGraphicsMenu(this._pointLayer);
+		  this._createGraphicsMenu(this._polylineLayer);
+		  this._createGraphicsMenu(this._polygonLayer);
+		  this._createGraphicsMenu(this._labelLayer);		  
         }
       },
 
@@ -232,10 +244,96 @@ define([
         this.drawBox.deactivate();
         this.map.setInfoWindowOnClick(true);
       },
+	  
+	  onOpen: function() {
+	    this._activateEditTool(); 	
+	  },
 
       onClose: function () {
         this._closeColorPicker();
+		
+		this._deactivateEditTool(); 		
       },
+
+		_activateEditTool: function() {
+			if (!this._editTool) {
+				this._editTool = new Edit(this.map);
+				
+				this._mapClickHandler = this.map.on("click", lang.hitch(this, function(evt) {					
+					if (this._activeGraphic) {
+						console.debug("graphic editing completed"); 
+						this._editTool.deactivate();
+						
+						// keep the editing lineage
+						this._activeGraphic.attributes["OID_PRED"] = this._activeGraphic.attributes[this._objectIdName]; 
+						this._activeGraphic.attributes["OPERATION"] = "modified"; 
+
+						// put it into undoManager
+						this._pushAddOperation([this._activeGraphic]);
+						
+						// clear the active ones
+						this._activeGraphic = null; 
+					}
+				}));
+			}	
+		}, 
+		
+		_deactivateEditTool: function() {
+			if (this._editTool) {
+				this._editTool = null;				
+			}
+			if (this._mapClickHandler) {
+				this._mapClickHandler.remove(); 
+			}
+		},
+		
+		_createGraphicsMenu : function(graphicsLayer) {
+		  // Creates right-click context menu for GRAPHICS
+		  var editCxtMenu = this._editCxtMenu[graphicsLayer.id] = new Menu({});
+		  editCxtMenu.addChild(new MenuItem({ 
+			label: "Edit",
+			onClick: lang.hitch(this, function() {
+				console.debug("graphic editing starting");
+			  this._editTool.activate(Edit.EDIT_VERTICES, this._activeGraphic);
+			}) 
+		  }));
+
+		  editCxtMenu.addChild(new MenuItem({ 
+			label: "Move",
+			onClick: lang.hitch(this, function() {
+				console.debug("graphic Move starting");
+			  this._editTool.activate(Edit.MOVE, this._activeGraphic);
+			}) 
+		  }));
+
+		  editCxtMenu.addChild(new MenuItem({ 
+			label: "Rotate/Scale",
+			onClick: lang.hitch(this, function() {
+				console.debug("graphic Rotate/Scale starting");
+				this._editTool.activate(Edit.ROTATE | Edit.SCALE, this._activeGraphic);
+			})
+		  }));
+
+		  editCxtMenu.startup();
+
+		  graphicsLayer.on("mouse-over", lang.hitch(this, function(evt) {
+			this._activeGraphic = evt.graphic;
+			// currentTarget is svg element, not graphic layer in the map object			
+			//var svgLayer = evt.currentTarget; 
+			//this._activeGraphicsLayerId = svgLayer.id.replace("_layer", ""); 
+			var activeGraphicsLayerId = evt.graphic.getLayer().id; 
+			// Let's bind to the graphic underneath the mouse cursor  
+			this._editCxtMenu[activeGraphicsLayerId].bindDomNode(evt.graphic.getDojoShape().getNode());
+		  }));
+
+		  graphicsLayer.on("mouse-out", lang.hitch(this, function(evt) {
+			this._activeGraphic = evt.graphic; 
+			var activeGraphicsLayerId = evt.graphic.getLayer().id; 
+			// Let's unbind to the graphic underneath the mouse cursor 
+			this._editCxtMenu[activeGraphicsLayerId].unBindDomNode(evt.graphic.getDojoShape().getNode());
+		  }));
+		  
+		},	  
 
       _closeColorPicker: function () {
         var choosers = ["pointSymChooser", "lineSymChooser", "fillSymChooser", "textSymChooser"];
@@ -788,9 +886,29 @@ define([
 
       _getAllGraphics: function(){
         //return a new array
+		/*
         return array.map(this._graphicsLayer.graphics, lang.hitch(this, function(g){
           return g;
         }));
+		 */
+		// return only the latest version of graphics
+		var graphicArray = []; 
+		array.forEach(this._graphicsLayer.graphics, lang.hitch(this, function(g, idx) {
+			var isLatest = true, ver = g.attributes[this._objectIdName]; 
+			for(var i=idx+1, len=this._graphicsLayer.graphics.length; i<len; i++) {
+				var a = this._graphicsLayer.graphics[i]; 
+				if (a.attributes["OID_PRED"] == ver) {
+					ver = a.attributes[this._objectIdName];
+					isLatest = false; 
+					break; 
+				}
+			}
+			if (isLatest == true) {
+				graphicArray.push(g); 
+			} 
+		})); 	
+
+		return graphicArray; 
       },
 
       _onUndoManagerChanged: function(){
