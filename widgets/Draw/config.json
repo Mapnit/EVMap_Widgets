@@ -37,5 +37,6 @@
     "unit": "SQUARE_YARDS",
     "abbr": "sq yd"
   }],
-  "isOperationalLayer": false
+  "isOperationalLayer": false, 
+  "exportServiceUrl": "https://hdc-arcgis01d.enervest.net:6443/arcgis/rest/services/Test/ExportJSONToShapefile/GPServer/Export_JSON_To_Shapefile"
 }

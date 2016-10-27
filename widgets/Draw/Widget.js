@@ -50,6 +50,7 @@ define([
 	'esri/toolbars/edit',
 	'dijit/Menu', 
 	'dijit/MenuItem', 	
+	'esri/tasks/Geoprocessor', 
     'jimu/dijit/SymbolChooser',
     'dijit/form/Select',
     'dijit/form/NumberSpinner'
@@ -58,7 +59,7 @@ define([
     esriConfig, Graphic, Polyline, Polygon, TextSymbol, Font, esriUnits, webMercatorUtils,
     geodesicUtils, GeometryService, AreasAndLengthsParameters, LengthsParameters, UndoManager,
     OperationBase, GraphicsLayer, FeatureLayer, ViewStack, jimuUtils, wkidUtils, LayerInfos,
-    LoadingIndicator, DrawBox, Edit, Menu, MenuItem) {
+    LoadingIndicator, DrawBox, Edit, Menu, MenuItem, Geoprocessor) {
     //custom operations
     var customOp = {};
     customOp.Add = declare(OperationBase, {
@@ -117,6 +118,7 @@ define([
 	  _editTool: null, 
 	  _activeGraphic: null, 
 	  _editCxtMenu: {}, 
+	  _gp: null, 
 
       postMixInProperties: function(){
         this.inherited(arguments);
@@ -138,6 +140,7 @@ define([
         this.inherited(arguments);
         this._initLayers();
         jimuUtils.combineRadioCheckBoxWithLabel(this.showMeasure, this.showMeasureLabel);
+		jimuUtils.combineRadioCheckBoxWithLabel(this.showExport, this.showExportLabel);
         this.drawBox.setMap(this.map);
 
         this.viewStack = new ViewStack({
@@ -152,6 +155,7 @@ define([
         this._enableBtn(this.btnUndo, false);
         this._enableBtn(this.btnRedo, false);
         this._enableBtn(this.btnClear, false);
+		this._enableBtn(this.btnExport, false);
       },
 
       _initLayers: function(){
@@ -953,6 +957,7 @@ define([
         var graphics = this._getAllGraphics();
         this._enableBtn(this.btnClear, graphics.length > 0);
         this._syncGraphicsToLayers();
+		this._enableBtn(this.btnExport, graphics.length > 0);
       },
 
       _syncGraphicsToLayers: function(){
@@ -1037,6 +1042,66 @@ define([
           this._pushDeleteOperation(graphics);
         }
         this._enableBtn(this.btnClear, false);
-      }
+      }, 
+	  
+	  _convertGraphicsLayerToJSON: function(graphicsLayer){
+          var jsonTemplate = {
+            "geometryType": "",
+			"spatialReference": this.map.spatialReference.toJson(),
+            "fields": [{
+              "name": this._objectIdName,
+              "type": this._objectIdType,
+              "alias": this._objectIdName
+            }], 
+			"features": []
+          };
+		  var layerJson = null; 
+		  if (graphicsLayer && graphicsLayer.graphics.length > 0) {
+			var layerJson = lang.clone(jsonTemplate);
+			switch(graphicsLayer.graphics[0].geometry.type) {
+				case "point": 
+					layerJson.geometryType = "esriGeometryPoint";
+					break;
+				case "polyline":
+					layerJson.geometryType = "esriGeometryPolyline";
+					break;
+				case "polygon":
+					layerJson.geometryType = "esriGeometryPolygon";
+					break;
+			}			
+			array.forEach(graphicsLayer.graphics, lang.hitch(this, function(g) {
+			  layerJson.features.push(g.toJson()); 
+			})); 
+		  }
+		  return JSON.stringify(layerJson); 
+	  }, 
+	  
+	  _onBtnExportClicked: function(){
+		this._gp = new Geoprocessor(this.config.exportServiceUrl); 
+		var params = {
+			"Point_Input_JSON": this._convertGraphicsLayerToJSON(this._pointLayer),
+			"Line_Input_JSON": this._convertGraphicsLayerToJSON(this._polylineLayer),
+			"Polygon_Input_JSON": this._convertGraphicsLayerToJSON(this._polygonLayer)
+		}; 
+		this._gp.submitJob(params, lang.hitch(this, function(jobInfo) {
+			// completed 
+			console.log(jobInfo.jobStatus);
+			this._gp.getResultData(jobInfo.jobId, "Export_ZipFile_URL", 
+				lang.hitch(this, function(result) {
+					// result 
+					console.log("zipfile URL: " + result.value["url"]);
+					window.open(result.value["url"]); 
+				}), lang.hitch(this, function(error) {
+					// err
+					console.log("error: " + error.message);
+				})); 
+		}), lang.hitch(this, function(jobInfo) {
+			// status 
+			console.log("status: " + jobInfo.jobStatus);
+		}), lang.hitch(this, function(jobInfo) {
+			// err 
+			console.log("error: " + jobInfo.message);
+		})); 
+	  }
     });
   });
