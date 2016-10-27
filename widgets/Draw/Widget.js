@@ -134,6 +134,8 @@ define([
         this._undoManager = new UndoManager({
           maxOperations: 0
         });
+		
+		this._gp = new Geoprocessor(this.config.exportServiceUrl); 		
       },
 
       postCreate: function() {
@@ -1077,7 +1079,6 @@ define([
 	  }, 
 	  
 	  _onBtnExportClicked: function(){
-		this._gp = new Geoprocessor(this.config.exportServiceUrl); 
 		var params = {
 			"Point_Input_JSON": this._convertGraphicsLayerToJSON(this._pointLayer),
 			"Line_Input_JSON": this._convertGraphicsLayerToJSON(this._polylineLayer),
