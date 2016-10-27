@@ -27,7 +27,8 @@ define([
     'jimu/utils',
     'dijit/form/Select',
     'jimu/dijit/CheckBox',
-    'jimu/dijit/SimpleTable'
+    'jimu/dijit/SimpleTable',
+	'dijit/form/TextBox'
   ],
   function(declare, lang, array, html, query, on, _WidgetsInTemplateMixin, BaseWidgetSetting,
     TabContainer, jimuUtils, Select, CheckBox, Table) {
@@ -227,6 +228,7 @@ define([
         this._setDistanceTable(this.config.distanceUnits);
         this._setAreaTable(this.config.areaUnits);
         this.cbxOperationalLayer.setValue(config.isOperationalLayer);
+		this.exportServiceUrl.setValue(config.exportServiceUrl);
       },
 
       _setDistanceTable:function(distanceUnits){
@@ -257,11 +259,13 @@ define([
         var config = {
           distanceUnits:[],
           areaUnits:[],
-          isOperationalLayer: false
+          isOperationalLayer: false,
+		  exportServiceUrl: null
         };
         config.distanceUnits = this._getDistanceConfig();
         config.areaUnits = this._getAreaConfig();
         config.isOperationalLayer = this.cbxOperationalLayer.getValue();
+		config.exportServiceUrl = this.exportServiceUrl.getValue(); 
         return config;
       },
 
