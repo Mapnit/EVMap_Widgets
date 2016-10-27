@@ -135,7 +135,9 @@ define([
           maxOperations: 0
         });
 		
-		this._gp = new Geoprocessor(this.config.exportServiceUrl); 		
+		if (this.config.exportServiceUrl && this.config.exportServiceUrl.trim().length > 0) {
+		  this._gp = new Geoprocessor(this.config.exportServiceUrl); 	
+		}		
       },
 
       postCreate: function() {
@@ -959,7 +961,7 @@ define([
         var graphics = this._getAllGraphics();
         this._enableBtn(this.btnClear, graphics.length > 0);
         this._syncGraphicsToLayers();
-		this._enableBtn(this.btnExport, graphics.length > 0);
+		this._enableBtn(this.btnExport, this._gp != null && graphics.length > 0);
       },
 
       _syncGraphicsToLayers: function(){
@@ -1079,6 +1081,9 @@ define([
 	  }, 
 	  
 	  _onBtnExportClicked: function(){
+		if (!this._gp) {
+			return; 
+		}
 		var params = {
 			"Point_Input_JSON": this._convertGraphicsLayerToJSON(this._pointLayer),
 			"Line_Input_JSON": this._convertGraphicsLayerToJSON(this._polylineLayer),
