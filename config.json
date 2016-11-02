@@ -313,11 +313,18 @@
         "id": "widgets_Select_Widget_41"
       },
       {
-        "name": "DataFilter",
-        "label": "Filter Data",
+        "name": "QueryBuilder",
+        "label": "Freeform Query",
         "version": "2.1",
-        "uri": "widgets/DataFilter/Widget",
-        "icon": "widgets/DataFilter/images/icon.png?wab_dv=2.1"
+        "uri": "widgets/QueryBuilder/Widget",
+        "icon": "widgets/QueryBuilder/images/icon.png?wab_dv=2.1"
+      },
+      {
+        "name": "FilterBuilder",
+        "label": "Freeform Filter",
+        "version": "2.1",
+        "uri": "widgets/FilterBuilder/Widget",
+        "icon": "widgets/FilterBuilder/images/icon.png?wab_dv=2.1"
 	  }
     ],
     "groups": [{
