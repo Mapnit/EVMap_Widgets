@@ -1,0 +1,23 @@
+<div>
+  <label class="search-prompt" data-dojo-attach-point="searchPrompt">${nls.searchPrompt}</label>
+  <div class="filter-input-field">
+	<label class="filter-input-label">${nls.searchTargetLabel}</label>
+	<input type="text" data-dojo-attach-point="targetInput"/>
+  </div>
+  <div class="filter-input" data-dojo-attach-point="filterInput">
+  </div>
+  <div class="filter-input-field">
+	<input type="checkbox" data-dojo-attach-point="limitToMapExtent" data-dojo-attach-event="onchange:_onLimitToMapExtentChecked"/>
+	<label class="filter-input-label" data-dojo-attach-point="limitToMapExtentLabel">${nls.limitToMapExtent}</label>
+  </div>
+  <hr/>
+  <div class="nav-section">
+	<div class="nav-btn-end" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-end-icon'" 
+		data-dojo-attach-event="onClick:_onBtnEndClicked">
+		${nls.endSteps}
+	</div>
+  </div>
+  <div class="message-section">
+	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+  </div>
+</div>
