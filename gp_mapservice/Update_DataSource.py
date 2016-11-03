@@ -10,6 +10,10 @@ def Main(rootFolder):
     for root,folder,files in os.walk(rootFolder):
         if root.find("Z_Old") <0:
             for file in files:
+                fname,fext = os.path.splitext(file)
+                if fext.lower() != ".mxd":
+                    continue
+                
                 mxdPath = os.path.join(root,file)
                 serverFolder = os.path.basename(root)
                 mxd = arcpy.mapping.MapDocument(mxdPath)
