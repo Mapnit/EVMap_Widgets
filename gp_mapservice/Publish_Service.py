@@ -3,13 +3,16 @@ import httplib, urllib, json,urllib2,arcpy,os,traceback
 
 # For system tools
 import sys
-
+import xml.dom.minidom as DOM 
 import datetime,time
 
 def Main(rootFolder,scratch,agscon):
     for root,folder,files in os.walk(rootFolder):
         if root.find("Z_Old") <0:
             for file in files:
+                fname,fext = os.path.splitext(file)
+                if fext.lower() != ".mxd":
+                    continue
                 try:
                     mxdPath = os.path.join(root,file)
                     serverFolder = os.path.basename(root)
@@ -30,6 +33,51 @@ def Main(rootFolder,scratch,agscon):
                         continue                    
                     
                     if analysis['errors'] == {}:
+                        # rename sddraft
+                        sddraft_xml = sddraft + ".xml"
+                        if os.path.exists(sddraft_xml):
+                            os.remove(sddraft_xml)
+                        os.rename(sddraft, sddraft_xml)
+                        # modify sddraft 
+                        xmldoc = DOM.parse(sddraft_xml)
+                        typeNames = xmldoc.getElementsByTagName('TypeName')
+                        for typeName in typeNames:
+                            if typeName.firstChild.data == 'KmlServer':
+                                # disable KmlServer
+                                extension = typeName.parentNode
+                                for extElement in extension.childNodes:
+                                    if extElement.tagName == 'Enabled':
+                                        extElement.firstChild.data = 'false'
+                                        break
+                            elif typeName.firstChild.data == 'WMSServer':
+                                # enable WMSServer
+                                extension = typeName.parentNode
+                                for extElement in extension.childNodes:
+                                    if extElement.tagName == 'Enabled':
+                                        extElement.firstChild.data = 'true'
+                                        break
+                        keyNames = xmldoc.getElementsByTagName('Key')
+                        for keyName in keyNames:
+                            if keyName.firstChild.data == 'enableDynamicLayers':
+                                # enable DynamicLayers
+                                serviceProperty = keyName.parentNode
+                                for propElement in serviceProperty.childNodes:
+                                    if propElement.tagName == 'Value':
+                                        propElement.firstChild.data = 'true'
+                                        break
+                            if keyName.firstChild.data == 'schemaLockingEnabled':
+                                # disable SchemaLocking
+                                serviceProperty = keyName.parentNode
+                                for propElement in serviceProperty.childNodes:
+                                    if propElement.tagName == 'Value':
+                                        propElement.firstChild.data = 'false'
+                                        break
+                                
+                        # save the modified sddraft
+                        with open(sddraft, 'w') as f:
+                            xmldoc.writexml(f)
+                            
+                        # convert sddraft to sd 
                         try:
                             if (os.path.exists(sd)):
                                 os.remove(sd)
@@ -56,7 +104,7 @@ def Main(rootFolder,scratch,agscon):
                             tbinfo = traceback.format_tb(tb)[0]
                             pymsg = "PYTHON ERRORS:\nTraceback Info:\n" + tbinfo + "\nError Info:\n    " + str(sys.exc_type)+ ": " + str(sys.exc_value) + "\n"
                             arcpy.AddError(pymsg + "\n" + "Service Name = " + mxd.title)
-                            
+                        '''
                         serviceProperties = GetServiceProperties(token,serverURL,serverFolder,servicename,serverName,serverPort)
                         if serviceProperties:
                             id = [id for id in range(len(serviceProperties["extensions"])) if serviceProperties["extensions"][id]["typeName"] == "WMSServer"]
@@ -69,6 +117,8 @@ def Main(rootFolder,scratch,agscon):
                                 arcpy.AddMessage ("Enabled WMS, Schema Lock Disabled, Enabled Dynamic Layers " + "\n")
                         else:
                             arcpy.AddError("Service Published with Default Settings. Could not unlock Schema, Enable WMS and Enable Dynamic Layers")
+                        '''
+                        arcpy.AddMessage ("Service Published with WMS and Dynamic Layers Enabled and Schema Lock Disabled " + "\n")
                     else:
                         for key in ('messages', 'warnings', 'errors'):
                             print "----" + key.upper() + "---"
