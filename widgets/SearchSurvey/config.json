@@ -1,41 +1,41 @@
 {
-	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+	"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 	"county": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7", 
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7", 
 		"field": "COUNTY",
 		"required": true
 	},
 	"abstractNumber": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "ABSNO",
 		"dataType": "number"
 	},  
 	"abstractName": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "ABSNA",
 		"relatedFields": {
 			"county": "COUNTY"
 		}
 	},  
 	"surveyNumber": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "SURVNO",
 		"dataType": "number"
 	},
 	"surveyName": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "SURVNA",
 		"relatedFields": {
 			"county": "COUNTY"
 		}
 	},
 	"blockNumber": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "BLOCKNO",
 		"dataType": "number"
 	},
 	"blockName": {
-		"layer": "https://mapservices.enervest.net/arcgis/rest/services/Culture/LandGrid/MapServer/7",
+		"layer": "/arcgis/rest/services/Culture/LandGrid/MapServer/7",
 		"field": "BLOCKNA",
 		"relatedFields": {
 			"county": "COUNTY"

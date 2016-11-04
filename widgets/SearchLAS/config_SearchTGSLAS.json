@@ -1,5 +1,5 @@
 {
-	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Geology/Well_TGS_LAS/MapServer/4", 
+	"layer": "/arcgis/rest/services/Geology/Well_TGS_LAS/MapServer/4", 
 	"logAliases": [{
 			"field": "Evdphi",
 			"label": "EVDPHI"
