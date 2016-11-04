@@ -495,6 +495,17 @@ define([
 				}
 			},
 			
+			_isKeyPrintable : function(keyCode) {
+				return (
+					(keyCode > 64 && keyCode < 91)   || /* letter keys */
+					(keyCode > 47 && keyCode < 58)   || /* number keys */
+					(keyCode > 95 && keyCode < 112)  || /* numpad keys */ 
+					keyCode == 32 || keyCode == 8    || /* spacebar, backspace */
+					(keyCode > 185 && keyCode < 193) || /* ;=,-./` (in order) */ 
+					(keyCode > 218 && keyCode < 223)    /* [\]' (in order)) */ 
+					); 
+			},
+			
 			_convertToAbsURLs : function(relativeURLs) {
 				if (relativeURLs instanceof Array) {
 					var absoluteURLs = []; 
@@ -533,17 +544,6 @@ define([
 				return relativeURL; // return as is 
 			}, 
 
-			_isKeyPrintable : function(keyCode) {
-				return (
-					(keyCode > 64 && keyCode < 91)   || /* letter keys */
-					(keyCode > 47 && keyCode < 58)   || /* number keys */
-					(keyCode > 95 && keyCode < 112)  || /* numpad keys */ 
-					keyCode == 32 || keyCode == 8    || /* spacebar, backspace */
-					(keyCode > 185 && keyCode < 193) || /* ;=,-./` (in order) */ 
-					(keyCode > 218 && keyCode < 223)    /* [\]' (in order)) */ 
-					); 
-			},
-			
 			_showMessage : function (textMsg, lvl) {
 				domClass.remove(this.searchMessage);
 				switch (lvl) {
