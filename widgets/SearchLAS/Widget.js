@@ -105,6 +105,7 @@ define([
 
 			postCreate : function () {
 				this.inherited(arguments);
+				this._qualifyURLs();
 				this._initSearch();
 				this._initSearchForm();
 
@@ -113,6 +114,11 @@ define([
 						views : [this.drawSection, this.filterSection]
 					});
 				domConstruct.place(this.viewStack.domNode, this.parameterSection, "only");
+			},
+			
+			_qualifyURLs : function () {
+				this.config.layer = this._convertToAbsURL(this.config.layer); 
+				this.config.visibleLayers = this._convertToAbsURLs(this.config.visibleLayers);	
 			},
 
 			_initSearch : function () {
@@ -432,6 +438,44 @@ define([
 				this._searchParams["queryTypeOpr"] = evt.currentTarget.value; 
 			},
 
+			_convertToAbsURLs : function(relativeURLs) {
+				if (relativeURLs instanceof Array) {
+					var absoluteURLs = []; 
+					for(var u=0,l=relativeURLs.length; u<l; u++) {
+						absoluteURLs[u] = this._convertToAbsURL(relativeURLs[u]); 
+					} 
+					return absoluteURLs;
+				}
+				return relativeURLs; // return as is
+			},
+			
+			_convertToAbsURL : function(relativeURL) {
+				if (relativeURL && /^https?:\/\//i.test(relativeURL) == false) {
+					var urlRegExp = new RegExp(relativeURL.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + "$", "i"); 
+					if (this.map.itemInfo && this.map.itemInfo.itemData && this.map.itemInfo.itemData.operationalLayers) {
+						var operationalLayers = this.map.itemInfo.itemData.operationalLayers; 
+						for(var p=0,pl=operationalLayers.length; p<pl; p++) {
+							var serviceLayer = operationalLayers[p]; 
+							for(var f=0,fl=serviceLayer.resourceInfo.layers.length; f<fl; f++) {
+								var featureLayer = serviceLayer.resourceInfo.layers[f]; 
+								var layerURL = serviceLayer["url"] + "/" + featureLayer["id"]; 
+								if (urlRegExp.test(layerURL) == true) {
+									return layerURL; 
+								}
+							}
+							for(var t=0,tl=serviceLayer.resourceInfo.tables.length; t<tl; t++) {
+								var featureTable = serviceLayer.resourceInfo.tables[t]; 
+								var tableURL = serviceLayer["url"] + "/" + featureTable["id"]; 
+								if (urlRegExp.test(tableURL) == true) {
+									return tableURL; 
+								}
+							} 
+						}
+					} 
+				}
+				return relativeURL; // return as is 
+			}, 
+			
 			_showMessage : function (textMsg, lvl) {
 				domClass.remove(this.searchMessage);
 				switch (lvl) {
