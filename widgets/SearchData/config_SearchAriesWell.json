@@ -1,6 +1,6 @@
 {
 	"prompt": "How do you want to search for aries wells?",
-	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/3",
+	"layer": "/arcgis/rest/services/Wells/EV_Wells/MapServer/3",
 	"options": [{
 		"name": "propNum",
 		"label": "Prop Num",

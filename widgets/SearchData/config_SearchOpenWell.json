@@ -1,6 +1,6 @@
 {
 	"prompt": "How do you want to search for open wells?",
-	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Wells/EV_Wells/MapServer/5",
+	"layer": "/arcgis/rest/services/Wells/EV_Wells/MapServer/5",
 	"options": [{
 		"name": "wellApi",
 		"label": "API",

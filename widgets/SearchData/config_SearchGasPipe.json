@@ -1,6 +1,6 @@
 {
 	"prompt": "How do you want to search for Gas Pipelines?",
-	"layer": "https://mapservices.enervest.net/arcgis/rest/services/Midstream/Pipelines/MapServer/2", 
+	"layer": "/arcgis/rest/services/Midstream/Pipelines/MapServer/2", 
 	"options": [{
 	  "name": "operator",
 	  "label": "Operator",

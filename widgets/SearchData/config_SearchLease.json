@@ -1,9 +1,9 @@
 {
   "prompt": "How do you want to search for leases?",
-  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/EV_Lease/MapServer/6", 
+  "layer": "/arcgis/rest/services/Land/EV_Lease/MapServer/6", 
   "visibleLayers": [
-	  "https://mapservices.enervest.net/arcgis/rest/services/Wells/IHS_Wells/MapServer/0",  
-	  "https://hdc-arcgis01t.enervest.net/arcgis/rest/services/Wells/IHS_Wells/MapServer/2"
+	  "/arcgis/rest/services/Wells/IHS_Wells/MapServer/0",  
+	  "/arcgis/rest/services/Wells/IHS_Wells/MapServer/2"
   ],
   "options": [{
 	  "name": "singleLease",
