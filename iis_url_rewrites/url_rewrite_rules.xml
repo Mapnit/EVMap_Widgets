@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appcmd>
+	<CONFIG CONFIG.SECTION="system.webServer/rewrite/rules" path="MACHINE/WEBROOT/APPHOST/Default Web Site" overrideMode="Inherit" locked="false">
+		<system.webServer-rewrite-rules>
+			<rule name="proxy to BLM GeoCommunicator Services">
+				<match url="^geocomm/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://www.geocommunicator.gov/{R:1}" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to Kansas BioSurvey Services">
+				<match url="^kars/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://kars.ku.edu/{R:1}" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to Texas NRR Services">
+				<match url="^tnris/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://r.tnris.org/{R:1}" logRewrittenUrl="true"/>
+			</rule>
+			<rule name="Proxy to LA SONRIS Services">
+				<match url="^sonris/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://sonris-www.dnr.state.la.us/{R:1}" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to Texas RRC Services">
+				<match url="^rrc/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://wwwgisp.rrc.state.tx.us/{R:1}" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to PSU Services">
+				<match url="^psu/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://data1.commons.psu.edu/{R:1}" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to WVDOT Services">
+				<match url="^wvdot/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://gis.transportation.wv.gov/" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to WV Geo&amp;Eco Survey Services">
+				<match url="^wvges/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://atlas.wvgs.wvnet.edu/{R:1}" logRewrittenUrl="true" />
+			</rule>
+			<rule name="Proxy to WV GIS Services">
+				<match url="^wvgis/(.*)" />
+				<conditions>
+				</conditions>
+				<serverVariables>
+				</serverVariables>
+				<action type="Rewrite" url="http://services.wvgis.wvu.edu/{R:1}" logRewrittenUrl="true" />
+			</rule>
+		</system.webServer-rewrite-rules>
+	</CONFIG>
+</appcmd>
