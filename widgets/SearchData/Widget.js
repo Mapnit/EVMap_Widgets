@@ -276,7 +276,7 @@ define([
 					var valOptions = textInput.split(/[\,|\n]/);
 					var searchVals = [];
 					array.forEach(valOptions, function (opt) {
-						if (opt) {
+						if (opt && opt.length > 0) {
 							searchVals.push("'" + opt.trim() + "'");
 						}
 					});
