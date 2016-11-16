@@ -1,0 +1,47 @@
+<div>
+  <div data-dojo-attach-point="ParameterSection">
+    <div class="option-section" data-dojo-attach-point="optionSection">
+      <label class="option-list-prompt" data-dojo-attach-point="optionListPrompt"></label>
+      <div class="option-list" data-dojo-attach-point="optionList">
+      </div>
+	  <div class="filter-input-field">
+		  <input type="checkbox" data-dojo-attach-point="limitToMapExtent" data-dojo-attach-event="onchange:_onLimitToMapExtentChecked"/>
+		  <label class="filter-input-label" data-dojo-attach-point="limitToMapExtentLabel">${nls.limitToMapExtent}</label>
+	  </div>
+	  <hr/>
+      <div class="nav-section">
+		<div class="nav-btn-cancel" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-cancel-icon'" 
+			data-dojo-attach-event="onClick:_onBtnCancelClicked">
+            ${nls.cancelSteps}
+        </div>
+		<div class="nav-btn-next" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-next-icon'" 
+			data-dojo-attach-event="onClick:_onBtnGoToNextClicked">
+            ${nls.nextStep}
+        </div>
+      </div>
+    </div>
+    <div class="filter-section" data-dojo-attach-point="filterSection">
+      <label class="filter-prompt" data-dojo-attach-point="filterPrompt"></label>
+      <div class="filter-input" data-dojo-attach-point="filterInput">
+      </div>
+	  <hr/>
+      <div class="nav-section">
+		<div class="nav-btn-cancel" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-cancel-icon'" 
+			data-dojo-attach-event="onClick:_onBtnCancelClicked">
+            ${nls.cancelSteps}
+        </div>
+		<div class="nav-btn-prev" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-prev-icon'" 
+			data-dojo-attach-event="onClick:_onBtnGoToPrevClicked">
+            ${nls.prevStep}
+        </div>
+		<div class="nav-btn-end" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'nav-btn-end-icon'" 
+			data-dojo-attach-event="onClick:_onBtnEndClicked">
+            ${nls.endSteps}
+        </div>
+      </div>
+    </div>  
+  </div>
+  <div class="message-section">
+	<label class="message-info" data-dojo-attach-point="searchMessage"></label>
+  </div>
+</div>

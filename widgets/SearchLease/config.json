@@ -1,0 +1,88 @@
+{
+  "prompt": "How do you want to search for leases?",
+  "layer": "/arcgis/rest/services/Land/EV_Lease/MapServer/6", 
+  "visibleLayers": [
+	  "/arcgis/rest/services/Wells/IHS_Wells/MapServer/0",  
+	  "/arcgis/rest/services/Wells/IHS_Wells/MapServer/2"
+  ],
+  "options": [{
+	  "name": "singleLease",
+	  "label": "Single Lease Number",
+	  "field": "LEASE_NO",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided"
+	}, {
+	  "name": "multipleLeases",
+	  "label": "Multiple Lease Numbers",
+	  "field": "LEASE_NO",
+	  "dataType": "text",
+	  "input": "multiple",
+	  "prompt": "Enter a comma-separated list of lease numbers"
+	}, {
+	  "name": "lessee",
+	  "label": "Lessee",
+	  "field": "LESSEE",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessee name below, as you type matching lessee names will be provided"
+	}, {
+	  "name": "lessor",
+	  "label": "Lessor",
+	  "field": "LESSOR",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessor name below, as you type matching lessor names will be provided"
+	}, {
+	  "name": "status",
+	  "label": "Status",
+	  "field": "STATUS",
+	  "dataType": "text",
+	  "input": "select",
+	  "prompt": "Select at least one status from the following list:"
+	}, {
+	  "name": "expirationDate",
+	  "label": "Expiration Date",
+	  "field": "EXP_DATE",
+	  "dataType": "date",
+	  "input": "range",
+	  "rangeLabels": ["From", "To"],
+	  "prompt": "Use the fields below to specify the date range you wish to search"
+	}],
+	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
+	"renderSymbols": {
+		"esriGeometryPolygon" : {
+			"type" : "esriSFS",
+			"style" : "esriSFSSolid",
+			"color" : [0, 255, 255, 64],
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 2
+			}
+		},
+		"esriGeometryPolyline" : {
+			"type" : "esriSLS",
+			"style" : "esriSLSSolid",
+			"color" : [0, 255, 255, 255],
+			"width" : 2
+		},
+		"esriGeometryPoint" : {
+			"type" : "esriSMS",
+			"style" : "esriSMSCircle",
+			"color" : [0, 255, 255, 128],
+			"size" : 8,
+			"angle" : 0,
+			"xoffset" : 0,
+			"yoffset" : 0,
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 1
+			}
+		}
+	}
+}
