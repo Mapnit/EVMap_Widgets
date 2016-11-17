@@ -139,7 +139,15 @@ define([
 				jimuUtils.combineRadioCheckBoxWithLabel(this.limitToMapExtent, this.limitToMapExtentLabel);
 			},
 			
-			onOpen : function() {				
+			onOpen : function() { 
+				// increase the widget width 
+				domStyle.set(this.domNode, "width", "500px");
+				var widgetPanel = this.getPanel(); 
+				if (widgetPanel) {
+					domStyle.set(widgetPanel.domNode, "width", "530px"); 
+				} 
+				//domStyle.set(this.domNode.id + "_panel", "width", "530px"); 
+				//
 				this._graphicLayer = new GraphicsLayer();
 				this.map.addLayer(this._graphicLayer);
 			},
