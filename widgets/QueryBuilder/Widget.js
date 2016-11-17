@@ -4,6 +4,7 @@ define([
 		'dijit/_WidgetsInTemplateMixin',
 		'jimu/BaseWidget',
 		'dojo/on',
+		'dojo/aspect', 
 		'dojo/Deferred',
 		'dojo/html',
 		'dojo/_base/lang',
@@ -42,7 +43,7 @@ define([
 		'dijit/form/NumberSpinner', 
 		'dijit/form/Button'
 	],
-	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
+	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, aspect, Deferred,
 		html, lang, Color, array, domConstruct, domStyle, domClass,
 		esriConfig, esriRequest, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
 		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
@@ -93,6 +94,7 @@ define([
 			_jimuFilter : null, 
 			_targetUrl : null, 
 			_limitToMapExtent : false, 
+			_adviceAfterPanelResize : null, 
 
 			postCreate : function () {
 				this.inherited(arguments);
@@ -140,14 +142,6 @@ define([
 			},
 			
 			onOpen : function() { 
-				// increase the widget width 
-				domStyle.set(this.domNode, "width", "500px");
-				var widgetPanel = this.getPanel(); 
-				if (widgetPanel) {
-					domStyle.set(widgetPanel.domNode, "width", "530px"); 
-				} 
-				//domStyle.set(this.domNode.id + "_panel", "width", "530px"); 
-				//
 				this._graphicLayer = new GraphicsLayer();
 				this.map.addLayer(this._graphicLayer);
 			},
@@ -170,12 +164,32 @@ define([
 				}
 			},
 
-			destroy : function () {},
+			destroy : function () {
+				if (this._adviceAfterPanelResize) {
+					this._adviceAfterPanelResize.remove(); 
+				}
+			},
 
 			startup : function () {
 				this.inherited(arguments);
-
+				
+				if (!this._adviceAfterPanelResize) { 
+					this._adviceAfterPanelResize = 
+						aspect.after(this.getPanel(), 'resize', lang.hitch(this, this._resizeWidgetWidth));
+				}
+				this._resizeWidgetWidth();
+				
 				this._fetchSearchTargets(); 
+			},
+			
+			_resizeWidgetWidth : function() {
+				// increase the widget width 
+				domStyle.set(this.domNode, "width", "500px");
+				var widgetPanel = this.getPanel(); 
+				if (widgetPanel) {
+					domStyle.set(widgetPanel.domNode, "width", "530px"); 
+				} 
+				// 
 			},
 			
 			_fetchSearchTargets : function() {							
