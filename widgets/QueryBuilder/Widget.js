@@ -133,8 +133,15 @@ define([
 			},
 			
 			onOpen : function() { 
-				this._graphicLayer = new GraphicsLayer();
-				this.map.addLayer(this._graphicLayer);
+				if (this._renderType != "featureLayer") {
+					this._graphicLayer = new GraphicsLayer();
+					this.map.addLayer(this._graphicLayer); 
+				}
+				// if the targetInput already has a value, then init the render layer
+				var targetName = this.targetInput.get('value'); 
+				if (targetName && targetName.length > 0) {
+					this._onSearchTargetChanged(targetName); 
+				}
 			},
 
 			onClose : function () {
