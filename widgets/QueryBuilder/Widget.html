@@ -2,7 +2,10 @@
   <label class="search-prompt" data-dojo-attach-point="searchPrompt">${nls.searchPrompt}</label>
   <div class="filter-input-field">
 	<label class="filter-input-label">${nls.searchTargetLabel}</label>
-	<input type="text" data-dojo-attach-point="targetInput"/>
+	<input type="text" data-dojo-type="dijit/form/ComboBox" 
+		data-dojo-props="searchAttr:'name',style:'width:250px;height:25px'" 
+		data-dojo-attach-event="onChange:_onSearchTargetChanged" 
+		data-dojo-attach-point="targetInput"/>
   </div>
   <div class="filter-input" data-dojo-attach-point="filterInput">
   </div>

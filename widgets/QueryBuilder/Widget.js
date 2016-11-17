@@ -90,7 +90,6 @@ define([
 					}
 				}
 			},
-			_targetValues : [],
 			_jimuFilter : null, 
 			_targetUrl : null, 
 			_limitToMapExtent : false, 
@@ -123,14 +122,6 @@ define([
 
 			_initSearchForm : function () {
 				this.limitToMapExtent.checked = this._limitToMapExtent; 
-				
-				this._targetValues = new ComboBox({
-						style: "width: 175px; height:25px",
-						store: new Memory({data: []}),
-						searchAttr: "name",
-						onChange: lang.hitch(this, this._onSearchTargetChanged)
-					}, this.targetInput);
-				this._targetValues.startup(); 
 				
 				this._jimuFilter = new Filter({
 					noFilterTip: this.nls.noFilterTip,
@@ -215,7 +206,7 @@ define([
 						})); 
 				}
 				//TODO: sort by alphabet
-				this._targetValues.store = valueStore;
+				this.targetInput.store = valueStore;
 			},
 			
 			_onBtnEndClicked : function () {				
@@ -237,7 +228,7 @@ define([
 			},
 
 			_onSearchTargetChanged : function (targetName) { 
-				var selectedTarget = this._targetValues.store.query({name:targetName}); 
+				var selectedTarget = this.targetInput.store.query({name:targetName}); 
 				if (selectedTarget.length == 1) {
 					this._targetUrl = selectedTarget[0].url; 
 					this._initRenderLayer(targetName, this._targetUrl);
