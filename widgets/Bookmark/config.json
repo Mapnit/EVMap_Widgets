@@ -1,5 +1,263 @@
 {
-	"bookmarks2D": [],
+	"bookmarks2D": [{
+      "displayName": "Appalachia",
+      "name": "Appalachia",
+      "extent": {
+        "type": "extent",
+        "xmin": -9646979.15985379,
+        "ymin": 4324934.468998657,
+        "xmax": -8228307.914881296,
+        "ymax": 5303328.431048652,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -9646979.15985379,
+                "ymin": 4324934.468998657,
+                "xmax": -8228307.914881296,
+                "ymax": 5303328.431048652,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_Appalachia.png",
+      "isInWebmap": true
+    },
+    {
+      "displayName": "South Texas",
+      "name": "South Texas",
+      "extent": {
+        "type": "extent",
+        "xmin": -10995435.734665584,
+        "ymin": 3364334.7703018948,
+        "xmax": -10640767.923422385,
+        "ymax": 3608933.2608144465,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -10995435.734665584,
+                "ymin": 3364334.7703018948,
+                "xmax": -10640767.923422385,
+                "ymax": 3608933.2608144465,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_South Texas.png",
+      "isInWebmap": true
+    },
+    {
+      "displayName": "Permian",
+      "name": "Permian",
+      "extent": {
+        "type": "extent",
+        "xmin": -11406343.84896537,
+        "ymin": 3435131.8382165646,
+        "xmax": -11051676.03772217,
+        "ymax": 3679730.3287291164,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -11406343.84896537,
+                "ymin": 3435131.8382165646,
+                "xmax": -11051676.03772217,
+                "ymax": 3679730.3287291164,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_Permian.png",
+      "isInWebmap": true
+    },
+    {
+      "displayName": "North Texas  Barnett",
+      "name": "North Texas  Barnett",
+      "extent": {
+        "type": "extent",
+        "xmin": -11034108.229635818,
+        "ymin": 3742858.8153960947,
+        "xmax": -10679440.41839262,
+        "ymax": 3987457.3059086464,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -11034108.229635818,
+                "ymin": 3742858.8153960947,
+                "xmax": -10679440.41839262,
+                "ymax": 3987457.3059086464,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_North Texas  Barnett.png",
+      "isInWebmap": true
+    },
+    {
+      "displayName": "North Texas - MidCon",
+      "name": "North Texas - MidCon",
+      "extent": {
+        "type": "extent",
+        "xmin": -11262786.335919276,
+        "ymin": 4146088.64818567,
+        "xmax": -10908118.524676077,
+        "ymax": 4390687.138698221,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -11262786.335919276,
+                "ymin": 4146088.64818567,
+                "xmax": -10908118.524676077,
+                "ymax": 4390687.138698221,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_North Texas - MidCon.png",
+      "isInWebmap": true
+    },
+    {
+      "displayName": "Rockies - San Juan Basin",
+      "name": "Rockies - San Juan Basin",
+      "extent": {
+        "type": "extent",
+        "xmin": -12142640.366477927,
+        "ymin": 4259826.946274,
+        "xmax": -11787972.555234728,
+        "ymax": 4504425.436786552,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -12142640.366477927,
+                "ymin": 4259826.946274,
+                "xmax": -11787972.555234728,
+                "ymax": 4504425.436786552,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_Rockies - San Juan Basin.png",
+      "isInWebmap": true
+    },
+    {
+      "displayName": "Rockies - Uinta Basin",
+      "name": "Rockies - Uinta Basin",
+      "extent": {
+        "type": "extent",
+        "xmin": -12319665.439302977,
+        "ymin": 4803468.800278952,
+        "xmax": -12230998.486492138,
+        "ymax": 4864618.422907116,
+        "spatialReference": {
+          "wkid": 102100,
+          "latestWkid": 3857
+        },
+        "cache": {
+          "_parts": [
+            {
+              "extent": {
+                "type": "extent",
+                "xmin": -12319665.439302977,
+                "ymin": 4803468.800278952,
+                "xmax": -12230998.486492138,
+                "ymax": 4864618.422907116,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "frameIds": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "thumbnail": "images/thumbnail_Rockies - Uinta Basin.png",
+      "isInWebmap": true
+    }],
 	"bookmarks3D": [],
 	"flyTime": 3000
 }
