@@ -5,6 +5,7 @@ define([
 		'jimu/BaseWidget',
 		'dojo/on',
 		'dojo/Deferred',
+		'dojo/promise/all', 
 		'dojo/dom-construct',
 		'dojo/html',
 		'dojo/_base/lang',
@@ -43,7 +44,7 @@ define([
 		'dijit/form/NumberSpinner', 
 		'dijit/form/Button'
 	],
-	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred,
+	function (declare, _WidgetsInTemplateMixin, BaseWidget, on, Deferred, all, 
 		domConstruct, html, lang, Color, array, domStyle, domClass,
 		esriConfig, esriRequest, Graphic, QueryTask, Query, Extent, Point, Polyline, Polygon, webMercatorUtils,
 		GeometryService, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
@@ -57,10 +58,9 @@ define([
 			partialMatchMinInputLength : 3, 
 			_searchParams : {},
 			_selectedOption : null,
-			_queryTask : null,
 			_renderType : null /*graphicLayer (default) or featureLayer*/,
-			_featureLayer : null, 
-			_graphicLayer : null,
+			_featureLayers : {}, 
+			_graphicLayers : {},
 			_symbols : { /*default rendering symbols*/
 				"esriGeometryPolygon" : {
 					"type" : "esriSFS",
@@ -112,13 +112,20 @@ define([
 			},
 			
 			_qualifyURLs : function () {
-				this.config.layer = this._convertToAbsURL(this.config.layer); 
-				this.config.visibleLayers = this._convertToAbsURLs(this.config.visibleLayers);				
+				array.forEach(this.config.options, lang.hitch(this, function(opt) {
+					if (opt.layer) {
+						opt.layer = this._convertToAbsURL(opt.layer); 
+					}
+				})); 
+				array.forEach(this.config.dataSources, lang.hitch(this, function(ds) {
+					if (ds.layer) {
+						ds.layer = this._convertToAbsURL(ds.layer); 
+					}
+				})); 
+				this.config.visibleLayers = this._convertToAbsURLs(this.config.visibleLayers);	
 			},
 
 			_initSearch : function () {
-				this._queryTask = new QueryTask(this.config.layer);
-
 				this._infoTemplate = new InfoTemplate("Properties", "${*}");
 
 				this._filterValues = []; 
@@ -134,8 +141,12 @@ define([
 				if (!this.config.visibleLayers) {
 					this.config.visibleLayers = []; 
 				} 
-				// by default, display the query layer 
-				this.config.visibleLayers.push(this.config.layer); 
+				// by default, display the data source layers
+				array.forEach(this.config.dataSources, lang.hitch(this, function(ds) {
+					if (ds.layer) {
+						this.config.visibleLayers.push(ds.layer);
+					}
+				}));
 			},
 
 			_initSearchForm : function () {
@@ -163,7 +174,6 @@ define([
 						jimuUtils.combineRadioCheckBoxWithLabel(radioBtn, radioLabel);
 
 						on(radioBtn, "change", lang.hitch(this, this._onSearchOptionChecked));
-
 					}));
 
 				jimuUtils.combineRadioCheckBoxWithLabel(this.limitToMapExtent, this.limitToMapExtentLabel);
@@ -175,44 +185,48 @@ define([
 				this.viewStack.switchView(this._currentViewIndex);
 				
 				if (this._renderType === "featureLayer") {
-					esriRequest({
-						"url": this.config.layer,
-						"content": {
-						  "f": "json"
-						}
-					}).then(lang.hitch(this, function(layerInfo) {
-						var featureCollection = {
-							"featureSet": {
-								"features": [],
-								"geometryType": layerInfo.geometryType
-							}, 
-							"layerDefinition": {
-								"geometryType": layerInfo.geometryType,
-								"objectIdField": layerInfo.objectIdField,
-								"drawingInfo": {
-									"renderer": {
-										"type": "simple",
-										"symbol": this._symbols[layerInfo.geometryType], 
-									}
-								},
-								"fields": layerInfo.fields 
+					array.forEach(this.config.dataSources, lang.hitch(this, function(ds) {
+						esriRequest({
+							"url": ds.layer,
+							"content": {
+							  "f": "json"
 							}
-						};
-						this._featureLayer = new FeatureLayer(featureCollection, {
-							id: layerInfo.name + "_searchResults", 
+						}).then(lang.hitch(this, function(layerInfo) {
+							var featureCollection = {
+								"featureSet": {
+									"features": [],
+									"geometryType": layerInfo.geometryType
+								}, 
+								"layerDefinition": {
+									"geometryType": layerInfo.geometryType,
+									"objectIdField": layerInfo.objectIdField,
+									"drawingInfo": {
+										"renderer": {
+											"type": "simple",
+											"symbol": this._symbols[layerInfo.geometryType], 
+										}
+									},
+									"fields": layerInfo.fields 
+								}
+							};
+							this._featureLayers[layerInfo.name] = new FeatureLayer(featureCollection, {
+								id: layerInfo.name + "_searchResults", 
+								infoTemplate: this._infoTemplate
+							});
+							this.map.addLayer(this._featureLayers[layerInfo.name]); 
+						}), lang.hitch(this, function(err) {
+							this._showMessage(err.message, "error"); 
+						})); 						
+						console.debug("the search results to be rendered as features"); 
+					})); 
+				} else { 
+					array.forEach(this.config.dataSources, lang.hitch(this, function(ds) {
+						this._graphicLayers[layerInfo.name] = new GraphicsLayer({
+							id: ds.name + "_searchResults", 
 							infoTemplate: this._infoTemplate
 						});
-						this.map.addLayer(this._featureLayer); 
-						console.debug("the search results to be rendered as features"); 
-					}), lang.hitch(this, function(err) {
-						this._showMessage(err.message, "error");
-					}));
-				} else { 
-					this._graphicLayer = new GraphicsLayer({
-						id: this.name + "_searchResults", 
-						infoTemplate: this._infoTemplate
-					});
-					this.map.addLayer(this._graphicLayer);	
+					})); 
+					this.map.addLayer(this._graphicLayers); 
 					console.debug("the search results to be rendered as graphics"); 
 				}
 			},
@@ -223,13 +237,19 @@ define([
 				
 				if (this._renderType === "featureLayer") {
 					// clean up featureLayer
-					this.map.removeLayer(this._featureLayer); 
-					this._featureLayer.clear(); 
-					this._featureLayer = null; 
+					for(var k in this._featureLayers) {
+						this.map.removeLayer(this._featureLayers[k]); 
+						this._featureLayers[k].clear(); 
+						this._featureLayers[k] = null; 
+					}
+					this._featureLayers = {}; 
 				} else {
-					this.map.removeLayer(this._graphicLayer); 
-					this._graphicLayer.clear();
-					this._graphicLayer = null; 
+					for(var k in this._graphicLayers) {
+						this.map.removeLayer(this._graphicLayers[k]); 
+						this._graphicLayers[k].clear(); 
+						this._graphicLayers[k] = null; 
+					}
+					this._graphicLayers = {}; 
 				}
 			},
 
@@ -265,54 +285,70 @@ define([
 			},
 
 			_onBtnEndClicked : function () {
-				var whereClause;
-				switch (this._selectedOption.input) {
-				case "single":
-					var searchVal = this._filterValues[0].value.trim();
-					whereClause = this._selectedOption.field + " = '" + searchVal + "'";
-					break;
-				case "multiple":
-					var textInput = this._filterValues[0].value.trim();
-					var valOptions = textInput.split(/[\,|\n]/);
-					var searchVals = [];
-					array.forEach(valOptions, function (opt) {
-						if (opt && opt.length > 0) {
-							searchVals.push("'" + opt.trim() + "'");
+				this._hideMessage(); 
+				
+				var searchDeferredList = []; 
+				array.forEach(this.config.dataSources, lang.hitch(this, function(ds) {
+					var whereClause;
+					switch (this._selectedOption.input) {
+					case "single":
+						var searchVal = this._filterValues[0].value.trim();
+						whereClause = ds.fields[this._selectedOption.name] + " = '" + searchVal + "'";
+						break;
+					case "multiple":
+						var textInput = this._filterValues[0].value.trim();
+						var valOptions = textInput.split(/[\,|\n]/);
+						var searchVals = [];
+						array.forEach(valOptions, function (opt) {
+							if (opt && opt.length > 0) {
+								searchVals.push("'" + opt.trim() + "'");
+							}
+						});
+						whereClause = ds.fields[this._selectedOption.name] + " in (" + searchVals.join() + ")";
+						break;
+					case "select":
+						var searchVals = [];
+						array.forEach(this._filterValues[0].options, function (opt) {
+							if (opt.selected) {
+								searchVals.push("'" + opt.value + "'");
+							}
+						});
+						whereClause = ds.fields[this._selectedOption.name] + " in (" + searchVals.join() + ")";
+						break;
+					case "range":
+						searchVals = [];
+						array.forEach(this._filterValues, function (fltrVal, i) {
+							searchVals[i%2] = fltrVal.get('displayedValue');
+						});
+						var rangeLimits = [];
+						if (searchVals[0]) {
+							rangeLimits.push(ds.fields[this._selectedOption.name] + " >= '" + searchVals[0] + "'");
 						}
-					});
-					whereClause = this._selectedOption.field + " in (" + searchVals.join() + ")";
-					break;
-				case "select":
-					var searchVals = [];
-					array.forEach(this._filterValues[0].options, function (opt) {
-						if (opt.selected) {
-							searchVals.push("'" + opt.value + "'");
+						if (searchVals[1]) {
+							rangeLimits.push(ds.fields[this._selectedOption.name] + " <= '" + searchVals[1] + "'");
 						}
-					});
-					whereClause = this._selectedOption.field + " in (" + searchVals.join() + ")";
-					break;
-				case "range":
-					searchVals = [];
-					array.forEach(this._filterValues, function (fltrVal, i) {
-						searchVals[i%2] = fltrVal.get('displayedValue');
-					});
-					var rangeLimits = [];
-					if (searchVals[0]) {
-						rangeLimits.push(this._selectedOption.field + " >= '" + searchVals[0] + "'");
+						whereClause = rangeLimits.join(' and ');
+						break;
+					default: 
+						this._showMessage("invalid search option", "error"); 
 					}
-					if (searchVals[1]) {
-						rangeLimits.push(this._selectedOption.field + " <= '" + searchVals[1] + "'");
-					}
-					whereClause = rangeLimits.join(' and ');
-					break;
-				default: 
-					this._showMessage("invalid search option", "error"); 
-				}
-				if (whereClause) {
-					this._executeSearch(whereClause, this._searchParams["limitToMapExtent"]);
-				} else {
-					this._showMessage("invalid search criteria", "error");
-				}
+					if (whereClause) {
+						searchDeferredList.push(
+							this._executeSearch(ds, whereClause, this._searchParams["limitToMapExtent"])
+						);
+					} else {
+						this._showMessage("invalid search criteria", "error");
+					} 
+				})); 
+				
+				all(searchDeferredList).then(lang.hitch(this, function(resultSetArray) {
+					array.forEach(resultSetArray, lang.hitch(this, function(resultSet, index) {
+						var ds = this.config.dataSources[index];
+						this._onSearchComplete(ds.name, resultSet); 
+					})); 
+				}), lang.hitch(this, function(err) {
+					this._showMessage(err, "error"); 
+				})); 
 			},
 
 			_onSearchOptionChecked : function (evt) {
@@ -524,50 +560,58 @@ define([
 						var operationalLayers = this.map.itemInfo.itemData.operationalLayers; 
 						for(var p=0,pl=operationalLayers.length; p<pl; p++) {
 							var serviceLayer = operationalLayers[p]; 
-							for(var f=0,fl=serviceLayer.resourceInfo.layers.length; f<fl; f++) {
-								var featureLayer = serviceLayer.resourceInfo.layers[f]; 
-								var layerURL = serviceLayer["url"] + "/" + featureLayer["id"]; 
-								if (urlRegExp.test(layerURL) == true) {
-									return layerURL; 
+							if (serviceLayer.errors && serviceLayer.errors.length > 0) {
+								this._showMessage("failed to load " + serviceLayer.title, "error"); 
+							} else {
+								for(var f=0,fl=serviceLayer.resourceInfo.layers.length; f<fl; f++) {
+									var featureLayer = serviceLayer.resourceInfo.layers[f]; 
+									var layerURL = serviceLayer["url"] + "/" + featureLayer["id"]; 
+									if (urlRegExp.test(layerURL) == true) {
+										return layerURL; 
+									}
 								}
+								for(var t=0,tl=serviceLayer.resourceInfo.tables.length; t<tl; t++) {
+									var featureTable = serviceLayer.resourceInfo.tables[t]; 
+									var tableURL = serviceLayer["url"] + "/" + featureTable["id"]; 
+									if (urlRegExp.test(tableURL) == true) {
+										return tableURL; 
+									}
+								} 
 							}
-							for(var t=0,tl=serviceLayer.resourceInfo.tables.length; t<tl; t++) {
-								var featureTable = serviceLayer.resourceInfo.tables[t]; 
-								var tableURL = serviceLayer["url"] + "/" + featureTable["id"]; 
-								if (urlRegExp.test(tableURL) == true) {
-									return tableURL; 
-								}
-							} 
 						}
 					} 
 				}
 				return relativeURL; // return as is 
 			}, 
 
-			_showMessage : function (textMsg, lvl) {
-				domClass.remove(this.searchMessage);
-				switch (lvl) {
-				case "error":
-					domClass.add(this.searchMessage, "message-error");
-					break;
-				case "warning":
-					domClass.add(this.searchMessage, "message-warning");
-					break;
-				case "info":
-					domClass.add(this.searchMessage, "message-info");
-					break;
-				default:
-					domClass.add(this.searchMessage, "message-info");
-				}
-				this.searchMessage.innerText = textMsg;
+			_showMessage : function (textMsg, lvl, additional) {
+				var msgNode = domConstruct.create("p", {
+					innerHTML: textMsg
+				}); 
 				
-				domStyle.set(this.searchMessage, "display", "block"); 
+				switch (lvl) {
+					case "error":
+						domClass.add(msgNode, "message-error");
+						break;
+					case "warning":
+						domClass.add(msgNode, "message-warning");
+						break;
+					case "info":
+						domClass.add(msgNode, "message-info");
+						break;
+					default:
+						domClass.add(msgNode, "message-info");
+				}
+				
+				domConstruct.place(msgNode, this.searchMessages, additional==true?"last":"only"); 
+				
+				domStyle.set(this.searchMessages, "display", "block"); 
 			},
 
 			_hideMessage : function () {
-				domStyle.set(this.searchMessage, "display", "none"); 
+				domStyle.set(this.searchMessages, "display", "none"); 
 				
-				this.searchMessage.innerText = "";
+				domConstruct.empty(this.searchMessages);
 			},
 
 			_fetchPartialMatches : function (textInput) {
@@ -582,7 +626,8 @@ define([
 					query.outFields = [this._selectedOption.field];
 					query.num = this.partialMatchMaxNumber; 
 
-					this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
+					var queryTask = new QueryTask(this._selectedOption.layer); 
+					queryTask.execute(query, lang.hitch(this, function (resultSet) {
 							var valueArray = [];
 							if (resultSet && resultSet.features && resultSet.features.length > 0) {
 								array.forEach(resultSet.features, lang.hitch(this, function (feature, i) {
@@ -604,10 +649,8 @@ define([
 
 				return deferred.promise;
 			},
-
-			_executeSearch : function (whereClause, boundByMapExtent) {
-				this._showMessage("searching..."); 
-				
+			
+			_executeSearch : function (dataSource, whereClause, boundByMapExtent) {
 				var query = new Query();
 				query.where = whereClause;
 				query.outSpatialReference = this.map.spatialReference;
@@ -619,40 +662,34 @@ define([
 					query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
 				}
 
-				this._queryTask.execute(query, lang.hitch(this, function (resultSet) {
-						if (resultSet && resultSet.features) {
-							if (resultSet.features.length > 0) {
-								if (resultSet.exceededTransferLimit === true) {
-									this._showMessage("exceed search limit. only first " 
-										+ resultSet.features.length + " feature(s) displayed", "warning"); 
-								} else {
-									this._showMessage(resultSet.features.length + " feature(s) found");
-								}
-							} else {
-								this._showMessage("no feature found", "warning");
-							}
-							// turn on query layer and other relevant layers
-							this._displayMapLayers(this.config.visibleLayers); 
+				var queryTask = new QueryTask(dataSource.layer);
+				
+				return queryTask.execute(query); 
+			}, 
+			
+			_onSearchComplete : function(dataSourceName, resultSet) {
+				if (resultSet && resultSet.features) {
+					console.debug(dataSourceName + " results: " + resultSet.features.length);
+					if (resultSet.features.length > 0) {
+						if (resultSet.exceededTransferLimit === true) {
+							this._showMessage(dataSourceName + ": exceed search limit. only first " 
+								+ resultSet.features.length + " feature(s) displayed", "warning", true); 
 						} else {
-							// in case null resultSet, set empty value
-							resultSet = {"features": []}; 
-						} 
+							this._showMessage(dataSourceName + ": " + resultSet.features.length 
+								+ " feature(s) found", "info", true);
+						}
 						if (this._renderType === "featureLayer") {
-							this._drawFeaturesOnMap(resultSet); 
+							this._drawFeaturesOnMap(dataSourceName, resultSet); 
 						} else {
 							this._drawGraphicsOnMap(resultSet); 
 						} 
-					}), lang.hitch(this, function (err) {
-						this._showMessage(err.message, "error");
-						// clear the render layer
-						if (this._renderType === "featureLayer") {
-							this._featureLayer.clear(); 
-						} else {
-							this._graphicLayer.clear(); 
-						} 
-					})
-				);
-			},
+					} else {
+						this._showMessage(dataSourceName + ": no feature found", "warning", true);
+					}
+				} 
+				// turn on query layer and other relevant layers
+				this._displayMapLayers(this.config.visibleLayers); 
+			}, 
 
 			_drawGraphicsOnMap : function (resultSet, clearFirst/*default: true*/) {
 				if (clearFirst !== false) {
@@ -710,9 +747,15 @@ define([
 				this._zoomToExtent(resultExtent); 
 			}, 
 
-			_drawFeaturesOnMap : function (resultSet, clearFirst/*default: true*/) {
+			_drawFeaturesOnMap : function (dataSourceName, resultSet, clearFirst/*default: true*/) {
+				var featureLayer = this._featureLayers[dataSourceName]; 
+				if (!featureLayer) {
+					this._showMessage(dataSourceName + ": can't find results", "error", true); 
+					return; 
+				}
+				
 				if (clearFirst !== false) {
-					this._featureLayer.clear();
+					featureLayer.clear();
 				}
 				
 				var resultExtent = null,
@@ -750,14 +793,15 @@ define([
 				this._zoomToExtent(resultExtent); 
 
 				if (featureArray.length > 0) {
-					this._featureLayer.applyEdits(featureArray, null, null, 
+					featureLayer.applyEdits(featureArray, null, null, 
 						lang.hitch(this, function() {
-							console.debug("resultset is added into FeatureLayer");  
+							console.debug("resultset is added into FeatureLayer for " + dataSourceName);  
 							// open AttributeTable and display the results 
-							this._showResultsInAttributeTable(); 
+							this._showResultsInAttributeTable(dataSourceName); 
 						}), 
 						lang.hitch(this, function(err) {
-							this._showMessage(err.message || "failed to show search results", "error"); 
+							this._showMessage( dataSourceName + ": " 
+								+ (err.message || "failed to show search results"), "error", true); 
 						})
 					); 	
 				}
@@ -774,7 +818,7 @@ define([
 				} 
 			},
 			
-			_showResultsInAttributeTable : function() {
+			_showResultsInAttributeTable : function(dataSourceName) {
 				var attributeTableWidgetEle =
 					this.appConfig.getConfigElementsByName("AttributeTable")[0];
 				var widgetManager = WidgetManager.getInstance();
@@ -782,7 +826,7 @@ define([
 					lang.hitch(this, function() {
 						this.publishData({
 							'target': 'AttributeTable',
-							'layer': this._featureLayer
+							'layer': this._featureLayers[dataSourceName]
 						});
 					})
 				);	
