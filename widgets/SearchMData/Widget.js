@@ -52,8 +52,8 @@ define([
 		Memory, LoadingIndicator, Popup, ComboBox, DateTextBox) {
 
 	var clazz = declare([BaseWidget, _WidgetsInTemplateMixin], {
-			name : 'SearchLease',
-			baseClass : 'ev-widget-searchLease',
+			name : 'SearchMData',
+			baseClass : 'ev-widget-searchMData',
 			partialMatchMaxNumber : 100, 
 			partialMatchMinInputLength : 3, 
 			_searchParams : {},

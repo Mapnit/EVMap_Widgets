@@ -1,18 +1,18 @@
-.ev-widget-searchLease{
+.ev-widget-searchMData{
 	width: 100%;
 	height: 100%;
 	min-width: 250px;
 	min-height: 192px;
 }
 
-.ev-widget-searchLease .option-section{
+.ev-widget-searchMData .option-section{
 }
 
-.ev-widget-searchLease .option-list-prompt{
+.ev-widget-searchMData .option-list-prompt{
 	padding-bottom: 10px; 
 }
 
-.ev-widget-searchLease .option-list{
+.ev-widget-searchMData .option-list{
 	border: 2px groove;
 	border-radius: 5px;
 	padding: 5px 0px 5px 7px; 
@@ -20,99 +20,99 @@
 	margin-top: 5px; 
 }
 
-.ev-widget-searchLease .option-list-item{
+.ev-widget-searchMData .option-list-item{
 	vertical-align: top;
 	padding: 2px; 
 }
 
-.ev-widget-searchLease .filter-section{
+.ev-widget-searchMData .filter-section{
 }
 
-.ev-widget-searchLease .filter-prompt{
+.ev-widget-searchMData .filter-prompt{
 	padding-bottom: 10px; 
 }
 
-.ev-widget-searchLease .filter-input{
+.ev-widget-searchMData .filter-input{
 	width: 100%; 
 	padding-left: 5px; 
 	padding-top: 10px; 	
 }
 
-.ev-widget-searchLease .filter-input-field{
+.ev-widget-searchMData .filter-input-field{
     padding-top: 0.35em;
     padding-bottom: 0.35em;
 }
 
-.ev-widget-searchLease .filter-input-label{
+.ev-widget-searchMData .filter-input-label{
 	vertical-align: top;
 	padding-top: 5px; 
 	padding-right: 5px; 
 }
 
-.ev-widget-searchLease .nav-section{
+.ev-widget-searchMData .nav-section{
 	width: 100%; 
 	padding-bottom: 10px; 	
 }
 
-.ev-widget-searchLease .nav-btn-cancel{
+.ev-widget-searchMData .nav-btn-cancel{
 	float: left;
 	margin-left: 5px; 
 	display: none; 
 }
 
-.ev-widget-searchLease .nav-btn-cancel-icon{
+.ev-widget-searchMData .nav-btn-cancel-icon{
 	background-image: url(../images/cancel.png);
 	width: 16px;
 	height: 16px;
 }
 
-.ev-widget-searchLease .nav-btn-prev{
+.ev-widget-searchMData .nav-btn-prev{
 	float: left;
 	margin-left: 5px; 
 }
 
-.ev-widget-searchLease .nav-btn-prev-icon{
+.ev-widget-searchMData .nav-btn-prev-icon{
 	background-image: url(../images/prev.png);
 	width: 16px;
 	height: 16px;
 }
 
-.ev-widget-searchLease .nav-btn-next{
+.ev-widget-searchMData .nav-btn-next{
 	float: right;
 	margin-right: 5px; 
 }
 
-.ev-widget-searchLease .nav-btn-next-icon{
+.ev-widget-searchMData .nav-btn-next-icon{
 	background-image: url(../images/next.png);
 	width: 16px;
 	height: 16px;
 }
 
-.ev-widget-searchLease .nav-btn-end{
+.ev-widget-searchMData .nav-btn-end{
 	float: right;
 	margin-right: 5px; 
 }
 
-.ev-widget-searchLease .nav-btn-end-icon{
+.ev-widget-searchMData .nav-btn-end-icon{
 	background-image: url(../images/search.png);
 	width: 16px;
 	height: 16px;
 }
 
-.ev-widget-searchLease .message-section{
+.ev-widget-searchMData .message-section{
 	width: 100%; 
 	margin-top: 25px; 
 	text-align: center; 
 }
 
-.ev-widget-searchLease .message-info{
+.ev-widget-searchMData .message-info{
 	font-size: 12px; 
 	color: #444444; 
 	font-weight: bolder;
 	padding: 5px; 
 }
 
-.ev-widget-searchLease .message-warning{
+.ev-widget-searchMData .message-warning{
 	font-size: 12px; 
 	background-color: yellow; 
 	color: #444444; 
@@ -120,7 +120,7 @@
 	padding: 5px; 
 }
 
-.ev-widget-searchLease .message-error{
+.ev-widget-searchMData .message-error{
 	font-size: 12px; 
 	background-color: red; 
 	color: yellow; 

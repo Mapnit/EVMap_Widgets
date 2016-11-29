@@ -6,6 +6,6 @@ define([
   ],
   function(declare, _WidgetsInTemplateMixin, BaseWidgetSetting) {
     return declare([BaseWidgetSetting, _WidgetsInTemplateMixin], {
-      baseClass: 'ev-widget-searchLease-setting'
+      baseClass: 'ev-widget-searchMData-setting'
     });
   });

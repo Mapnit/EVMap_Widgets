@@ -338,11 +338,11 @@
         "icon": "widgets/SearchData/images/icon.png?wab_dv=2.1"
       },
       {
-        "name": "SearchLease",
-        "label": "Search Leases",
+        "name": "SearchMData",
+        "label": "Search Multiple Data",
         "version": "2.1",
-        "uri": "widgets/SearchLease/Widget",
-        "icon": "widgets/SearchLease/images/icon.png?wab_dv=2.1"
+        "uri": "widgets/SearchMData/Widget",
+        "icon": "widgets/SearchMData/images/icon.png?wab_dv=2.1"
       },
       {
         "name": "SearchSurvey",
