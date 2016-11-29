@@ -333,6 +333,7 @@ define([
 						this._showMessage("invalid search option", "error"); 
 					}
 					if (whereClause) {
+						this._showMessage("search ...");
 						searchDeferredList.push(
 							this._executeSearch(ds, whereClause, this._searchParams["limitToMapExtent"])
 						);
@@ -342,12 +343,13 @@ define([
 				})); 
 				
 				all(searchDeferredList).then(lang.hitch(this, function(resultSetArray) {
+					this._hideMessage(); 
 					array.forEach(resultSetArray, lang.hitch(this, function(resultSet, index) {
 						var ds = this.config.dataSources[index];
 						this._onSearchComplete(ds.name, resultSet); 
 					})); 
 				}), lang.hitch(this, function(err) {
-					this._showMessage(err, "error"); 
+					this._showMessage(err.message, "error"); 
 				})); 
 			},
 
