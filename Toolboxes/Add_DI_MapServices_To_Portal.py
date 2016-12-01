@@ -225,9 +225,9 @@ def createPortalProxy(portalUrl, portalToken, portalUser, folderUID, serviceType
 
     return sendRequest(requestJson, requestUrl, "create portal proxy")
 
-def ItemExists(folderInfo, searchItem):
+def ItemExists(folderInfo, searchItemName, searchItemType):
     for item in folderInfo.items:
-        if item.title.lower() == searchItem.lower():
+        if item.title.lower() == searchItemName.lower() and item.type.lower() == searchItemType.lower():
             return True
 
     return False
@@ -375,11 +375,12 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                            + (str(mapService[0].split('/')[-1]) if serviceJson.mapName == "Layers" else serviceJson.mapName)
             '''
 
+            serviceType = mapService[4]
+
             #if the proxy doesn't exist
-            if not ItemExists(portalFolderInfo, serviceTitle):
+            if not ItemExists(portalFolderInfo, serviceTitle, serviceType):
 
                 #set the proxy information
-                serviceType = mapService[4]
                 serviceTypeKeywords = serviceJson.capabilities
                 #serviceTags = serviceJson.documentInfo.Keywords
                 # - add additional tags
@@ -418,12 +419,12 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                         proxyCreated = True
 
                 if proxyCreated:
-                    arcpy.AddMessage("Proxy Created Successfully: {}:{}".format(serviceTitle, mapProxy.id))
+                    arcpy.AddMessage("Proxy Created Successfully: {} ({}):{}".format(serviceTitle, serviceType, mapProxy.id))
                 else:
-                    arcpy.AddWarning("Proxy Not Created For: {}".format(mapService))
+                    arcpy.AddWarning("Proxy Not Created For: {} ({})".format(mapService, serviceType))
 
             else:
-                arcpy.AddMessage("Proxy Exists: {}".format(serviceTitle))
+                arcpy.AddMessage("Proxy Exists: {} {{})".format(serviceTitle, serviceType))
 
 if __name__ == "__main__":
     #so we can run from command line
