@@ -407,6 +407,7 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                 imageType = serviceJson.supportedImageFormatTypes.split(",")[0] if hasattr(serviceJson, 'supportedImageFormatTypes') else 'png32'
                 imageExtent = "{},{},{},{}".format(serviceJson.fullExtent.xmin,serviceJson.fullExtent.ymin,serviceJson.fullExtent.xmax,serviceJson.fullExtent.ymax)
                 serviceThumbnailUrl = "{}/export?size=200,133&f=image&bbox={}&format={}&token={}".format(serviceUrl, imageExtent, imageType, agsToken.token)
+                #print("serviceThumbnailUrl: {}".format(serviceThumbnailUrl))
 
                 #create the proxy in the IHS proxy folder
                 mapProxy = createPortalProxy(portalUrl, portalToken.token, portalUser, folderUID, serviceType, serviceTypeKeywords, serviceUrl, serviceTitle, serviceTags, diUser, diPassword, serviceDescription, serviceSnippet, serviceAccessInformation, serviceSpatialReference, serviceExtent, serviceThumbnailUrl)
