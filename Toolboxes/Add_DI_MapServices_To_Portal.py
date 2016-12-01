@@ -3,6 +3,8 @@ import json
 from argparse import Namespace
 import arcpy
 import sys
+from urlparse import urlparse
+import httplib
 
 #support python 2&3
 try:
@@ -10,7 +12,7 @@ try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
-    from urllib import urlopen
+    from urllib2 import urlopen
 
 #this folder will get created in the users portal
 targetFolder = "DI Map Services"
@@ -24,6 +26,67 @@ agsEMS = "https://geodata-services.drillinginfo.com/arcgis/rest/services"
 servers = [[agsEMSToken, agsEMSTokenUrl, agsEMS, None]]
 
 def sendRequest(data, url, requesttype='generic request'):
+
+    headers = {}
+
+    urlProps = urlparse(url)
+    urlHost = urlProps.hostname
+    urlPort = urlProps.port
+
+    if urlHost is None:
+        print('No host name specified in the request for {}'.format(requesttype))
+        return None
+
+    if urlPort is None:
+        if urlProps.scheme == "https":
+            urlPort = 443
+        else: # if urlProps.scheme == "http":
+            urlPort = 80
+
+    # set headers
+    headers = { "Content-type": "application/x-www-form-urlencoded",
+                "Accept": "text/plain" }
+
+    # Connect to URL
+    httpConn = httplib.HTTPSConnection(urlHost, urlPort)  # over HTTPS
+
+    # encode parameters
+    #print("{} params: {}".format(requesttype, data))
+    params = urlencode(data)
+    params = params.encode('utf-8')
+
+    # send request
+    httpConn.request("POST", url, params, headers)
+
+    # Read response
+    response = httpConn.getresponse()
+    if response.status != 200:
+        httpConn.close()
+        print('Error occurred sending the request for {}: {}'.format(requesttype, response.status))
+        return None
+    else:
+        data = response.read()
+        httpConn.close()
+
+        try:
+            #load response to server object
+            serverObject = json.loads(data, object_hook=lambda d: Namespace(**d))
+
+            #check for errors
+            if hasattr(serverObject, 'error'):
+                print(serverObject.error.message)
+                for detail in serverObject.error.details:
+                    print(detail)
+                return None
+            else:
+                return serverObject
+        except:
+            print('An unspecified error occurred sending the request for {}'.format(requesttype))
+            e = sys.exc_info()[1]
+            print(e.args[0])
+            return None
+
+def sendRequest_HTTP(data, url, requesttype='generic request'):
 
     #server encoding
     encoding = 'utf-8'
