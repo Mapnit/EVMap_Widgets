@@ -12,23 +12,16 @@ except ImportError:
     from urllib import urlencode
     from urllib import urlopen
 
-#service endpoint for retrieving ArcGIS Server information
-serverInfoUrl = "http://smeridianicses.ihsglobal.local/portaltools/api/servers"
-
 #this folder will get created in the users portal
-targetFolder = "IHS Map Services"
-exclusionFolders = ["enerdeq", "wms"]
-
-agsMeridianToken = None
-agsMeridianTokenUrl = "https://meridianmapservices.ihsenergy.com/administration/generateToken"
-agsMeridian = "https://meridianmapservices.ihsenergy.com/wss/service/ags-relay/EMS_2_00/agstoken/arcgis/rest/services"
+targetFolder = "DI Map Services"
+exclusionFolders = ["Utilities"]
 
 agsEMSToken = None
-agsEMSTokenUrl = "https://mapservices.ihs.com/administration/generateToken"
-agsEMS = "https://mapservices.ihs.com/wss/service/ags-relay/EMS_1_00/agstoken/arcgis/rest/services"
+agsEMSTokenUrl = "https://geodata-services.drillinginfo.com/arcgis/tokens/generateToken"
+agsEMS = "https://geodata-services.drillinginfo.com/arcgis/rest/services"
 
 #will read all map services from these ags
-servers = [[agsMeridianToken, agsMeridianTokenUrl, agsMeridian, "Meridian"],[agsEMSToken, agsEMSTokenUrl, agsEMS, "EMS"]]
+servers = [[agsEMSToken, agsEMSTokenUrl, agsEMS, None]]
 
 def sendRequest(data, url, requesttype='generic request'):
 
@@ -65,8 +58,8 @@ def getPortalToken(username, password, portalUrl):
     '''Retrieves a token to be used with API requests.'''
     requestJson = {'username' : username,
                     'password' : password,
-                    'client' : 'referer',
-                    'referer': portalUrl,
+                    'client' : 'requestip',
+                    # 'referer': portalUrl,
                     'expiration': 60,
                     'f' : 'json'}
 
@@ -101,7 +94,7 @@ def getPortalInfo(portalUrl, portalToken):
                     'f' : 'json'}
 
     requestUrl = portalUrl + '/sharing/rest/portals/self?'
-    
+
     return sendRequest(requestJson, requestUrl, "portal info")
 
 def createPortalFolder(portalFolderName, portalUser, portalUrl, portalToken):
@@ -124,7 +117,7 @@ def getAgsToken(tokenUrl, agsUser, agsPassword):
                     'f' : 'json'}
 
 	requestUrl = tokenUrl + '?'
-	
+
 	return sendRequest(requestJson, requestUrl, "ArcGIS Server token")
 
 def getAgsMapServices(agsToken, agsServicesDirectory):
@@ -175,7 +168,7 @@ def ItemExists(folderInfo, searchItem):
     return False
 
 def ProjectExtent(extent, outSystem):
-    sr = arcpy.SpatialReference(extent.spatialReference.wkid)    
+    sr = arcpy.SpatialReference(extent.spatialReference.wkid)
     srOut = arcpy.SpatialReference(outSystem)
 
     ex = arcpy.Extent(extent.xmin, extent.ymin, extent.xmax, extent.ymax)
@@ -204,15 +197,13 @@ def GetServers():
     servers = json.load(response)
     return servers
 
-def CreatePortalProxies(portalUrl, portalUser, portalPassword, ihsUser, ihsPassword):
-
-    #servers = GetServers()
+def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPassword):
 
     if '*' in portalPassword:
         portalPassword = arcpy.GetParameterAsText(2)
 
-    if '*' in ihsPassword:
-        ihsPassword = arcpy.GetParameterAsText(4)
+    if '*' in diPassword:
+        diPassword = arcpy.GetParameterAsText(4)
 
     #get portal token and other info
     portalToken = getPortalToken(portalUser, portalPassword, portalUrl)
@@ -234,18 +225,18 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, ihsUser, ihsPassw
         return
 
     #validate accounts
-    ihsAccountsValid = True
+    diAccountsValid = True
     for server in servers:
         #query ags server token
-        agsToken = getAgsToken(server[1], ihsUser, ihsPassword)
+        agsToken = getAgsToken(server[1], diUser, diPassword)
 
         if not agsToken:
-            arcpy.AddError("IHS Account Invalid ({})".format(server[3]))
-            ihsAccountsValid = False
+            arcpy.AddError("DI Account Invalid ({})".format(server[3]))
+            diAccountsValid = False
         else:
             server[0] = agsToken
 
-    if not ihsAccountsValid:
+    if not diAccountsValid:
         return
 
     #create portal folder if needed
@@ -328,8 +319,8 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, ihsUser, ihsPassw
                 serviceThumbnailUrl = "{}/export?size=200,133&f=image&bbox={}&format={}&token={}".format(serviceUrl, imageExtent, imageType, agsToken.token)
 
                 #create the proxy in the IHS proxy folder
-                mapProxy = createPortalProxy(portalUrl, portalToken.token, portalUser, folderUID, serviceType, serviceTypeKeywords, serviceUrl, serviceTitle, serviceTags, ihsUser, ihsPassword, serviceDescription, serviceSnippet, serviceAccessInformation, serviceSpatialReference, serviceExtent, serviceThumbnailUrl)
-                
+                mapProxy = createPortalProxy(portalUrl, portalToken.token, portalUser, folderUID, serviceType, serviceTypeKeywords, serviceUrl, serviceTitle, serviceTags, diUser, diPassword, serviceDescription, serviceSnippet, serviceAccessInformation, serviceSpatialReference, serviceExtent, serviceThumbnailUrl)
+
                 proxyCreated = False
                 if mapProxy:
                     if bool(mapProxy.success):
@@ -339,7 +330,7 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, ihsUser, ihsPassw
                     arcpy.AddMessage("Proxy Created Successfully: {}:{}".format(serviceTitle, mapProxy.id))
                 else:
                     arcpy.AddWarning("Proxy Not Created For: {}".format(mapService))
-                    
+
             else:
                 arcpy.AddMessage("Proxy Exists: {}".format(serviceTitle))
 
