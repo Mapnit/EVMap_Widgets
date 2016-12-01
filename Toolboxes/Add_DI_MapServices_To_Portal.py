@@ -392,7 +392,6 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                               + (",Drilling Info")
                 '''
                 serviceDescription = serviceJson.serviceDescription.encode('ascii',errors='ignore') # description
-                serviceSnippet =  (serviceJson.description + " Map Service provided by Drilling Info.").encode('ascii',errors='ignore') # summary
                 serviceAccessInformation = serviceJson.copyrightText.encode('ascii',errors='ignore')
                 #serviceAccessInformation = u"\N{COPYRIGHT SIGN}" + unicode(serviceAccessInformation)
                 serviceSpatialReference = serviceJson.initialExtent.spatialReference.wkid
