@@ -62,6 +62,7 @@ def sendRequest(data, url, requesttype='generic request'):
     response = httpConn.getresponse()
     if response.status != 200:
         httpConn.close()
+        arcpy.AddError('Error occurred sending the request for {}: {}'.format(requesttype, response.status))
         print('Error occurred sending the request for {}: {}'.format(requesttype, response.status))
         return None
     else:
@@ -74,6 +75,7 @@ def sendRequest(data, url, requesttype='generic request'):
 
             #check for errors
             if hasattr(serverObject, 'error'):
+                arcpy.AddError(serverObject.error.message)
                 print(serverObject.error.message)
                 for detail in serverObject.error.details:
                     print(detail)
@@ -81,7 +83,7 @@ def sendRequest(data, url, requesttype='generic request'):
             else:
                 return serverObject
         except:
-            print('An unspecified error occurred sending the request for {}'.format(requesttype))
+            print('bad response returned from sending the request for {}'.format(requesttype))
             e = sys.exc_info()[1]
             print(e.args[0])
             return None
@@ -318,7 +320,7 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
         if folder:
             folderUID =  folder.folder.id
         else:
-            print("Portal Folder Could Not Be Created")
+            arcpy.AddError("Portal Folder Could Not Be Created")
             return
 
     #get the portal folder information
