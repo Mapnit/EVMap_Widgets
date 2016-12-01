@@ -240,7 +240,8 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
         return
 
     #create portal folder if needed
-    targetUserFolder = "{} ({})".format(targetFolder, ihsUser)
+    targetUserFolder = "{}".format(targetFolder) # omit the specific username
+    #targetUserFolder = "{} ({})".format(targetFolder, diUser)
     folderUID = ""
     for folderItem in userInfo.folders:
 
@@ -296,7 +297,14 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
             serviceJson = getAgsServiceInfo(serviceUrl, agsToken.token)
 
             #create the service title for the proxy
-            serviceTitle = "{} -- {} -- {}".format(mapService[2], mapService[1], serviceJson.mapName)
+            #serviceTitle = "{} -- {} -- {}".format(mapService[2], mapService[1], serviceJson.mapName)
+            serviceTitle = mapService[0].split('/')[-1] if serviceJson.mapName == "Layers" else serviceJson.mapName
+            serviceTitle = serviceTitle.replace('_', ' ')
+            '''
+            serviceTitle = ("" if mapService[2] is None else "{} -- ".format(mapService[2])) \
+                           + ("" if mapService[1] == "Root" else "{} -- ".format(mapService[1])) \
+                           + (str(mapService[0].split('/')[-1]) if serviceJson.mapName == "Layers" else serviceJson.mapName)
+            '''
 
             #if the proxy doesn't exist
             if not ItemExists(portalFolderInfo, serviceTitle):
@@ -304,9 +312,22 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                 #set the proxy information
                 serviceType = 'Map Service'
                 serviceTypeKeywords = serviceJson.capabilities
-                serviceTags = serviceJson.documentInfo.Keywords
-                serviceDescription = serviceJson.description
-                serviceSnippet = serviceJson.description
+                #serviceTags = serviceJson.documentInfo.Keywords
+                # - add additional tags
+                if len(serviceJson.documentInfo.Keywords.strip()) > 0:
+                    serviceTags = serviceJson.documentInfo.Keywords
+                else:
+                    serviceTags = ','.join(mapService[0].split('/')[-1].split('_'))
+                serviceTags += (',Drilling Info')
+                '''
+                serviceTags = ("" if len(serviceJson.documentInfo.Keywords.strip()) == 0 else "{},".format(serviceJson.documentInfo.Keywords)) \
+                              + ("{},".format(mapService[0].split('/')[-1] if serviceJson.mapName == "Layers" else serviceJson.mapName)) \
+                              + ("" if mapService[1] == "Root" else "{},".format(mapService[1])) \
+                              + ("" if mapService[2] is None else "{},".format(mapService[2])) \
+                              + (",Drilling Info")
+                '''
+                serviceDescription = serviceJson.serviceDescription.encode('ascii',errors='ignore') # description
+                serviceSnippet =  (serviceJson.description + " Map Service provided by Drilling Info.").encode('ascii',errors='ignore') # summary
                 serviceAccessInformation = serviceJson.copyrightText.encode('ascii',errors='ignore')
                 #serviceAccessInformation = u"\N{COPYRIGHT SIGN}" + unicode(serviceAccessInformation)
                 serviceSpatialReference = serviceJson.initialExtent.spatialReference.wkid
