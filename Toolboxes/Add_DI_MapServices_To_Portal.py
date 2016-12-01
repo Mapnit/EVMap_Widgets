@@ -346,24 +346,28 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                     if folderInfo:
                         for serviceInfo in folderInfo.services:
                             if serviceInfo.type == "MapServer":
-                                mapServices.append(["{}/{}".format(server[2], serviceInfo.name), serverFolder, server[3]])
+                                mapServices.append(["{}/{}".format(server[2], serviceInfo.name), serverFolder, server[3], serviceInfo.type, "Map Service"])
+                            elif serviceInfo.type == "FeatureServer":
+                                mapServices.append(["{}/{}".format(server[2], serviceInfo.name), serverFolder, server[3], serviceInfo.type, "Feature Service"])
                     else:
                         arcpy.AddWarning("Folder: {} Could Not Be Read".format(serverFolder))
 
             #search root
             for serviceInfo in serverInfo.services:
                 if serviceInfo.type == "MapServer":
-                    mapServices.append(["{}/{}".format(server[2], serviceInfo.name), "Root", server[3]])
+                    mapServices.append(["{}/{}".format(server[2], serviceInfo.name), "Root", server[3], serviceInfo.type, "Map Service"])
+                elif serviceInfo.type == "FeatureServer":
+                    mapServices.append(["{}/{}".format(server[2], serviceInfo.name), "Root", server[3], serviceInfo.type, "Feature Service"])
 
 
         for mapService in mapServices:
 
-            serviceUrl = "{}/MapServer".format(mapService[0])
+            serviceUrl = "{}/{}".format(mapService[0], mapService[3])
             serviceJson = getAgsServiceInfo(serviceUrl, agsToken.token)
 
             #create the service title for the proxy
             #serviceTitle = "{} -- {} -- {}".format(mapService[2], mapService[1], serviceJson.mapName)
-            serviceTitle = mapService[0].split('/')[-1] if serviceJson.mapName == "Layers" else serviceJson.mapName
+            serviceTitle = mapService[0].split('/')[-1] if (not hasattr(serviceJson, 'mapName')) or serviceJson.mapName == "Layers" else serviceJson.mapName
             serviceTitle = serviceTitle.replace('_', ' ')
             '''
             serviceTitle = ("" if mapService[2] is None else "{} -- ".format(mapService[2])) \
@@ -375,7 +379,7 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
             if not ItemExists(portalFolderInfo, serviceTitle):
 
                 #set the proxy information
-                serviceType = 'Map Service'
+                serviceType = mapService[4]
                 serviceTypeKeywords = serviceJson.capabilities
                 #serviceTags = serviceJson.documentInfo.Keywords
                 # - add additional tags
@@ -383,7 +387,7 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                     serviceTags = serviceJson.documentInfo.Keywords
                 else:
                     serviceTags = ','.join(mapService[0].split('/')[-1].split('_'))
-                serviceTags += (',Drilling Info')
+                    serviceTags += (',drillinginfo')
                 '''
                 serviceTags = ("" if len(serviceJson.documentInfo.Keywords.strip()) == 0 else "{},".format(serviceJson.documentInfo.Keywords)) \
                               + ("{},".format(mapService[0].split('/')[-1] if serviceJson.mapName == "Layers" else serviceJson.mapName)) \
@@ -400,7 +404,7 @@ def CreatePortalProxies(portalUrl, portalUser, portalPassword, diUser, diPasswor
                 serviceExtent = ProjectExtent(serviceJson.fullExtent, "WGS 1984")
 
                 #create the proxy thumbnail url
-                imageType = serviceJson.supportedImageFormatTypes.split(",")[0]
+                imageType = serviceJson.supportedImageFormatTypes.split(",")[0] if hasattr(serviceJson, 'supportedImageFormatTypes') else 'png32'
                 imageExtent = "{},{},{},{}".format(serviceJson.fullExtent.xmin,serviceJson.fullExtent.ymin,serviceJson.fullExtent.xmax,serviceJson.fullExtent.ymax)
                 serviceThumbnailUrl = "{}/export?size=200,133&f=image&bbox={}&format={}&token={}".format(serviceUrl, imageExtent, imageType, agsToken.token)
 
