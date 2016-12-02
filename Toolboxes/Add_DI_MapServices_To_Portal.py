@@ -123,8 +123,8 @@ def getPortalToken(username, password, portalUrl):
     '''Retrieves a token to be used with API requests.'''
     requestJson = {'username' : username,
                     'password' : password,
-                    'client' : 'requestip',
-                    # 'referer': portalUrl,
+                    'client' : 'referer',
+                    'referer': portalUrl,
                     'expiration': 60,
                     'f' : 'json'}
 
