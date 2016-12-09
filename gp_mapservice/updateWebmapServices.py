@@ -96,6 +96,8 @@ def updateWebmapService(webmapId, oldUrl, newUrl, token, portalUrl):
         itemDataReq = urllib.urlopen(reqUrl).read()
         itemString = str(itemDataReq)
 
+        print 'item data: ' + itemString
+
         # Find the service URL to be replaced.
         if itemString.find(oldUrl) > -1:
             newString = itemString.replace(oldUrl, newUrl)
@@ -189,7 +191,8 @@ if __name__ == '__main__':
     portal = args.portal
     username = args.username
     password = args.password
-    query = args.query
+    query = 'owner:EV_GIS' if args.query == 'None' else args.query
+    # query = 'web map' if args.query == 'None' else args.query
     oldUrl = args.oldUrl
     newUrl = args.newUrl
 
@@ -203,7 +206,10 @@ if __name__ == '__main__':
                            token=token)
 
     for item in content:
-        if item['type'] == 'Web Map':
+        #print 'item (' + item['type'] + '): ' + item['title'] + ' - ' + item['id']
+        print 'item :' + str(item)
+        #if item['type'] == 'Web Map':
+        if item['type'] == 'Map Service':
             updateWebmapService(item['id'], oldUrl, newUrl, token=token,
                                 portalUrl=portal)
 
