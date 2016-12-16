@@ -6,7 +6,7 @@
 	  "dataType": "text",
 	  "input": "single",
 	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided", 
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
 	  "field": "LEASE_NO"
 	}, {
 	  "name": "multipleLeases",
@@ -20,7 +20,7 @@
 	  "dataType": "text",
 	  "input": "single",
 	  "prompt": "Enter a lessee name below, as you type matching lessee names will be provided",
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
 	  "field": "LESSEE"	  
 	}, {
 	  "name": "lessor",
@@ -28,7 +28,7 @@
 	  "dataType": "text",
 	  "input": "single",
 	  "prompt": "Enter a lessor name below, as you type matching lessor names will be provided",
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
 	  "field": "LESSOR"	  
 	}, {
 	  "name": "status",
@@ -36,7 +36,7 @@
 	  "dataType": "text",
 	  "input": "select",
 	  "prompt": "Select at least one status from the following list:", 
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
 	  "field": "STATUS"	  
 	}, {
 	  "name": "expirationDate",
