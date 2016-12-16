@@ -1,0 +1,114 @@
+{
+    "prompt": "How do you want to search for leases?",
+    "options": [{
+	  "name": "singleLease",
+	  "label": "Single Lease Number",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided", 
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "field": "LEASE_NO"
+	}, {
+	  "name": "multipleLeases",
+	  "label": "Multiple Lease Numbers",
+	  "dataType": "text",
+	  "input": "multiple",
+	  "prompt": "Enter a comma-separated list of lease numbers"
+	}, {
+	  "name": "lessee",
+	  "label": "Lessee",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessee name below, as you type matching lessee names will be provided",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "field": "LESSEE"	  
+	}, {
+	  "name": "lessor",
+	  "label": "Lessor",
+	  "dataType": "text",
+	  "input": "single",
+	  "prompt": "Enter a lessor name below, as you type matching lessor names will be provided",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "field": "LESSOR"	  
+	}, {
+	  "name": "status",
+	  "label": "Status",
+	  "dataType": "text",
+	  "input": "select",
+	  "prompt": "Select at least one status from the following list:", 
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15",
+	  "field": "STATUS"	  
+	}, {
+	  "name": "expirationDate",
+	  "label": "Expiration Date",
+	  "dataType": "date",
+	  "input": "range",
+	  "rangeLabels": ["From", "To"],
+	  "prompt": "Use the fields below to specify the date range you wish to search"
+	}],  
+    "dataSources": [{
+	  "name": "P2 Lease Tracts",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15", 
+	  "fields": {
+		"singleLease": "DSPLY_NAME", 
+		"multipleLeases": "DSPLY_NAME", 
+		"lessee": "LESSEE", 
+		"lessor": "LESSOR", 
+		"status": "STATUS", 
+		"expirationDate": "EXP_DATE"
+	  }
+	}, { 
+	  "name": "P2 Leases",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16", 
+	  "fields": {
+		"singleLease": "DSPLY_NAME", 
+		"multipleLeases": "DSPLY_NAME", 
+		"lessee": "LESSEE", 
+		"lessor": "LESSOR", 
+		"status": "STATUS", 
+		"expirationDate": "EXP_DATE"
+	  }
+	}], 
+	"visibleLayers": [
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/2",  
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/18",
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/19",
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/20"
+	],	
+	"limitToMapExtent": false, 
+	"renderType": "featureLayer", 
+	"renderSymbols": {
+		"esriGeometryPolygon" : {
+			"type" : "esriSFS",
+			"style" : "esriSFSSolid",
+			"color" : [0, 255, 255, 64],
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 2
+			}
+		},
+		"esriGeometryPolyline" : {
+			"type" : "esriSLS",
+			"style" : "esriSLSSolid",
+			"color" : [0, 255, 255, 255],
+			"width" : 2
+		},
+		"esriGeometryPoint" : {
+			"type" : "esriSMS",
+			"style" : "esriSMSCircle",
+			"color" : [0, 255, 255, 128],
+			"size" : 8,
+			"angle" : 0,
+			"xoffset" : 0,
+			"yoffset" : 0,
+			"outline" : {
+				"type" : "esriSLS",
+				"style" : "esriSLSSolid",
+				"color" : [0, 255, 255, 255],
+				"width" : 1
+			}
+		}
+	}
+}
