@@ -72,7 +72,18 @@ def Main(rootFolder,scratch,agscon):
                                     if propElement.tagName == 'Value':
                                         propElement.firstChild.data = 'false'
                                         break
-                                
+
+                        # modify description in sddraft
+                        descriptions = xmldoc.getElementsByTagName('Description')
+                        for desc in descriptions:
+                            if desc.parentNode.tagName == 'ItemInfo':
+                                # modify the Description
+                                if desc.hasChildNodes():
+                                    desc.firstChild.data = mxd.description
+                                else:
+                                    txtNode = doc.createTextNode(mxd.description)
+                                    desc.appendChild(txtNode)
+
                         # save the modified sddraft
                         with open(sddraft, 'w') as f:
                             xmldoc.writexml(f)
