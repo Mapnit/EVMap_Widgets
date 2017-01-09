@@ -21,7 +21,7 @@ def Main(rootFolder,scratch,agscon):
                     sddraft = os.path.join(scratch,mxd.title + '.sddraft')
                     sd = os.path.join(scratch,mxd.title + '.sd')
                     serverURL = "/arcgis/admin/services/"
-                    servicename = str(file).replace(".mxd","")
+                    servicename = str(file)[:-4]
                                    
                     try:
                         analysis = arcpy.mapping.CreateMapSDDraft(mxd, sddraft, servicename, 'ARCGIS_SERVER',agscon,False,serverFolder,mxd.summary,mxd.tags)
@@ -38,7 +38,8 @@ def Main(rootFolder,scratch,agscon):
                         if os.path.exists(sddraft_xml):
                             os.remove(sddraft_xml)
                         os.rename(sddraft, sddraft_xml)
-                        # modify sddraft 
+                        
+                        # modify services and capabilities in sddraft 
                         xmldoc = DOM.parse(sddraft_xml)
                         typeNames = xmldoc.getElementsByTagName('TypeName')
                         for typeName in typeNames:
@@ -345,6 +346,5 @@ if __name__ == "__main__":
     password = arcpy.GetParameterAsText(4)
     serverName = arcpy.GetParameterAsText(5)
     serverPort = str(arcpy.GetParameterAsText(6))
-
    
     Main(rootFolder,scratch,ArcGIS_Server_Connection)
