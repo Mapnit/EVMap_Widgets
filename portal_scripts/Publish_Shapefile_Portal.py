@@ -9,12 +9,44 @@ import os
 import time
 import csv
 import requests
+import arcpy
+import zipfile
+import shutil
+import glob
 
 maxJobs = 5 # Set the max number of concurrent jobs allowed.
 sleepTime = 10 # Time in seconds to wait between status checks.
 
-def projectShapefile():
-    None
+def zipShapefile(shapefilePath, zipfilePath):
+    with zipfile.ZipFile(zipfilePath, "w", zipfile.ZIP_DEFLATED) as zf:
+        abs_src = os.path.abspath(shapefilePath)
+        for dirname, subdirs, files in os.walk(shapefilePath):
+            for filename in files:
+                absname = os.path.abspath(os.path.join(dirname, filename))
+                arcname = absname[len(abs_src) + 1:]
+                print 'zipping %s as %s' % (os.path.join(dirname, filename),
+                                            arcname)
+                zf.write(absname, arcname)
+    return zipfilePath
+
+def projectShapefile(shapefilePath, projectedShapefilePath, outCS, inCS):
+    # copy shapefile to avoid modification on the original file
+    fname,fext = os.path.splitext(shapefilePath)
+    for f in glob.glob(fname + ".*"):
+        head,tail = os.path.splitext(f)
+        if tail in ['.dbf','.prj','.sbn','.sbx','.shp','.shx','xml']:
+            shutil.copy(f, projectedShapefilePath)
+
+    # project the shapefile
+    sf = arcpy.Describe(shapefilePath)
+    if sf.spatialReference.name == "Unknown":
+        print('warning: no spatial reference in the input shapefile:' + shapefilePath)
+        shapefileName = os.path.basename(projectedShapefilePath)
+        arcpy.Project_management(shapefilePath, os.path.join(projectedShapefilePath, shapefileName + ".shp"), outCS, None, inCS)
+    else:
+        print('spatial reference in the input shapefile: ' + sf.spatialReference.Name)
+
+    return projectedShapefilePath
 
 def generateToken(username, password, portalUrl):
     '''Retrieves a token to be used with API requests.'''
@@ -161,12 +193,39 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--username', help='username')
     parser.add_argument('-p', '--password', help='password')
     parser.add_argument('-f', '--path', help='path to the shapefile')
+    parser.add_argument('-s', '--coordsys', help='input coordinate system')
+    parser.add_argument('-t', '--tempdir', help='path to a temporary working folder')
+
     # Read the command line arguments.
     args = parser.parse_args()
     portal = args.portal
     username = args.username
     password = args.password
     path = args.path
+    coordsys = args.coordsys
+    tempdir = args.tempdir
+
+    # Project the input shapefile to the desired coord system
+    if tempdir is None or len(tempdir) < 1:
+        tempdir,fname = os.path.split(path)
+
+    fname = os.path.basename(path)
+    shapefileName, fext = os.path.splitext(fname)
+    projectedShapefilePath = os.path.join(tempdir, shapefileName)
+    if os.path.exists(projectedShapefilePath):
+        shutil.rmtree(projectedShapefilePath)
+
+    os.mkdir(projectedShapefilePath)
+
+    outCS = arcpy.SpatialReference(4326) # 4326
+    inCS = arcpy.SpatialReference(int(coordsys))
+    projectShapefile(path, projectedShapefilePath, outCS, inCS)
+
+    # Zip the projected shapefile
+    zipfilePath = os.path.join(tempdir, shapefileName + ".zip")
+    zipShapefile(projectedShapefilePath, zipfilePath)
+
+    path = zipfilePath
 
     # Get an authentication token to use with subsequent requests.
     print('Authenticating')
