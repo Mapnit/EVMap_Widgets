@@ -29,24 +29,32 @@ def zipShapefile(shapefilePath, zipfilePath):
                 zf.write(absname, arcname)
     return zipfilePath
 
-def projectShapefile(shapefilePath, projectedShapefilePath, outCS, inCS):
+def projectShapefile(shapefilePath, workspace, outCS, inCS):
     # copy shapefile to avoid modification on the original file
-    fname,fext = os.path.splitext(shapefilePath)
-    for f in glob.glob(fname + ".*"):
-        head,tail = os.path.splitext(f)
-        if tail in ['.dbf','.prj','.sbn','.sbx','.shp','.shx','xml']:
-            shutil.copy(f, projectedShapefilePath)
+    fhead = os.path.splitext(shapefilePath)[0]
+    shapefileName = ''.join([c if c.isalnum() else '_' for c in os.path.basename(fhead)])
+    inputFolder = os.path.join(workspace, 'input')
+    outputFolder = os.path.join(workspace, 'output')
+    projectedShapefilePath = os.path.join(outputFolder, shapefileName + ".shp")
+
+    os.mkdir(inputFolder)
+    os.mkdir(outputFolder)
+
+    for f in glob.glob(fhead + ".*"):
+        fext = os.path.splitext(f)[1]
+        if fext in ['.dbf','.prj','.sbn','.sbx','.shp','.shx','xml']:
+            shutil.copy(f, os.path.join(inputFolder, shapefileName + fext))
+    shapefilePath = os.path.join(inputFolder, shapefileName + '.shp')
 
     # project the shapefile
     sf = arcpy.Describe(shapefilePath)
     if sf.spatialReference.name == "Unknown":
-        print('warning: no spatial reference in the input shapefile:' + shapefilePath)
-        shapefileName = os.path.basename(projectedShapefilePath)
-        arcpy.Project_management(shapefilePath, os.path.join(projectedShapefilePath, shapefileName + ".shp"), outCS, None, inCS)
+        print('warning: no spatial reference in the input shapefile: ' + shapefilePath)
     else:
         print('spatial reference in the input shapefile: ' + sf.spatialReference.Name)
+    arcpy.Project_management(shapefilePath, projectedShapefilePath, outCS, None, inCS)
 
-    return projectedShapefilePath
+    return outputFolder
 
 def generateToken(username, password, portalUrl):
     '''Retrieves a token to be used with API requests.'''
@@ -210,25 +218,24 @@ if __name__ == '__main__':
         tempdir,fname = os.path.split(path)
 
     fname = os.path.basename(path)
-    shapefileName, fext = os.path.splitext(fname)
-    projectedShapefilePath = os.path.join(tempdir, shapefileName)
-    if os.path.exists(projectedShapefilePath):
-        shutil.rmtree(projectedShapefilePath)
-
-    os.mkdir(projectedShapefilePath)
+    shapefileName = os.path.splitext(fname)[0]
+    workspace = os.path.join(tempdir, shapefileName)
+    if os.path.exists(workspace):
+        shutil.rmtree(workspace)
+    os.mkdir(workspace)
 
     outCS = arcpy.SpatialReference(4326) # 4326
     inCS = arcpy.SpatialReference(int(coordsys))
-    projectShapefile(path, projectedShapefilePath, outCS, inCS)
+    projectedShapefileFolder = projectShapefile(path, workspace, outCS, inCS)
 
     # Zip the projected shapefile
-    zipfilePath = os.path.join(tempdir, shapefileName + ".zip")
-    zipShapefile(projectedShapefilePath, zipfilePath)
+    zipfilePath = os.path.join(workspace, shapefileName + ".zip")
+    zipShapefile(projectedShapefileFolder, zipfilePath)
 
     path = zipfilePath
 
     # Get an authentication token to use with subsequent requests.
-    print('Authenticating')
+    print('Authenticating with Portal')
     token = generateToken(username=username, password=password, portalUrl=portal)['token']
 
     # Gather up the shapefiles in the directory (and subdirectories).
