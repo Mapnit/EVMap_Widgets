@@ -103,7 +103,7 @@ define([
 
     return declare([BaseWidget, _WidgetsInTemplateMixin], {
       name: 'Draw',
-      baseClass: 'jimu-widget-draw',
+      baseClass: 'ev-widget-draw',
       _gs: null,
       _defaultGsUrl: '//tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
       _undoManager: null,

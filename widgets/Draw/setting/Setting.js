@@ -33,7 +33,7 @@ define([
   function(declare, lang, array, html, query, on, _WidgetsInTemplateMixin, BaseWidgetSetting,
     TabContainer, jimuUtils, Select, CheckBox, Table) {
     return declare([BaseWidgetSetting, _WidgetsInTemplateMixin], {
-      baseClass: 'jimu-widget-draw-setting',
+      baseClass: 'ev-widget-draw-setting',
       distanceUnits:null,
       areaUnits:null,
 
