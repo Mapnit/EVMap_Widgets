@@ -30,3 +30,33 @@
   cursor: default;
 }
 
+
+.ev-widget-draw-setting .message-section{
+	width: 100%; 
+	margin-top: 25px; 
+	text-align: center; 
+}
+
+.ev-widget-draw-setting .message-info{
+	font-size: 12px; 
+	background-color: #eeeeee;
+	color: #444444; 
+	font-weight: bolder;
+	padding: 5px; 
+}
+
+.ev-widget-draw-setting .message-warning{
+	font-size: 12px; 
+	background-color: yellow; 
+	color: #444444; 
+	font-weight: bolder;
+	padding: 5px; 
+}
+
+.ev-widget-draw-setting .message-error{
+	font-size: 12px; 
+	background-color: red; 
+	color: yellow; 
+	font-weight: bolder;
+	padding: 5px; 
+}

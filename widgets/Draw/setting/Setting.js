@@ -20,6 +20,8 @@ define([
     'dojo/_base/array',
     'dojo/_base/html',
     'dojo/_base/query',
+	'dojo/dom-style',
+	'dojo/dom-class',
     'dojo/on',
     'dijit/_WidgetsInTemplateMixin',
     'jimu/BaseWidgetSetting',
@@ -30,7 +32,7 @@ define([
     'jimu/dijit/SimpleTable',
 	'dijit/form/TextBox'
   ],
-  function(declare, lang, array, html, query, on, _WidgetsInTemplateMixin, BaseWidgetSetting,
+  function(declare, lang, array, html, query, domStyle, domClass, on, _WidgetsInTemplateMixin, BaseWidgetSetting,
     TabContainer, jimuUtils, Select, CheckBox, Table) {
     return declare([BaseWidgetSetting, _WidgetsInTemplateMixin], {
       baseClass: 'ev-widget-draw-setting',
@@ -181,10 +183,11 @@ define([
 
         this.cbxOperationalLayer = new CheckBox({
           label: this.nls.operationalLayer,
-          style: 'margin-top:10px;'
+          style: 'margin-top:10px;',
+		  onChange: lang.hitch(this, this._enableOperationalLayer)
         });
         html.addClass(this.cbxOperationalLayer.domNode, 'tip');
-        this.cbxOperationalLayer.placeAt(this.domNode);
+        this.cbxOperationalLayer.placeAt(this.messageNode, 'before');
         this.own(on(this.btnAddDistance, 'click', lang.hitch(this, this._addDistance)));
         this.own(on(this.btnAddArea, 'click', lang.hitch(this, this._addArea)));
         this.own(on(this.distanceTable, 'row-delete', lang.hitch(this, function(tr) {
@@ -535,7 +538,41 @@ define([
           var tr = trs[index];
           this._showCorrectAreaInfoBySelectedOption(tr);
         }));
-      }
+      }, 
+	  
+		_enableOperationalLayer : function (isChecked) {
+			if (isChecked == true) {
+				this._showMessage(this.nls.graphicEditOrExportDisabled, "warning");
+			} else {
+				this._hideMessage(); 
+			}
+		}, 
+		
+		_showMessage : function (textMsg, lvl) {
+			domClass.remove(this.settingMessage);
+			switch (lvl) {
+			case "error":
+				domClass.add(this.settingMessage, "message-error");
+				break;
+			case "warning":
+				domClass.add(this.settingMessage, "message-warning");
+				break;
+			case "info":
+				domClass.add(this.settingMessage, "message-info");
+				break;
+			default:
+				domClass.add(this.settingMessage, "message-info");
+			}
+			this.settingMessage.innerText = textMsg;
+			
+			domStyle.set(this.settingMessage, "display", "block"); 
+		},
+
+		_hideMessage : function () {
+			domStyle.set(this.settingMessage, "display", "none"); 
+			
+			this.settingMessage.innerText = "";
+		} 
 
     });
   });
