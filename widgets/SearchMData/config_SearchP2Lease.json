@@ -6,7 +6,7 @@
 	  "dataType": "text",
 	  "input": "single",
 	  "prompt": "Enter a lease number below, as you type matching lease numbers will be provided", 
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/P2_Tract_Lookup/MapServer/0",
 	  "field": "LEASE_NO"
 	}, {
 	  "name": "multipleLeases",
@@ -20,7 +20,7 @@
 	  "dataType": "text",
 	  "input": "single",
 	  "prompt": "Enter a lessee name below, as you type matching lessee names will be provided",
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/P2_Tract_Lookup/MapServer/0",
 	  "field": "LESSEE"	  
 	}, {
 	  "name": "lessor",
@@ -28,7 +28,7 @@
 	  "dataType": "text",
 	  "input": "single",
 	  "prompt": "Enter a lessor name below, as you type matching lessor names will be provided",
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/P2_Tract_Lookup/MapServer/0",
 	  "field": "LESSOR"	  
 	}, {
 	  "name": "status",
@@ -36,7 +36,7 @@
 	  "dataType": "text",
 	  "input": "select",
 	  "prompt": "Select at least one status from the following list:", 
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/P2_Tract_Lookup/MapServer/0",
 	  "field": "STATUS"	  
 	}, {
 	  "name": "expirationDate",
@@ -47,8 +47,8 @@
 	  "prompt": "Use the fields below to specify the date range you wish to search"
 	}],  
     "dataSources": [{
-	  "name": "P2 Lease Tracts",
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/15", 
+	  "name": "EV P2 Lease Tracts",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/EV_P2_Lease/MapServer/3", 
 	  "fields": {
 		"singleLease": "DSPLY_NAME", 
 		"multipleLeases": "DSPLY_NAME", 
@@ -58,11 +58,11 @@
 		"expirationDate": "EXP_DATE"
 	  }
 	}, { 
-	  "name": "P2 Leases",
-	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/16", 
+	  "name": "EV P2 Lease",
+	  "layer": "https://mapservices.enervest.net/arcgis/rest/services/Land/EV_P2_Lease/MapServer/4", 
 	  "fields": {
-		"singleLease": "DSPLY_NAME", 
-		"multipleLeases": "DSPLY_NAME", 
+		"singleLease": "DISP_NAM", 
+		"multipleLeases": "DISP_NAM", 
 		"lessee": "LESSEE", 
 		"lessor": "LESSOR", 
 		"status": "STATUS", 
@@ -70,10 +70,9 @@
 	  }
 	}], 
 	"visibleLayers": [
-		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/2",  
-		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/18",
-		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/19",
-		"https://mapservices.enervest.net/arcgis/rest/services/Land/P2/MapServer/20"
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/EV_P2_Lease/MapServer/0",  
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/EV_P2_Lease/MapServer/1",
+		"https://mapservices.enervest.net/arcgis/rest/services/Land/EV_P2_Lease/MapServer/2"
 	],	
 	"limitToMapExtent": false, 
 	"renderType": "featureLayer", 
