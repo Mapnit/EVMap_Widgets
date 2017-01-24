@@ -30,9 +30,9 @@ Service_Summary = arcpy.GetParameterAsText(4)
 
 Service_Tags = arcpy.GetParameterAsText(5)
 
-Portal_Username = arcpy.GetParameterAsText(6)
-
-Portal_Password = arcpy.GetParameterAsText(7)
+# Require a live connection to Portal
+#Portal_Username = arcpy.GetParameterAsText(6)
+#Portal_Password = arcpy.GetParameterAsText(7)
 
 # Environmental variables
 mxd_template = r'C:\Users\cliang\Documents\ArcGIS\zmap_grid\tool\template.mxd'
@@ -66,5 +66,5 @@ del mxd, imgLayer
 arcpy.CreateMapTilePackage_management(mxd_filePath, "ONLINE", Output_Package, Tile_Format, Levels_Of_Details)
 
 # Process: Share Package
-arcpy.SharePackage_management(Output_Package, Portal_Username, Portal_Password, Service_Summary, Service_Tags)
-
+arcpy.AddMessage("Uploading the tile package to Portal...")
+arcpy.SharePackage_management(Output_Package, "#", "#", Service_Summary, Service_Tags)
