@@ -45,15 +45,19 @@ arcpy.env.overwriteOutput = True
 
 # Local variables:
 Data_Name = os.path.splitext(os.path.basename(Input_File))[0]
+Data_Name = Data_Name.replace(' ', '_')
 Output_Package = os.path.join(Scratch_WS, Data_Name + '.tpk')
 
 # Process: ZMap Grid
+arcpy.AddMessage("Importing ZMap data...")
 arcpy.ImportInterpZMapGrid_DA(Input_File, Input_File_Projection, Scratch_WS, Data_Name)
 
 # Process: Create a working mxd file
+arcpy.AddMessage("Creating a working mxd...")
 copyfile(mxd_template, os.path.join(Scratch_WS, Data_Name + '.mxd'))
 
 # Process: Add Tiff Image to MXD
+arcpy.AddMessage("Adding ZMap data to the working mxd...")
 mxd_filePath = os.path.join(Scratch_WS, Data_Name + '.mxd')
 mxd = arcpy.mapping.MapDocument(mxd_filePath)
 df = arcpy.mapping.ListDataFrames(mxd, "Layers")[0]
@@ -62,10 +66,10 @@ imgLayer = arcpy.mapping.Layer(os.path.join(Scratch_WS, Data_Name + ".tif"))
 arcpy.mapping.AddLayer(df, imgLayer, "BOTTOM")
 
 mxd.save()
-
 del mxd, imgLayer
 
 # Process: Create Map Tile Package
+arcpy.AddMessage("Creating a tile package...")
 arcpy.CreateMapTilePackage_management(mxd_filePath, "ONLINE", Output_Package, Tile_Format, Levels_Of_Details)
 
 # Process: Share Package
