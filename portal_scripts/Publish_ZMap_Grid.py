@@ -36,7 +36,10 @@ Service_Tags = arcpy.GetParameterAsText(5)
 
 # Environmental variables
 mxd_template = r'C:\Users\cliang\Documents\ArcGIS\zmap_grid\tool\template.mxd'
-Scratch_WS = arcpy.env.ScratchWorkSpace = tempfile.gettempdir()
+if os.path.exists(arcpy.env.ScratchWorkSpace):
+    Scratch_WS = arcpy.env.ScratchWorkSpace
+else:
+    Scratch_WS = tempfile.gettempdir()
 
 arcpy.env.overwriteOutput = True
 
